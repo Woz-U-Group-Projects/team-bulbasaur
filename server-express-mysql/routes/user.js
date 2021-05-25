@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var authService = require("../services/auth")
 
 router.get('/', (req, res, next) => {
   models.users.findAll({})
@@ -17,7 +18,7 @@ router.post('/signup', (req, res, next) => {
       FullName: req.body.name,
       Email: req.body.email,
       UserName: req.body.userName,
-      Password: req.body.password,
+      Password: authService.hashPassword(req.body.password),
       Admin: 0
     }
   })
@@ -27,6 +28,27 @@ router.post('/signup', (req, res, next) => {
       res.send(JSON.stringify(result))
     } else {
       res.send('user already exists')
+    }
+  })
+})
+
+router.post('/login', (req, res, next) => {
+  models.users.findOne({
+    where: { Email: req.body.email }
+  })
+  .then(user => {
+    if(!user){
+      res.send('user not found')
+    } else {
+      let passwordMatch = authService.comparePassword(req.body.password, user.Password)
+      if(passwordMatch){
+        let token = authService.signUser(user)
+        res.cookie('jwt', token)
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify(user))
+      } else {
+        res.send('incorrect password')
+      }
     }
   })
 })
