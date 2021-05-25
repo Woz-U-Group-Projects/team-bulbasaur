@@ -1,10 +1,11 @@
 {
   "development": {
     "username": "root",
-    "password": "Password1!",
-    "database": "sakila",
+    "password": "Muddhawg1",
+    "database": "digichat",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": { "timestamps": false}
   },
   "test": {
     "username": "root",
