@@ -25,9 +25,10 @@ router.post('/signup', (req, res, next) => {
   .spread((result, created) => {
     if(created){
       res.header('Content-Type', 'application/json')
-      res.send(JSON.stringify(result))
+      res.send(JSON.stringify({ result: true, message: 'you have successfully signed up' }))
     } else {
-      res.send('user already exists')
+      res.header('Content-Type', 'application/json')
+      res.send({ result: false, message: 'user already exists' })
     }
   })
 })
@@ -51,6 +52,64 @@ router.post('/login', (req, res, next) => {
       }
     }
   })
+})
+
+router.get('/profile', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token)
+    .then( user => {
+      if(user){
+        models.users.findOne({
+          where: { Email: user.Email },
+          attributes: ['FullName', 'UserName', 'Email']
+        })
+        .then( result => {
+          res.header('Content-Type', 'application/json') 
+          res.send(JSON.stringify({ result: true, data: result}))
+        })
+      } else {
+        res.send(JSON.stringify({ result: false, message: 'must be logged in'}))
+      }
+    })
+  } else {
+    res.send(JSON.stringify({ result: false, message: 'must be logged in'}))
+  }
+})
+
+router.get('/profile/:id', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token)
+    .then( user => {
+      if(user){
+        models.users.findOne({
+          where: { Email: user.Email },
+          attributes: ['FullName', 'UserName', 'Email']
+        })
+        .then( result => {
+          res.header('Content-Type', 'application/json') 
+          res.send(JSON.stringify({ result: true, data: result}))
+        })
+      } else {
+        res.send(JSON.stringify({ result: false }))
+      }
+    })
+  } else {
+    models.users.findOne({
+      where: { UserId: req.body.id },
+      attributes: ['FullName', 'UserName']
+    })
+    .then( user => {
+      res.header('Content-Type', 'application/json') 
+      res.send(JSON.stringify({ result: false, data: user}))
+    })
+  }
+})
+
+router.get('/logout', function (req, res, next) {
+  res.cookie('jwt', "", { expires: new Date(0) })
+  res.send(JSON.stringify({ message: 'logged out'}))
 })
 
 module.exports = router
