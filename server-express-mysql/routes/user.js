@@ -44,7 +44,7 @@ router.post('/login', (req, res, next) => {
       if(passwordMatch){
         let token = authService.signUser(user)
         res.cookie('jwt', token)
-        res.header('Content-Type', 'application/json')
+        res.header('Content-Type', 'application/json')  
         res.send(JSON.stringify(user))
       } else {
         res.send('incorrect password')
