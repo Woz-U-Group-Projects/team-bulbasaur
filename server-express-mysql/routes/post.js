@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
