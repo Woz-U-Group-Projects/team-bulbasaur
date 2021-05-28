@@ -6,7 +6,9 @@ const Op = Sequelize.Op;
 var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
-  models.posts.findAll({})
+  models.posts.findAll({
+    where: {Visible: 0}
+  })
     .then(posts => {
       res.header('Content-Type', 'application/json')
       res.send(JSON.stringify(posts))
