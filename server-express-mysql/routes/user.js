@@ -3,7 +3,7 @@ var router = express.Router();
 var models = require("../models");
 var authService = require("../services/auth")
 
-router.get('/', (req, res, next) => {
+router.get('/api', (req, res, next) => {
   models.users.findAll({})
   .then(users => {
     res.header('Content-Type', 'application/json')
@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
   })
 })
 
-router.post('/signup', (req, res, next) => {
+router.post('/api/signup', (req, res, next) => {
   models.users.findOrCreate({
     where: { Email: req.body.email },
     defaults: {
@@ -33,7 +33,7 @@ router.post('/signup', (req, res, next) => {
   })
 })
 
-router.post('/login', (req, res, next) => {
+router.post('/api/login', (req, res, next) => {
   models.users.findOne({
     where: { Email: req.body.email }
   })
@@ -54,7 +54,7 @@ router.post('/login', (req, res, next) => {
   })
 })
 
-router.get('/profile', (req, res, next) => {
+router.get('/api/profile', (req, res, next) => {
   let token = req.cookies.jwt
   if(token){
     authService.verifyUser(token)
@@ -77,7 +77,7 @@ router.get('/profile', (req, res, next) => {
   }
 })
 
-router.get('/profile/:id', (req, res, next) => {
+router.get('/api/profile/:id', (req, res, next) => {
   let token = req.cookies.jwt
   if(token){
     authService.verifyUser(token)
@@ -107,7 +107,7 @@ router.get('/profile/:id', (req, res, next) => {
   }
 })
 
-router.get('/logout', function (req, res, next) {
+router.get('/api/logout', function (req, res, next) {
   res.cookie('jwt', "", { expires: new Date(0) })
   res.send(JSON.stringify({ message: 'logged out'}))
 })

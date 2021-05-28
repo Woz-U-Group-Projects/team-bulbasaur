@@ -5,16 +5,12 @@ module.exports = function(sequelize, DataTypes) {
     PostId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     UserId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'users',
-        key: 'UserId'
-      }
+      allowNull: false
     },
     PostHead: {
       type: DataTypes.STRING(200),
@@ -32,10 +28,17 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,
       allowNull: false
     },
+    Visible: {
+      type: DataTypes.INTEGER.ZEROFILL,
+      allowNull: false
+    },
     LastUpdated: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    userUserId: {
+      type: DataTypes.INTEGER(10).UNSIGNED
     }
   }, {
     tableName: 'posts'

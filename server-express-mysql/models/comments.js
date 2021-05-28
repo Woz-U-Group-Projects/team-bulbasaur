@@ -5,21 +5,16 @@ module.exports = function(sequelize, DataTypes) {
     CommentId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     PostId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'posts',
-        key: 'PostId'
-      }
+      allowNull: false
     },
     UserId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
+      allowNull: false
     },
     CommentBody: {
       type: DataTypes.STRING(500),
