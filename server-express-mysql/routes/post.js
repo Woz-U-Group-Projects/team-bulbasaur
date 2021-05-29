@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
@@ -112,6 +112,42 @@ router.get('/api/:id', (req, res, next) => {
         res.header('Content-Type', 'application/json')
         res.send(JSON.stringify(posts))
       })
+  }
+})
+
+router.delete('/api/:postId', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token)
+    .then( user => {
+      if(user){
+        models.posts.findAll({ where: { PostId: req.params.postId } })
+        .then( post => {
+            let newPost = [...post]
+            if( user.UserId == newPost[0].UserId || user.Admin == 1 ){
+              models.posts.destroy({ where: { PostId: req.params.postId } })
+              .then( result => {
+                if(result){
+                  res.header('Content-Type', 'application/json')
+                  res.send(JSON.stringify({ status: true, message: 'post was deleted' }))
+                } else {
+                  res.header('Content-Type', 'application/json')
+                  res.send(JSON.stringify({ status: false, message: 'something whent worng' }))
+                }
+              })
+            } else {
+              res.header('Content-Type', 'application/json')
+              res.send(JSON.stringify({ status: false, id: [user.UserId, newPost[0].UserId] }))              
+            }
+          })
+      } else {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify({ status: false, message: 'Guests are not allowed to delete posts' }))
+      }
+    })
+  } else {
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify({ status: false, message: 'Guests are not allowed to delete posts' }))
   }
 })
 
