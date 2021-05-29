@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var models = require("../models");
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
@@ -107,9 +109,35 @@ router.get('/api/profile/:id', (req, res, next) => {
   }
 })
 
-router.get('/api/logout', function (req, res, next) {
+router.get('/api/logout', (req, res, next) => {
   res.cookie('jwt', "", { expires: new Date(0) })
   res.send(JSON.stringify({ message: 'logged out'}))
+})
+
+router.delete('/api/:userId', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token)
+    .then( user => {
+      if( user.UserId == req.params.userId || user.Admin == 1 ){
+        let model = [models.users, models.posts, models.comments]
+        let status = []
+        for(let i=0; i<model.length; i++){
+          model[i].destroy({
+            where: { UserId: parseInt(req.params.userId) }
+          })
+          .then( result => {
+            status.push(result)
+          })
+        }
+        return status
+      }
+    })
+    .then( status => {
+      res.header('Content-Type', 'application/json') 
+      res.send(JSON.stringify(status))
+    })
+  }
 })
 
 module.exports = router
