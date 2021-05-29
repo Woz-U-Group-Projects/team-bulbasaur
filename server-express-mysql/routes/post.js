@@ -7,7 +7,7 @@ var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
   models.posts.findAll({
-    where: {Visible: 0}
+    where: { Visible: 0 }
   })
     .then(posts => {
       res.header('Content-Type', 'application/json')
@@ -115,36 +115,69 @@ router.get('/api/:id', (req, res, next) => {
   }
 })
 
+router.put('/api/:type/:postId', (req, res, next) => {
+  if (req.params.type == 'likes') {
+    models.posts.update(
+      { Likes: parseInt(req.body.likes) + 1 },
+      { where: { PostId: req.params.postId } }
+    )
+      .then(() => {
+        return models.posts.findOne({
+          where: { PostId: req.params.postId }
+        })
+      })
+      .then(post => {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify(post))
+      })
+  }
+  if (req.params.type == 'dislikes') {
+    models.posts.update(
+      { Dislikes: parseInt(req.body.dislikes) + 1 },
+      { where: { PostId: req.params.postId } }
+    )
+      .then(() => {
+        return models.posts.findOne({
+          where: { PostId: req.params.postId }
+        })
+      })
+      .then(post => {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify(post))
+      })
+  }
+})
+
 router.delete('/api/:postId', (req, res, next) => {
   let token = req.cookies.jwt
-  if(token){
+  if (token) {
     authService.verifyUser(token)
-    .then( user => {
-      if(user){
-        models.posts.findAll({ where: { PostId: req.params.postId } })
-        .then( post => {
-            let newPost = [...post]
-            if( user.UserId == newPost[0].UserId || user.Admin == 1 ){
-              models.posts.destroy({ where: { PostId: req.params.postId } })
-              .then( result => {
-                if(result){
-                  res.header('Content-Type', 'application/json')
-                  res.send(JSON.stringify({ status: true, message: 'post was deleted' }))
-                } else {
-                  res.header('Content-Type', 'application/json')
-                  res.send(JSON.stringify({ status: false, message: 'something whent worng' }))
-                }
-              })
-            } else {
-              res.header('Content-Type', 'application/json')
-              res.send(JSON.stringify({ status: false, id: [user.UserId, newPost[0].UserId] }))              
-            }
-          })
-      } else {
-        res.header('Content-Type', 'application/json')
-        res.send(JSON.stringify({ status: false, message: 'Guests are not allowed to delete posts' }))
-      }
-    })
+      .then(user => {
+        if (user) {
+          models.posts.findAll({ where: { PostId: req.params.postId } })
+            .then(post => {
+              let newPost = [...post]
+              if (user.UserId == newPost[0].UserId || user.Admin == 1) {
+                models.posts.destroy({ where: { PostId: req.params.postId } })
+                  .then(result => {
+                    if (result) {
+                      res.header('Content-Type', 'application/json')
+                      res.send(JSON.stringify({ status: true, message: 'post was deleted' }))
+                    } else {
+                      res.header('Content-Type', 'application/json')
+                      res.send(JSON.stringify({ status: false, message: 'something whent worng' }))
+                    }
+                  })
+              } else {
+                res.header('Content-Type', 'application/json')
+                res.send(JSON.stringify({ status: false, id: [user.UserId, newPost[0].UserId] }))
+              }
+            })
+        } else {
+          res.header('Content-Type', 'application/json')
+          res.send(JSON.stringify({ status: false, message: 'Guests are not allowed to delete posts' }))
+        }
+      })
   } else {
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify({ status: false, message: 'Guests are not allowed to delete posts' }))

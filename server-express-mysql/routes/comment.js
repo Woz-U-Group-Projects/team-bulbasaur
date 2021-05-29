@@ -50,36 +50,37 @@ router.delete('/api/:commentId', (req, res, next) => {
   })
 })
 
-router.put('/api/addlike/:commentId', (req, res, next) => {
-  models.comments.update(
-    {Likes: parseInt(req.body.likes + 1)}, 
-    {where: { CommentId: parseInt(req.params.commentId) }}
-  )
-  .then(() => {
-    return models.comments.findOne({
-      where: { CommentId: parseInt(req.params.commentId)}
+router.put('/api/:type/:commentId', (req, res, next) => {
+  if(req.params.type == 'likes'){
+    models.comments.update(
+      {Likes: parseInt(req.body.likes + 1)}, 
+      {where: { CommentId: parseInt(req.params.commentId) }}
+    )
+    .then(() => {
+      return models.comments.findOne({
+        where: { CommentId: parseInt(req.params.commentId)}
+      })
     })
-  })
-  .then( comment => {
-    res.header('Content-Type', 'application/json')
-    res.send(JSON.stringify(comment))
-  })
-})
-
-router.put('/api/adddislike/:commentId', (req, res, next) => {
-  models.comments.update(
-    { Dislikes: parseInt(req.body.dislikes + 1) }, 
-    { where: { CommentId: parseInt(req.params.commentId) } }
-  )
-  .then( () => { 
-    return models.comments.findOne({ 
-      where: { CommentId: req.params.commentId } 
+    .then( comment => {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify(comment))
     })
-  })
-  .then( comment => {
-    res.header('Content-Type', 'application/json')
-    res.send(JSON.stringify(comment))
-  })
+  }
+  if(req.params.type == 'dislikes'){
+    models.comments.update(
+      { Dislikes: parseInt(req.body.dislikes + 1) }, 
+      { where: { CommentId: parseInt(req.params.commentId) } }
+    )
+    .then( () => { 
+      return models.comments.findOne({ 
+        where: { CommentId: req.params.commentId } 
+      })
+    })
+    .then( comment => {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify(comment))
+    })
+  }
 })
 
 module.exports = router
