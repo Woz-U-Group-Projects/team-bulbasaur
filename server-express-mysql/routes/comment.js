@@ -51,10 +51,10 @@ router.delete('/api/:commentId', (req, res, next) => {
 })
 
 router.put('/api/addlike/:commentId', (req, res, next) => {
-  let where = {where: { CommentId: parseInt(req.params.commentId) }}
-  let values = {Likes: parseInt(req.body.likes + 1)}
-
-  models.comments.update(values, where)
+  models.comments.update(
+    {Likes: parseInt(req.body.likes + 1)}, 
+    {where: { CommentId: parseInt(req.params.commentId) }}
+  )
   .then(() => {
     return models.comments.findOne({
       where: { CommentId: parseInt(req.params.commentId)}
@@ -67,12 +67,10 @@ router.put('/api/addlike/:commentId', (req, res, next) => {
 })
 
 router.put('/api/adddislike/:commentId', (req, res, next) => {
-  let values = {Dislikes: parseInt(req.body.dislikes + 1)}
-  let selectors = {
-    where: { CommentId: parseInt(req.params.commentId) }
-  }
-
-  models.comments.update(values, selectors)
+  models.comments.update(
+    { Dislikes: parseInt(req.body.dislikes + 1) }, 
+    { where: { CommentId: parseInt(req.params.commentId) } }
+  )
   .then( () => { 
     return models.comments.findOne({ 
       where: { CommentId: req.params.commentId } 
