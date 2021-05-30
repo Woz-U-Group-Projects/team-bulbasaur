@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Post from './post'
 
 const MainPage = (props) => {
-  let [posts, setposts] = useState([...props.posts])
 
   return (
     <div>
