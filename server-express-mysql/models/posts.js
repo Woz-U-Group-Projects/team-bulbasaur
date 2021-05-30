@@ -10,7 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     UserId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'UserId'
+      }
     },
     PostHead: {
       type: DataTypes.STRING(200),
