@@ -9,3 +9,14 @@ export const getUsersCompleted = (users) => ({
   payload: users
 })
 
+export const getPosts = async () => {
+  const posts = await fetch('http://localhost:3001:/posts/api')
+  const posts_1 = await posts.json()
+  console.log(posts_1)
+  return posts_1
+}
+
+export const getPostsCompleted = (posts) => ({
+  type: 'GET_POSTS_COMPLETED',
+  payload: posts
+})

@@ -3,7 +3,10 @@ import {connect} from 'react-redux'
 import  Task from "./components/Task";
 import "./App.css";
 //actions
-import { getUsers, getUsersCompleted } from './actions/actions'
+import { 
+  getUsers, getUsersCompleted,
+  getPosts, getPostsCompleted
+} from './actions/actions'
 
 function _App(props) {
   useEffect( () => {
@@ -12,7 +15,7 @@ function _App(props) {
 
   return (
     <div className="App">
-      {props.users.length === 0 ? <p>nothing here</p> : props.users.map( user => {
+      {props.users.length === 0 ? <p>nothing to see here</p> : props.users.map( user => {
         return <h1>{user.FullName}</h1>
       })}
     </div>
@@ -21,7 +24,8 @@ function _App(props) {
 
 const mapDispatchToProps = (dispatch, state) => {
   return {
-    onGetUsers: () => getUsers().then( users => dispatch(getUsersCompleted(users)))
+    onGetUsers: () => getUsers().then( users => dispatch(getUsersCompleted(users))),
+    onGetPosts: () => getPosts().then( posts => dispatch(getPostsCompleted(posts)))
   }
 }
 
