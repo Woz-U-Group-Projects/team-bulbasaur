@@ -7,7 +7,11 @@ var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
   models.posts.findAll({
-    where: { Visible: 0 }
+    where: { Visible: 0 },
+    include: {
+      model: models.users,
+      attributes: ['UserName']
+    }
   })
     .then(posts => {
       res.header('Content-Type', 'application/json')

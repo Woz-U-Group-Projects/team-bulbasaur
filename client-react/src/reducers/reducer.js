@@ -1,5 +1,6 @@
 const initialState = {
-  users: []
+  users: [],
+  posts: []
 }
 
 const reducer = (state = initialState, action)=>{
@@ -8,6 +9,11 @@ const reducer = (state = initialState, action)=>{
       return {
         ...state,
         users: action.payload
+      }
+    case 'GET_POSTS_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
       }
     default: 
       return{

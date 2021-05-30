@@ -1,23 +1,29 @@
 import React, { useEffect } from "react";
 import {connect} from 'react-redux'
-import  Task from "./components/Task";
+//CSS
 import "./App.css";
 //actions
 import { 
   getUsers, getUsersCompleted,
-  getPosts, getPostsCompleted
+  getPosts, getPostsCompleted,
+  addVote, addVoteCompleted
 } from './actions/actions'
+//components
+import MainPage from "./components/mainPage/mainPage";
 
 function _App(props) {
-  useEffect( () => {
+  const fetchData = () => {
     props.onGetUsers()
+    props.onGetPosts()
+  }
+
+  useEffect( () => {
+    fetchData()
   },[])
 
   return (
     <div className="App">
-      {props.users.length === 0 ? <p>nothing to see here</p> : props.users.map( user => {
-        return <h1>{user.FullName}</h1>
-      })}
+      <MainPage {...props} />
     </div>
   );
 }
@@ -25,13 +31,15 @@ function _App(props) {
 const mapDispatchToProps = (dispatch, state) => {
   return {
     onGetUsers: () => getUsers().then( users => dispatch(getUsersCompleted(users))),
-    onGetPosts: () => getPosts().then( posts => dispatch(getPostsCompleted(posts)))
+    onGetPosts: () => getPosts().then( posts => dispatch(getPostsCompleted(posts))),
+    onAddVote: (type, current, postId) => addVote(type, current, postId).then( post => dispatch(addVoteCompleted(post)))
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    users: state.users
+    users: state.users,
+    posts: state.posts
   }
 }
 
