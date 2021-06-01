@@ -15,6 +15,11 @@ const reducer = (state = initialState, action)=>{
         ...state,
         posts: action.payload
       }
+    case 'ADD_VOTE_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload 
+      }
     default: 
       return{
         ...state

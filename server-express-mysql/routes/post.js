@@ -126,8 +126,11 @@ router.put('/api/:type/:postId', (req, res, next) => {
       { where: { PostId: req.params.postId } }
     )
       .then(() => {
-        return models.posts.findOne({
-          where: { PostId: req.params.postId }
+        return models.posts.findAll({
+          where: { Visible: 0 },
+          include: {
+            model: models.users
+          }
         })
       })
       .then(post => {
@@ -141,8 +144,11 @@ router.put('/api/:type/:postId', (req, res, next) => {
       { where: { PostId: req.params.postId } }
     )
       .then(() => {
-        return models.posts.findOne({
-          where: { PostId: req.params.postId }
+        return models.posts.findAll({
+          where: { Visible: 0 },
+          include: {
+            model: models.users
+          }
         })
       })
       .then(post => {

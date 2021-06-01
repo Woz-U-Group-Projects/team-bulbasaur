@@ -6,21 +6,12 @@ import "./App.css";
 import { 
   getUsers, getUsersCompleted,
   getPosts, getPostsCompleted,
-  addVote, addVoteCompleted
+  // addVote, addVoteCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
 
 function _App(props) {
-  const fetchData = () => {
-    props.onGetUsers()
-    props.onGetPosts()
-  }
-
-  useEffect( () => {
-    fetchData()
-  },[])
-
   return (
     <div className="App">
       <MainPage {...props} />
@@ -32,7 +23,7 @@ const mapDispatchToProps = (dispatch, state) => {
   return {
     onGetUsers: () => getUsers().then( users => dispatch(getUsersCompleted(users))),
     onGetPosts: () => getPosts().then( posts => dispatch(getPostsCompleted(posts))),
-    onAddVote: (type, current, postId) => addVote(type, current, postId).then( post => dispatch(addVoteCompleted(post)))
+    // onAddVote: (type, current, postId) => addVote(type, current, postId).then( posts => dispatch(addVoteCompleted(posts)))
   }
 }
 
