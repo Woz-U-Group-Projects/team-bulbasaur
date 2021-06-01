@@ -14,7 +14,6 @@ export const getUsersCompleted = (users) => ({
 export const getPosts = async () => {
   const posts = await axios.get('http://localhost:3001/posts/api')
   const posts_1 = await posts.data
-  console.log(posts_1)
   
   const postList = posts_1.map( post => ({
     id: post.PostId,
@@ -32,21 +31,42 @@ export const getPostsCompleted = (posts) => ({
   payload: posts
 })
 
-export const addVote = async (type, current, postId) => {
-  if(type === 'likes'){
-    const post = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
-    const post_1 = await post.data
-    console.log(post_1)
-    return post_1
-  }
-  if(type === 'dislikes'){
-    const post = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
-    const post_1 = await post.data
-    console.log(post_1)
-    return post_1
-  }
-}
+// export const addVote = async (type, current, postId) => {
+//   if(type === 'likes'){
+//     const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
+//     const posts_1 = await posts.data
+    
+//     const postList = posts_1.map( post => ({
+//       id: post.PostId,
+//       author: post.user.UserName,
+//       title: post.PostHead,
+//       body: post.PostBody,
+//       likes: post.Likes,
+//       dislikes: post.Dislikes
+//     }))
 
-export const addVoteCompleted = (post) => ({
-  type: 'ADD_VOTE_COMPLETED'
-})
+//     return postList
+//   }
+//   if(type === 'dislikes'){
+//     const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
+//     const posts_1 = await posts.data
+   
+//     const postList = posts_1.map( post => ({
+//       id: post.PostId,
+//       author: post.user.UserName,
+//       title: post.PostHead,
+//       body: post.PostBody,
+//       likes: post.Likes,
+//       dislikes: post.Dislikes
+//     }))
+    
+//     return postList
+//   }
+// }
+
+// export const addVoteCompleted = (posts) => {
+//   return ({
+//     type: 'ADD_VOTE_COMPLETED',
+//     payload: posts
+//   })
+// }
