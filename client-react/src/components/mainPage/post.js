@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
-const Post = ({ post, set }) => {
-  let [likes, setLikes] = useState(post.likes)
-  let [dislikes, setDislikes] = useState(post.dislikes)
+const Post = ({ post, onUpdateVotes }) => {
+  let [likes, setLikes] = useState(0)
+  let [dislikes, setDislikes] = useState(0)
 
-  useEffect(() => {
-    return () => set({
-      postId: post.id,
-      data: [{
-        type: 'likes',
-        current: likes,
-        postId: post.id
-      }, {
-        type: 'dislikes',
-        current: dislikes,
-        postId: post.id
-      }]
-    })
-  })
+  useEffect( () => {
+    setLikes(post.likes)
+    setDislikes(post.dislikes)
+  },[post])
 
   return (
     <div>
@@ -25,11 +15,11 @@ const Post = ({ post, set }) => {
       <h2>{post.title}</h2>
       <p>{post.body}</p>
       <div>
-        <button onClick={() => setLikes(likes + 1)}>
+        <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
           <div>Likes</div>
           <div>{likes}</div>
         </button>
-        <button onClick={() => setDislikes(dislikes + 1)}>
+        <button onClick={() => onUpdateVotes('dislikes', dislikes, post.id)}>
           <div>dislikes</div>
           <div>{dislikes}</div>
         </button>

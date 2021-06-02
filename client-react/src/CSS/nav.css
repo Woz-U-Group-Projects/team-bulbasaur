@@ -1,0 +1,44 @@
+nav{
+  display: grid;
+  grid-template-columns: repeat(1fr, 12);
+  grid-template-rows: repeat(1fr, 1);
+  height: 65px;
+}
+
+nav .title{
+  grid-column: 1/11;
+  grid-row: 1/2;
+  text-align: center;
+  margin: auto 0;
+}
+.title h1{
+  font-size: xx-large;
+}
+
+.linksList {
+  grid-column: 11/13;
+  grid-row: 1/2;
+  display: grid;
+  grid-template-columns: repeat(1fr, 3);
+  grid-template-rows: repeat(1fr, 1);
+  list-style: none;
+}
+
+.linksList li{
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-decoration: none;
+}
+
+.linksList .login{
+  grid-column: 1/2;
+}
+
+.linksList .signup{
+  grid-column: 2/3;
+}
+
+.linksList .profile{
+  grid-column: 3/4;
+}
