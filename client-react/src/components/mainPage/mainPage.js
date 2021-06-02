@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Post from './post'
 
-const MainPage = ({ posts, onGetPosts, onUpdateVotes }) => {
-  let [postList, setList] = useState([])
+const MainPage = ({ posts, users, onGetPosts, onGetUsers, onUpdateVotes }) => {
+  let [postList, setPosts] = useState([])
+  let [usersList, setUsers] = useState([])
 
   useEffect(() => {
     onGetPosts()
-  }, [onGetPosts])
+    onGetUsers()
+  }, [onGetPosts, onGetUsers])
 
   useEffect( () => {
-    setList(posts)
-  },[posts])
+    setPosts(posts)
+    setUsers(users)
+  },[posts, users])
 
   return (
     <div>
-      <div>
-        {/* <UserList/> */}
+      <div className='users'>
+        {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map( user => (
+          <div key={user.id}>
+            <Link to={`/profile/${user.id}`}>{user.name}</Link>
+          </div>
+        ))}
       </div>
-      <div>
+      <div className='posts'>
         {postList.length === 0 ? <p>no posts have been made yet</p> : postList.map(post => {
           return <Post key={post.id} post={post} onUpdateVotes={onUpdateVotes}  />
         })}
