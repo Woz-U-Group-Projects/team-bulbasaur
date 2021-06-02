@@ -31,42 +31,40 @@ export const getPostsCompleted = (posts) => ({
   payload: posts
 })
 
-// export const addVote = async (type, current, postId) => {
-//   if(type === 'likes'){
-//     const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
-//     const posts_1 = await posts.data
+export const updateVotes = async (type, current, postId) => {
+  if(type === 'likes'){
+    const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
+    const posts_1 = await posts.data
     
-//     const postList = posts_1.map( post => ({
-//       id: post.PostId,
-//       author: post.user.UserName,
-//       title: post.PostHead,
-//       body: post.PostBody,
-//       likes: post.Likes,
-//       dislikes: post.Dislikes
-//     }))
+    const postList = posts_1.map( post => ({
+      id: post.PostId,
+      author: post.user.UserName,
+      title: post.PostHead,
+      body: post.PostBody,
+      likes: post.Likes,
+      dislikes: post.Dislikes
+    }))
 
-//     return postList
-//   }
-//   if(type === 'dislikes'){
-//     const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
-//     const posts_1 = await posts.data
+    return postList
+  }
+  if(type === 'dislikes'){
+    const posts = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
+    const posts_1 = await posts.data
    
-//     const postList = posts_1.map( post => ({
-//       id: post.PostId,
-//       author: post.user.UserName,
-//       title: post.PostHead,
-//       body: post.PostBody,
-//       likes: post.Likes,
-//       dislikes: post.Dislikes
-//     }))
+    const postList = posts_1.map( post => ({
+      id: post.PostId,
+      author: post.user.UserName,
+      title: post.PostHead,
+      body: post.PostBody,
+      likes: post.Likes,
+      dislikes: post.Dislikes
+    }))
     
-//     return postList
-//   }
-// }
+    return postList
+  }
+}
 
-// export const addVoteCompleted = (posts) => {
-//   return ({
-//     type: 'ADD_VOTE_COMPLETED',
-//     payload: posts
-//   })
-// }
+export const updateVotesCompleted = (posts) => ({
+    type: 'ADD_VOTE_COMPLETED',
+    payload: posts
+  })

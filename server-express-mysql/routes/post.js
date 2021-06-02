@@ -123,7 +123,7 @@ router.put('/api/:type/:postId', (req, res, next) => {
   if (req.params.type == 'likes') {
     models.posts.update(
       { Likes: parseInt(req.body.likes) + 1 },
-      { where: { PostId: req.params.postId } }
+      { where: { PostId: parseInt(req.params.postId) } }
     )
       .then(() => {
         return models.posts.findAll({
@@ -141,7 +141,7 @@ router.put('/api/:type/:postId', (req, res, next) => {
   if (req.params.type == 'dislikes') {
     models.posts.update(
       { Dislikes: parseInt(req.body.dislikes) + 1 },
-      { where: { PostId: req.params.postId } }
+      { where: { PostId: parseInt(req.params.postId) } }
     )
       .then(() => {
         return models.posts.findAll({
