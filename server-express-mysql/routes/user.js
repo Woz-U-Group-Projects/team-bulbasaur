@@ -6,7 +6,13 @@ var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
 router.get('/api', (req, res, next) => {
-  models.users.findAll({})
+  models.users.findAll({
+    where: { 
+      UserId: { 
+        [Op.gt]: 1 
+      } 
+    }
+  })
   .then(users => {
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify(users))
@@ -64,7 +70,7 @@ router.get('/api/profile', (req, res, next) => {
       if(user){
         models.users.findOne({
           where: { Email: user.Email },
-          attributes: ['FullName', 'UserName', 'Email']
+          attributes: ['UserId', 'FullName', 'UserName', 'Email']
         })
         .then( result => {
           res.header('Content-Type', 'application/json') 
@@ -87,7 +93,7 @@ router.get('/api/profile/:id', (req, res, next) => {
       if(user){
         models.users.findOne({
           where: { Email: user.Email },
-          attributes: ['FullName', 'UserName', 'Email']
+          attributes: ['UserId', 'FullName', 'UserName', 'Email']
         })
         .then( result => {
           res.header('Content-Type', 'application/json') 
@@ -99,8 +105,8 @@ router.get('/api/profile/:id', (req, res, next) => {
     })
   } else {
     models.users.findOne({
-      where: { UserId: req.body.id },
-      attributes: ['FullName', 'UserName']
+      where: { UserId: parseInt(req.params.id) },
+      attributes: ['UserId', 'FullName', 'UserName']
     })
     .then( user => {
       res.header('Content-Type', 'application/json') 
