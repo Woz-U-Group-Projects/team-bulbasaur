@@ -25,16 +25,13 @@ router.post('/api', (req, res, next) => {
     authService.verifyUser(token)
       .then(user => {
         if (user) {
-          models.posts.findOrCreate({
-            where: { UserId: 0 },
-            defaults: {
-              UserId: user.UserId,
-              PostHead: req.body.head,
-              PostBody: req.body.body,
-              Likes: 0,
-              Dislikes: 0,
-              Visible: 0
-            }
+          models.posts.create({
+            UserId: user.UserId,
+            PostHead: req.body.head,
+            PostBody: req.body.body,
+            Likes: 0,
+            Dislikes: 0,
+            Visible: req.body.visible == undefined ? 0 : req.body.visible
           })
             .spread((result, created) => {
               if (created) {
@@ -50,26 +47,8 @@ router.post('/api', (req, res, next) => {
         }
       })
   } else {
-    models.posts.findOrCreate({
-      where: { UserId: 0 },
-      defaults: {
-        UserId: 1,
-        PostHead: req.body.head,
-        PostBody: req.body.body,
-        Likes: 0,
-        Dislikes: 0,
-        Visible: 0
-      }
-    })
-      .spread((result, created) => {
-        if (created) {
-          res.header('Content-Type', 'application/json')
-          res.send(JSON.stringify({ status: true, data: result }))
-        } else {
-          res.header('Content-Type', 'application/json')
-          res.send(JSON.stringify({ status: false, message: 'something went wrong' }))
-        }
-      })
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify({ status: false, message: 'must be logged in to make a post'}))
   }
 })
 
@@ -80,8 +59,10 @@ router.get('/api/:id', (req, res, next) => {
       .then(user => {
         if (user.UserId == req.params.id) {
           models.posts.findAll({
-            where: {
-              UserId: req.params.id
+            where: { UserId: parseInt(req.params.id) },
+            include: {
+              model: models.users,
+              attributes: ['UserName']
             }
           })
             .then(posts => {
@@ -92,9 +73,13 @@ router.get('/api/:id', (req, res, next) => {
           models.posts.findAll({
             where: {
               [Op.and]: [
-                { UserId: req.params.id },
+                { UserId: parseInt(req.params.id) },
                 { visible: 0 }
               ]
+            },
+            include: {
+              model: models.users,
+              attributes: ['UserName']
             }
           })
             .then(posts => {
@@ -107,9 +92,13 @@ router.get('/api/:id', (req, res, next) => {
     models.posts.findAll({
       where: {
         [Op.and]: [
-          { UserId: req.params.id },
+          { UserId: parseInt(req.params.id) },
           { visible: 0 }
         ]
+      },
+      include: {
+        model: models.users,
+        attributes: ['UserName']
       }
     })
       .then(posts => {
@@ -164,10 +153,9 @@ router.delete('/api/:postId', (req, res, next) => {
     authService.verifyUser(token)
       .then(user => {
         if (user) {
-          models.posts.findAll({ where: { PostId: req.params.postId } })
+          models.posts.findOne({ where: { PostId: req.params.postId } })
             .then(post => {
-              let newPost = [...post]
-              if (user.UserId == newPost[0].UserId || user.Admin == 1) {
+              if (user.UserId == post.UserId || user.Admin == 1) {
                 models.posts.destroy({ where: { PostId: req.params.postId } })
                   .then(result => {
                     if (result) {

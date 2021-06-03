@@ -31,14 +31,14 @@ nav .title{
   text-decoration: none;
 }
 
-.linksList .login{
+.linksList .profile{
   grid-column: 1/2;
 }
 
-.linksList .signup{
+.linksList .login{
   grid-column: 2/3;
 }
 
-.linksList .profile{
+.linksList .signup{
   grid-column: 3/4;
 }

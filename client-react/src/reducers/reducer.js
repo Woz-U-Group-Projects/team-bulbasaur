@@ -1,6 +1,9 @@
 const initialState = {
   users: [],
-  posts: []
+  posts: [],
+  userPosts: [],
+  profile: {},
+  user: undefined
 }
 
 const reducer = (state = initialState, action)=>{
@@ -19,6 +22,16 @@ const reducer = (state = initialState, action)=>{
       return {
         ...state,
         posts: action.payload 
+      }
+    case 'GET_PROFILE_BY_ID_COMPLETED':
+      return {
+        ...state,
+        profile: action.payload.data
+      }
+    case 'GET_POSTS_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        userPosts: action.payload
       }
     default: 
       return{
