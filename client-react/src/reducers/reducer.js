@@ -3,6 +3,7 @@ const initialState = {
   posts: [],
   userPosts: [],
   profile: {},
+  signupStatus: {},
   user: undefined
 }
 
@@ -32,6 +33,11 @@ const reducer = (state = initialState, action)=>{
       return {
         ...state,
         userPosts: action.payload
+      }
+    case 'SIGNUP_COMPLETED':
+      return {
+        ...state,
+        signupStatus: action.payload
       }
     default: 
       return{

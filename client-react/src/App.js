@@ -14,6 +14,7 @@ import {
   getPosts, getPostsCompleted,
   getPostsByUserId, getPostsByUserIdCompleted,
   updateVotes, updateVotesCompleted,
+  signup, signupCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -54,11 +55,13 @@ const mapDispatchToProps = (dispatch, state) => {
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
     onGetPostsById: (userId) => getPostsByUserId(userId).then(posts => dispatch(getPostsByUserIdCompleted(posts))),
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
+    onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data)))
   }
 }
 
 const mapStateToProps = (state) => {
   return {
+    signupStatus: state.signupStatus,
     users: state.users,
     user: state.user,
     posts: state.posts,
