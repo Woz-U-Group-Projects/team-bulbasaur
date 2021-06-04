@@ -3,8 +3,7 @@ import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 //CSS
 import "./App.css";
@@ -21,28 +20,14 @@ import MainPage from "./components/mainPage/mainPage";
 import Login from "./components/login/login";
 import SignUp from "./components/signup/signup";
 import Profile from './components/profile/profile'
+import Navigation from "./components/navigation/nav";
 
 function _App(props) {
   let [userId, setUserId] = useState(1)
   return (
     <Router>
       <div className="App">
-        <nav>
-          <div className='title'>
-            <h1>DigiChat</h1>
-          </div>
-          <ul className='linksList'>
-            <li className='profile'>
-              <Link to='/' style={{ textDecoration: 'none' }} >Home</Link>
-            </li>
-            <li className='login'>
-              <Link to='/login' style={{ textDecoration: 'none' }} >Login</Link>
-            </li>
-            <li className='signup'>
-              <Link to='/signup' style={{ textDecoration: 'none' }} >SignUp</Link>
-            </li>
-          </ul>
-        </nav>
+        <Navigation />
         <Switch>
           <Route exact path='/'>
             <MainPage {...props} setUserId={setUserId} />
@@ -54,8 +39,7 @@ function _App(props) {
             <SignUp {...props} />
           </Route>
           <Route path={`/profile/${userId}`} >
-            <Profile {...props} userId={userId
-            }/>
+            <Profile {...props} userId={userId} />
           </Route>
         </Switch>
       </div>
