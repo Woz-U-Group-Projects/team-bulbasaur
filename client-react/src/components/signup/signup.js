@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { formik } from 'formik';
+import * as yup from 'yup';
 
 const SignUp = (props) => {
   return (
