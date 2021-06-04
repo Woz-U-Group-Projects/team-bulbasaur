@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PostForm from '../forms/postForm'
 import Post from '../mainPage/post'
 
 const Profile = (props) => {
@@ -41,16 +42,9 @@ const Profile = (props) => {
             <h3>Make A New Post</h3>
             <button onClick={() => setView(!formView)}>{formView === false ? 'Start' : 'cancel'}</button>
           </div>
-          <form style={formView === false ? {display: 'none'} : {display: 'block'}}>
-            <div>
-              <label htmlFor='head' >Title</label>
-              <input name='head' id='head' />
-            </div>
-            <div>
-              <label htmlFor='body' >Post</label>
-              <textarea name='body' id='body'></textarea>
-            </div>
-          </form>
+          <div style={formView === false ? {display: 'none'} : {display: 'block'}}>
+            <PostForm />
+          </div>
         </div>
         <div>
           {props.userPosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : props.userPosts.map( post => (
