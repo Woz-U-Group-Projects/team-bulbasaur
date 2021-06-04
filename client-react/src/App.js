@@ -14,6 +14,7 @@ import {
   getPosts, getPostsCompleted,
   getPostsByUserId, getPostsByUserIdCompleted,
   updateVotes, updateVotesCompleted,
+  login, loginCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -27,7 +28,7 @@ function _App(props) {
   return (
     <Router>
       <div className="App">
-        <Navigation />
+        <Navigation {...props} />
         <Switch>
           <Route exact path='/'>
             <MainPage {...props} setUserId={setUserId} />
@@ -54,13 +55,14 @@ const mapDispatchToProps = (dispatch, state) => {
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
     onGetPostsById: (userId) => getPostsByUserId(userId).then(posts => dispatch(getPostsByUserIdCompleted(posts))),
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
+    onLogin: (object) => login(object).then( data => dispatch(loginCompleted(data)))
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     users: state.users,
-    user: state.user,
+    loggedInUser: state.loggedInUser,
     posts: state.posts,
     userPosts: state.userPosts,
     profile: state.profile

@@ -1,5 +1,34 @@
 import axios from 'axios'
 
+const cookie = document.cookie
+
+const authAxios = axios.create({
+  headers: {
+    authorization: `Bearer ${cookie}`
+  }
+})
+
+export const login = async (object) => {
+  const req = await axios.post('http://localhost:3001/users/api/login', object)
+  const data = await req.data
+
+  const loggedInUser = {
+    id: data.UserId,
+    name: data.UserName,
+    email: data.Email,
+    userName: data.UserName
+  }
+
+  console.log(loggedInUser)
+
+  return loggedInUser
+}
+
+export const loginCompleted = (data) => ({
+  type: 'LOGIN_COMPLETED',
+  payload: data
+})
+
 export const getUsers = async () => {
   const req = await axios.get('http://localhost:3001/users/api')
   const data = await req.data
@@ -19,7 +48,7 @@ export const getUsersCompleted = (users) => ({
 })
 
 export const getProfileById = async (userId) => {
-  const req = await axios.get(`http://localhost:3001/users/api/profile/${userId}`)
+  const req = await authAxios.get(`http://localhost:3001/users/api/profile/${userId}`)
   const data = await req.data
   
   const profile = {

@@ -3,9 +3,9 @@ import PostForm from '../forms/postForm'
 import Post from '../mainPage/post'
 
 const Profile = (props) => {
-  let [isUserLoggedIn] = useState(props.user === undefined ? false : true)
+  let [isUserLoggedIn] = useState(props.loggedInUser === undefined ? false : true)
   let [formView, setView] = useState(false)
-  let {onGetPostsById, onGetProfileById, userId} = props
+  let {onGetPostsById, onGetProfileById, userId, loggedInUser} = props
 
   useEffect( () => {
     onGetProfileById(userId)
@@ -13,10 +13,15 @@ const Profile = (props) => {
   },[onGetProfileById, onGetPostsById, userId])
 
   if(isUserLoggedIn){
-    if(props.user.id === props.profile.id){
+    if(props.loggedInUser.id === props.profile.id){
       return (
         <div>
           <h1>User Is Logged In</h1>
+          <div>
+            {props.userPosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : props.userPosts.map( post => (
+              <Post key={post.id} post={post} onUpdateVotes={props.onUpdateVotes} />
+            ))}
+          </div>
         </div>
       )
     } else {
