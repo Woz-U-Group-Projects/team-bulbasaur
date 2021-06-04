@@ -1,4 +1,18 @@
-import axios from 'axios'
+import axios from 'axios';
+
+export const signup = async (object) => {
+  const req = await axios.post('http://localhost:3001/users/api/signup', object)
+  const data = await req.data
+
+  console.log(data)
+
+  return data
+}
+
+export const signupCompleted = (data) => ({
+  type: 'SIGNUP_COMPLETED',
+  payload: data
+})
 
 const cookie = document.cookie
 
