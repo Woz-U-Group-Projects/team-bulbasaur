@@ -1,9 +1,16 @@
 import axios from 'axios'
 
 export const getUsers = async () => {
-  const user = await axios.get('http://localhost:3001/users/api')
-  const user_1 = await user.data
-  return user_1
+  const req = await axios.get('http://localhost:3001/users/api')
+  const data = await req.data
+
+  const users = data.map(user => ({
+    id: user.UserId,
+    name: user.FullName,
+    userName: user.UserName,
+    email: user.Email
+  }))
+  return users
 }
 
 export const getUsersCompleted = (users) => ({
@@ -11,12 +18,33 @@ export const getUsersCompleted = (users) => ({
   payload: users
 })
 
-export const getPosts = async () => {
-  const posts = await axios.get('http://localhost:3001/posts/api')
-  const posts_1 = await posts.data
-  console.log(posts_1)
+export const getProfileById = async (userId) => {
+  const req = await axios.get(`http://localhost:3001/users/api/profile/${userId}`)
+  const data = await req.data
   
-  const postList = posts_1.map( post => ({
+  const profile = {
+    status: data.result,
+    data: {
+      id: data.data.UserId,
+      name: data.data.FullName,
+      userName: data.data.UserName
+    }
+  }
+  return profile
+}
+
+export const getProfileByIdCompleted = (user) => {
+  return({
+    type: 'GET_PROFILE_BY_ID_COMPLETED', 
+    payload: user
+  })
+}
+
+export const getPosts = async () => {
+  const req = await axios.get('http://localhost:3001/posts/api')
+  const data = await req.data
+
+  const posts = data.map(post => ({
     id: post.PostId,
     author: post.user.UserName,
     title: post.PostHead,
@@ -24,7 +52,7 @@ export const getPosts = async () => {
     likes: post.Likes,
     dislikes: post.Dislikes
   }))
-  return postList
+  return posts
 }
 
 export const getPostsCompleted = (posts) => ({
@@ -32,21 +60,60 @@ export const getPostsCompleted = (posts) => ({
   payload: posts
 })
 
-export const addVote = async (type, current, postId) => {
-  if(type === 'likes'){
-    const post = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
-    const post_1 = await post.data
-    console.log(post_1)
-    return post_1
+export const getPostsByUserId = async (userId) => {
+  const req = await axios.get(`http://localhost:3001/posts/api/${userId}`)
+  const data = await req.data
+  
+  const posts = data.map(post => ({
+    id: post.PostId,
+    author: post.user.UserName,
+    title: post.PostHead,
+    body: post.PostBody,
+    likes: post.Likes,
+    dislikes: post.Dislikes
+  }))
+  return posts
+}
+
+export const getPostsByUserIdCompleted = (posts) => ({
+  type: 'GET_POSTS_BY_USER_ID_COMPLETED',
+  payload: posts
+})
+
+export const updateVotes = async (type, current, postId) => {
+  if (type === 'likes') {
+    const req = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
+    const data = await req.data
+
+    const posts = data.map(post => ({
+      id: post.PostId,
+      author: post.user.UserName,
+      title: post.PostHead,
+      body: post.PostBody,
+      likes: post.Likes,
+      dislikes: post.Dislikes
+    }))
+
+    return posts
   }
-  if(type === 'dislikes'){
-    const post = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
-    const post_1 = await post.data
-    console.log(post_1)
-    return post_1
+  if (type === 'dislikes') {
+    const req = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
+    const data = await req.data
+
+    const posts = data.map(post => ({
+      id: post.PostId,
+      author: post.user.UserName,
+      title: post.PostHead,
+      body: post.PostBody,
+      likes: post.Likes,
+      dislikes: post.Dislikes
+    }))
+
+    return posts
   }
 }
 
-export const addVoteCompleted = (post) => ({
-  type: 'ADD_VOTE_COMPLETED'
+export const updateVotesCompleted = (posts) => ({
+  type: 'ADD_VOTE_COMPLETED',
+  payload: posts
 })
