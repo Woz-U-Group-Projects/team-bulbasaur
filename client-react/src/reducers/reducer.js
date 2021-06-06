@@ -5,6 +5,7 @@ const initialState = {
   profile: {},
   signupStatus: {},
   loggedInUser: undefined,
+  isLoggedIn: false
 }
 
 const reducer = (state = initialState, action)=>{
@@ -40,9 +41,22 @@ const reducer = (state = initialState, action)=>{
         signupStatus: action.payload
       }
     case 'LOGIN_COMPLETED':
+      if(action.payload.result === true){
+        return {
+          ...state,
+          isLoggedIn: action.payload.result,
+          loggedInUser: action.payload.user
+        }
+      } else {
+        return {
+          ...state
+        }
+      }
+    case 'LOGOUT_COMPLETED':
       return {
         ...state,
-        loggedInUser: action.payload
+        isLoggedIn: false,
+        loggedInUser: undefined
       }
     default: 
       return{

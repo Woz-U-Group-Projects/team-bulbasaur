@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Navigation = ({loggedInUser}) => {
+const Navigation = ({isLoggedIn, onLogout}) => {
   let[isUserLoggedIn, setUserLoggedIn] = useState()
 
 
   useEffect(() => {
-    setUserLoggedIn(loggedInUser)
-  }, [loggedInUser])
+    setUserLoggedIn(isLoggedIn)
+  }, [isLoggedIn])
 
   return (
     <nav>
@@ -15,18 +15,17 @@ const Navigation = ({loggedInUser}) => {
         <h1>DigiChat</h1>
       </div>
       <ul className='linksList'>
-        <li className='profile'>
-          <Link to='/' style={{ textDecoration: 'none' }} >Home</Link>
-        </li>
+        {isUserLoggedIn ? null : <li className='signup'>
+          <Link to='/signup' style={{ textDecoration: 'none' }} >SignUp</Link>
+        </li>}
         {isUserLoggedIn ? null : <li className='login'>
           <Link to='/login' style={{ textDecoration: 'none' }} >Login</Link>
         </li>}
         {isUserLoggedIn ? <li className='/login'>
-          <Link to='/login'>Logout</Link>
+          <Link onClick={() => onLogout()} style={{ textDecoration: 'none' }} to='/login'>Logout</Link>
         </li> : null}
-        
-        <li className='signup'>
-          <Link to='/signup' style={{ textDecoration: 'none' }} >SignUp</Link>
+        <li className='profile'>
+          <Link to='/' style={{ textDecoration: 'none' }} >Home</Link>
         </li>
       </ul>
     </nav>
