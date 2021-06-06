@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
@@ -10,8 +10,10 @@ const validate = yup.object({
   password: yup.string().required().min(8, 'Your Password Must Be A Minimum Of 8 Characters')
 })
 
-const SignUp = ({onSignup}) => {
 
+
+const SignUp = ({onSignup}) => {
+  let history = useHistory();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -24,7 +26,7 @@ const SignUp = ({onSignup}) => {
       actions.resetForm()
       onSignup(values).then((res) => {
         if (res.payload.result === true) {
-          return <Redirect to = '/login' />
+          history.push('/login')
         } else {
           alert(res.payload.message)
         }
@@ -93,4 +95,4 @@ const SignUp = ({onSignup}) => {
   )
 }
 
-export default SignUp
+export default SignUp;

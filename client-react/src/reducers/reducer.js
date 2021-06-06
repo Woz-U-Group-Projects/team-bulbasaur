@@ -38,6 +38,7 @@ const reducer = (state = initialState, action)=>{
       return {
         ...state,
         signupStatus: action.payload
+      }
     case 'LOGIN_COMPLETED':
       return {
         ...state,
