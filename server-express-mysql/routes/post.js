@@ -57,7 +57,7 @@ router.get('/api/:id', (req, res, next) => {
   if (token) {
     authService.verifyUser(token)
       .then(user => {
-        if (user.UserId == req.params.id) {
+        if (user.UserId == parseInt(req.params.id)) {
           models.posts.findAll({
             where: { UserId: parseInt(req.params.id) },
             include: {

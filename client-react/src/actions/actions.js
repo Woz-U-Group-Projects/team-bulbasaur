@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const signup = async (object) => {
-  const req = await axios.post('http://localhost:3001/users/api/signup', object)
+  const req = await axios.post('/users/api/signup', object)
   const data = await req.data
 
   console.log(data)
@@ -13,38 +13,57 @@ export const signupCompleted = (data) => ({
   type: 'SIGNUP_COMPLETED',
   payload: data
 })
-
-const cookie = document.cookie
-
-const authAxios = axios.create({
-  headers: {
-    authorization: `Bearer ${cookie}`
-  }
-})
+//========================================================================================
 
 export const login = async (object) => {
-  const req = await axios.post('http://localhost:3001/users/api/login', object)
+  const authAxios = axios.create({
+    headers: {
+      withCredentials: true,
+    },
+    credentials: 'same-origin'
+  })
+
+  const req = await authAxios.post('/users/api/login', object)
   const data = await req.data
-
-  const loggedInUser = {
-    id: data.UserId,
-    name: data.UserName,
-    email: data.Email,
-    userName: data.UserName
+  
+  if(data.result===false){
+    return data
+  } else {
+    const newData = {
+      result: true,
+      message: '',
+      user: {
+        id: data.user.UserId,
+        name: data.user.FullName,
+        userName: data.user.UserName,
+        email: data.user.Email,
+      }
+    }
+    return newData
   }
-
-  console.log(loggedInUser)
-
-  return loggedInUser
 }
 
 export const loginCompleted = (data) => ({
   type: 'LOGIN_COMPLETED',
   payload: data
 })
+//========================================================================================
+
+export const logout = async () => {
+  const req = await axios.get('/users/api/logout')
+  const data = await req.data
+  console.log(data)
+  return data
+}
+
+export const logoutCompleted = (data) => ({
+  type: 'LOGOUT_COMPLETED',
+  payload: data
+})
+//========================================================================================
 
 export const getUsers = async () => {
-  const req = await axios.get('http://localhost:3001/users/api')
+  const req = await axios.get('/users/api')
   const data = await req.data
 
   const users = data.map(user => ({
@@ -60,9 +79,19 @@ export const getUsersCompleted = (users) => ({
   type: 'GET_USERS_COMPLETED',
   payload: users
 })
+//========================================================================================
 
 export const getProfileById = async (userId) => {
-  const req = await authAxios.get(`http://localhost:3001/users/api/profile/${userId}`)
+  const cookie = document.cookie
+  console.log(cookie)
+  
+  const authAxios = axios.create({
+    headers: {
+      authorization: `Bearer ${cookie}`
+    }
+  })
+
+  const req = await authAxios.get(`/users/api/profile/${userId}`)
   const data = await req.data
   
   const profile = {
@@ -82,9 +111,10 @@ export const getProfileByIdCompleted = (user) => {
     payload: user
   })
 }
+//========================================================================================
 
 export const getPosts = async () => {
-  const req = await axios.get('http://localhost:3001/posts/api')
+  const req = await axios.get('/posts/api')
   const data = await req.data
 
   const posts = data.map(post => ({
@@ -102,9 +132,10 @@ export const getPostsCompleted = (posts) => ({
   type: 'GET_POSTS_COMPLETED',
   payload: posts
 })
+//========================================================================================
 
 export const getPostsByUserId = async (userId) => {
-  const req = await axios.get(`http://localhost:3001/posts/api/${userId}`)
+  const req = await axios.get(`/posts/api/${userId}`)
   const data = await req.data
   
   const posts = data.map(post => ({
@@ -122,10 +153,11 @@ export const getPostsByUserIdCompleted = (posts) => ({
   type: 'GET_POSTS_BY_USER_ID_COMPLETED',
   payload: posts
 })
+//========================================================================================
 
 export const updateVotes = async (type, current, postId) => {
   if (type === 'likes') {
-    const req = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { likes: current })
+    const req = await axios.put(`/posts/api/${type}/${postId}`, { likes: current })
     const data = await req.data
 
     const posts = data.map(post => ({
@@ -140,7 +172,7 @@ export const updateVotes = async (type, current, postId) => {
     return posts
   }
   if (type === 'dislikes') {
-    const req = await axios.put(`http://localhost:3001/posts/api/${type}/${postId}`, { dislikes: current })
+    const req = await axios.put(`/posts/api/${type}/${postId}`, { dislikes: current })
     const data = await req.data
 
     const posts = data.map(post => ({
@@ -160,3 +192,4 @@ export const updateVotesCompleted = (posts) => ({
   type: 'ADD_VOTE_COMPLETED',
   payload: posts
 })
+//========================================================================================

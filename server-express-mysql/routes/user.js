@@ -47,16 +47,16 @@ router.post('/api/login', (req, res, next) => {
   })
   .then(user => {
     if(!user){
-      res.send('user not found')
+      res.send(JSON.stringify({ result: false, message: 'user not found', user: null}))
     } else {
       let passwordMatch = authService.comparePassword(req.body.password, user.Password)
       if(passwordMatch){
         let token = authService.signUser(user)
+        res.header('Content-Type', 'application/json')
         res.cookie('jwt', token)
-        res.header('Content-Type', 'application/json')  
-        res.send(JSON.stringify(user))
+        res.send(JSON.stringify({ result: true, message: 'Login successful', user: user}))
       } else {
-        res.send('incorrect password')
+        res.send(JSON.stringify({ result: false, message: 'incorrect password', user: null}))
       }
     }
   })
@@ -64,6 +64,7 @@ router.post('/api/login', (req, res, next) => {
 
 router.get('/api/profile', (req, res, next) => {
   let token = req.cookies.jwt
+  console.log(token)
   if(token){
     authService.verifyUser(token)
     .then( user => {
@@ -90,7 +91,8 @@ router.get('/api/profile/:id', (req, res, next) => {
   if(token){
     authService.verifyUser(token)
     .then( user => {
-      if(user){
+      if(user.UserId === parseInt(req.params.id)){
+        console.log('success')
         models.users.findOne({
           where: { Email: user.Email },
           attributes: ['UserId', 'FullName', 'UserName', 'Email']
@@ -100,7 +102,7 @@ router.get('/api/profile/:id', (req, res, next) => {
           res.send(JSON.stringify({ result: true, data: result}))
         })
       } else {
-        res.send(JSON.stringify({ result: false }))
+        res.send(JSON.stringify({ result: false,  }))
       }
     })
   } else {
@@ -117,7 +119,7 @@ router.get('/api/profile/:id', (req, res, next) => {
 
 router.get('/api/logout', (req, res, next) => {
   res.cookie('jwt', "", { expires: new Date(0) })
-  res.send(JSON.stringify({ message: 'logged out'}))
+  res.send(JSON.stringify({ result: true, message: 'logged out'}))
 })
 
 router.delete('/api/:userId', (req, res, next) => {

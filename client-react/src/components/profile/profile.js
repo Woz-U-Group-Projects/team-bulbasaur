@@ -13,7 +13,7 @@ const Profile = (props) => {
   },[onGetProfileById, onGetPostsById, userId])
 
   if(isUserLoggedIn){
-    if(props.loggedInUser.id === props.profile.id){
+    if(loggedInUser.id === props.profile.id){
       return (
         <div>
           <h1>User Is Logged In</h1>

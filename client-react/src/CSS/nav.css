@@ -31,7 +31,7 @@ nav .title{
   text-decoration: none;
 }
 
-.linksList .profile{
+.linksList .signup{
   grid-column: 1/2;
 }
 
@@ -39,6 +39,6 @@ nav .title{
   grid-column: 2/3;
 }
 
-.linksList .signup{
+.linksList .profile{
   grid-column: 3/4;
 }

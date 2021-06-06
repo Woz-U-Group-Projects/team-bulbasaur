@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { Redirect } from 'react-router'
 
 const validate = yup.object({
   email: yup.string().email('Must Be A Valid Email Address').required('An Email Is Needed To'),
   password: yup.string().required().min(8, 'Your Password Must Be A Minimum Of 8 Characters')
 })
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, loggedInUser, isLoggedIn }) => {
+
+  useEffect( () => {
+    console.log(isLoggedIn)
+  },[isLoggedIn])
 
   const formik = useFormik({
     initialValues: {
@@ -20,6 +25,10 @@ const Login = ({ onLogin }) => {
       onLogin(values)
     }
   })
+
+  if(isLoggedIn){
+    return <Redirect to='/' />
+  }
 
   return (
     <div>
