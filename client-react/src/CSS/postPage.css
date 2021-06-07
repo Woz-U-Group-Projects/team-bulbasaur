@@ -1,0 +1,27 @@
+
+/*large-size*/
+@media screen and (min-width: 770px) {
+  .mainPage-container{
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(1fr, 12);
+  }
+
+  .usersList{
+    grid-column: 1/3;
+  }
+
+  .postsList{
+    grid-column: 4/13;
+  }
+}
+
+/* medium-size */
+@media screen and (max-width: 769px) and (min-width: 425px){
+  
+}
+
+/* small-size */
+@media screen and (max-width: 424px){
+  
+}

@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+const cookie = document.cookie
+  
+const authAxios = axios.create({
+  headers: {
+    withCredentials: true,
+    authorization: `Bearer ${cookie}`
+  },
+  credentials: 'same-origin'
+})
+
 export const signup = async (object) => {
   const req = await axios.post('/users/api/signup', object)
   const data = await req.data
@@ -16,12 +26,6 @@ export const signupCompleted = (data) => ({
 //========================================================================================
 
 export const login = async (object) => {
-  const authAxios = axios.create({
-    headers: {
-      withCredentials: true,
-    },
-    credentials: 'same-origin'
-  })
 
   const req = await authAxios.post('/users/api/login', object)
   const data = await req.data
@@ -82,15 +86,6 @@ export const getUsersCompleted = (users) => ({
 //========================================================================================
 
 export const getProfileById = async (userId) => {
-  const cookie = document.cookie
-  console.log(cookie)
-  
-  const authAxios = axios.create({
-    headers: {
-      authorization: `Bearer ${cookie}`
-    }
-  })
-
   const req = await authAxios.get(`/users/api/profile/${userId}`)
   const data = await req.data
   
@@ -125,7 +120,7 @@ export const getPosts = async () => {
     likes: post.Likes,
     dislikes: post.Dislikes
   }))
-  return posts
+  return posts.reverse()
 }
 
 export const getPostsCompleted = (posts) => ({
@@ -146,7 +141,7 @@ export const getPostsByUserId = async (userId) => {
     likes: post.Likes,
     dislikes: post.Dislikes
   }))
-  return posts
+  return posts.reverse()
 }
 
 export const getPostsByUserIdCompleted = (posts) => ({
@@ -169,7 +164,7 @@ export const updateVotes = async (type, current, postId) => {
       dislikes: post.Dislikes
     }))
 
-    return posts
+    return posts.reverse()
   }
   if (type === 'dislikes') {
     const req = await axios.put(`/posts/api/${type}/${postId}`, { dislikes: current })
@@ -184,12 +179,33 @@ export const updateVotes = async (type, current, postId) => {
       dislikes: post.Dislikes
     }))
 
-    return posts
+    return posts.reverse()
   }
 }
 
 export const updateVotesCompleted = (posts) => ({
   type: 'ADD_VOTE_COMPLETED',
   payload: posts
+})
+//========================================================================================
+
+export const makePost = async (object) => {
+  const req = await authAxios.post('/posts/api', object)
+  const res = await req.data
+
+  const posts = res.data.map(post => ({
+    id: post.PostId,
+    author: post.user.UserName,
+    title: post.PostHead,
+    body: post.PostBody,
+    likes: post.Likes,
+    dislikes: post.Dislikes
+  }))
+  return posts.reverse()
+}
+
+export const makePostCompleted = (res) => ({
+  type: 'MAKE_POST_COMPLETED',
+  payload: res
 })
 //========================================================================================

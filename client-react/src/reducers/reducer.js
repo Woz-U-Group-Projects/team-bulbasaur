@@ -58,6 +58,11 @@ const reducer = (state = initialState, action)=>{
         isLoggedIn: false,
         loggedInUser: undefined
       }
+    case 'MAKE_POST_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
     default: 
       return{
         ...state

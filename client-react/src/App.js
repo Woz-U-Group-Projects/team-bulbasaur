@@ -16,7 +16,8 @@ import {
   updateVotes, updateVotesCompleted,
   signup, signupCompleted,
   login, loginCompleted,
-  logout, logoutCompleted
+  logout, logoutCompleted,
+  makePost, makePostCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -59,7 +60,8 @@ const mapDispatchToProps = (dispatch, state) => {
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
     onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data))),
     onLogin: (object) => login(object).then( data => dispatch(loginCompleted(data))),
-    onLogout: () => logout().then( data => dispatch(logoutCompleted(data)))
+    onLogout: () => logout().then( data => dispatch(logoutCompleted(data))),
+    onMakePost: (obj) => makePost(obj).then( res => dispatch(makePostCompleted(res)))
   }
 }
 

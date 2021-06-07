@@ -43,7 +43,8 @@ router.post('/api/signup', (req, res, next) => {
 
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
-    where: { Email: req.body.email }
+    where: { Email: req.body.email },
+    // attributes: ['FullName', 'UserName', 'UserId', 'Email', 'Admin']
   })
   .then(user => {
     if(!user){
@@ -102,7 +103,14 @@ router.get('/api/profile/:id', (req, res, next) => {
           res.send(JSON.stringify({ result: true, data: result}))
         })
       } else {
-        res.send(JSON.stringify({ result: false,  }))
+        models.users.findOne({
+          where: { UserId: parseInt(req.params.id) },
+          attributes: ['UserId', 'FullName', 'UserName']
+        })
+        .then( user => {
+          res.header('Content-Type', 'application/json') 
+          res.send(JSON.stringify({ result: false, data: user}))
+        })
       }
     })
   } else {

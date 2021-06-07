@@ -20,35 +20,49 @@ router.get('/api', (req, res, next) => {
 })
 
 router.post('/api', (req, res, next) => {
+  console.log(req.body)
   let token = req.cookies.jwt
   if (token) {
     authService.verifyUser(token)
       .then(user => {
         if (user) {
-          models.posts.create({
-            UserId: user.UserId,
-            PostHead: req.body.head,
-            PostBody: req.body.body,
-            Likes: 0,
-            Dislikes: 0,
-            Visible: req.body.visible == undefined ? 0 : req.body.visible
+          models.posts.findOrCreate({
+            where: { PostId: 0 },
+            defaults: {
+              UserId: user.UserId,
+              PostHead: req.body.title,
+              PostBody: req.body.body,
+              Likes: 0,
+              Dislikes: 0,
+              Visible: req.body.isHidden === false ? 0 : 1
+            }
           })
             .spread((result, created) => {
               if (created) {
-                res.header('Content-Type', 'application/json')
-                res.send(JSON.stringify({ status: true, data: result }))
+                models.posts.findAll({ 
+                  where: { visible: 0 },
+                  include: {
+                    model: models.users,
+                    attributes: ['UserName']
+                  } 
+                })
+                  .then(posts => {
+                    res.header('Content-Type', 'application/json')
+                    res.send(JSON.stringify({ status: true, message: 'post was successful', data: posts }))
+                  })
               } else {
                 res.header('Content-Type', 'application/json')
-                res.send(JSON.stringify({ status: false, message: 'something went wrong' }))
+                res.send(JSON.stringify({ status: false, message: 'something went wrong', data: null }))
               }
             })
         } else {
-          res.send('boo')
+          res.header('Content-Type', 'application/json')
+          res.send(JSON.stringify({ status: false, message: 'Something Went Wrong', data: null }))
         }
       })
   } else {
     res.header('Content-Type', 'application/json')
-    res.send(JSON.stringify({ status: false, message: 'must be logged in to make a post'}))
+    res.send(JSON.stringify({ status: false, message: 'must be logged in to make a post', data: null }))
   }
 })
 
