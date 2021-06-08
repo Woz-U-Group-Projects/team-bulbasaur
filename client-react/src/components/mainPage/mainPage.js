@@ -21,15 +21,6 @@ const MainPage = (props) => {
 
   return (
     <div className='mainPage-container'>
-      <div className='usersList'>
-        {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map(user => (
-          <div key={user.id}>
-            <Link onClick={() => setUserId(user.id)} to={`/profile/${user.id}`} style={{ textDecoration: 'none' }} >
-              {user.userName}
-            </Link>
-          </div>
-        ))}
-      </div>
       <div className='postsList'>
         <div className='postForm'>
           <div>
@@ -55,6 +46,18 @@ const MainPage = (props) => {
             return <Post key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
           })}
         </div>
+      </div>
+      <div className='usersList'>
+        <h3>People You're Following
+          
+        </h3>
+        {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map(user => (
+          <div key={user.id}>
+            <Link onClick={() => setUserId(user.id)} to={`/profile/${user.id}`} style={{ textDecoration: 'none' }} >
+              {user.userName}
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   )

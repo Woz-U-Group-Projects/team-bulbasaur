@@ -203,7 +203,7 @@ export const makePost = async (object) => {
   }))
   return posts.reverse()
 }
-
+  
 export const makePostCompleted = (res) => ({
   type: 'MAKE_POST_COMPLETED',
   payload: res
