@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react'
+import CommentView from '../comments/comments'
 
-const Post = ({ post, onUpdateVotes }) => {
+const Post = (props) => {
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser } = props
   let [commentList, setList] = useState([])
-
+  let [commentView, setView] = useState(false)
   let [likes, setLikes] = useState(0)
   let [dislikes, setDislikes] = useState(0)
 
-  useEffect( () => {
+  useEffect(() => {
     setLikes(post.likes)
     setDislikes(post.dislikes)
-  },[post])
+    setList(post.comments)
+  }, [post])
 
   return (
     <div>
-      <h3>{post.author}</h3>
+      <div>
+        <h3>{post.author}</h3>
+        {isLoggedIn ?
+          loggedInUser.id === post.authorId ? <button>Delete</button> : null
+          : null}
+      </div>
       <div>
         <h4>{post.title}</h4>
         <p>{post.body}</p>
@@ -27,14 +35,14 @@ const Post = ({ post, onUpdateVotes }) => {
           <div>dislikes</div>
           <div>{dislikes}</div>
         </button>
+        <button
+          style={commentList.length === 0 ? { display: 'none' } : { display: 'block' }}
+          onClick={() => setView(!commentView)}
+        >
+          See {commentView === false ? 'More' : 'Less'} Comments
+        </button>
       </div>
-      <div>
-        {commentList.length === 0 ? null : commentList.map(comment => (
-          <div>
-            <h5>{comment.author}</h5>
-          </div>
-        ))}
-      </div>
+      <CommentView {...props} commentView={commentView} postId={post.id} commentList={commentList} />
     </div>
   )
 }

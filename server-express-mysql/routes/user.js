@@ -44,7 +44,7 @@ router.post('/api/signup', (req, res, next) => {
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
     where: { Email: req.body.email },
-    // attributes: ['FullName', 'UserName', 'UserId', 'Email', 'Admin']
+    // attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin']
   })
   .then(user => {
     if(!user){

@@ -8,10 +8,19 @@ var authService = require("../services/auth")
 router.get('/api', (req, res, next) => {
   models.posts.findAll({
     where: { Visible: 0 },
-    include: {
-      model: models.users,
-      attributes: ['UserName']
-    }
+    include: [
+      {
+        model: models.users,
+        attributes: ['UserName']
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }
+    ]
   })
     .then(posts => {
       res.header('Content-Type', 'application/json')
@@ -41,10 +50,17 @@ router.post('/api', (req, res, next) => {
               if (created) {
                 models.posts.findAll({ 
                   where: { visible: 0 },
-                  include: {
+                  include: [{
                     model: models.users,
                     attributes: ['UserName']
-                  } 
+                  },
+                  {
+                    model: models.comments,
+                    include: {
+                      model: models.users,
+                      attributes: ['UserName']
+                    }
+                  }]
                 })
                   .then(posts => {
                     res.header('Content-Type', 'application/json')
@@ -74,10 +90,17 @@ router.get('/api/:id', (req, res, next) => {
         if (user.UserId == parseInt(req.params.id)) {
           models.posts.findAll({
             where: { UserId: parseInt(req.params.id) },
-            include: {
+            include: [{
               model: models.users,
               attributes: ['UserName']
-            }
+            },
+            {
+              model: models.comments,
+              include: {
+                model: models.users,
+                attributes: ['UserName']
+              }
+            }]
           })
             .then(posts => {
               res.header('Content-Type', 'application/json')
@@ -91,10 +114,17 @@ router.get('/api/:id', (req, res, next) => {
                 { visible: 0 }
               ]
             },
-            include: {
+            include: [{
               model: models.users,
               attributes: ['UserName']
-            }
+            },
+            {
+              model: models.comments,
+              include: {
+                model: models.users,
+                attributes: ['UserName']
+              }
+            }]
           })
             .then(posts => {
               res.header('Content-Type', 'application/json')
@@ -110,10 +140,17 @@ router.get('/api/:id', (req, res, next) => {
           { visible: 0 }
         ]
       },
-      include: {
+      include: [{
         model: models.users,
         attributes: ['UserName']
-      }
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }]
     })
       .then(posts => {
         res.header('Content-Type', 'application/json')
@@ -131,9 +168,16 @@ router.put('/api/:type/:postId', (req, res, next) => {
       .then(() => {
         return models.posts.findAll({
           where: { Visible: 0 },
-          include: {
+          include: [{
             model: models.users
-          }
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }]
         })
       })
       .then(post => {
@@ -149,9 +193,16 @@ router.put('/api/:type/:postId', (req, res, next) => {
       .then(() => {
         return models.posts.findAll({
           where: { Visible: 0 },
-          include: {
+          include: [{
             model: models.users
-          }
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }]
         })
       })
       .then(post => {

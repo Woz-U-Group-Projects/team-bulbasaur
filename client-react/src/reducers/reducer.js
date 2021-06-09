@@ -42,6 +42,7 @@ const reducer = (state = initialState, action)=>{
       }
     case 'LOGIN_COMPLETED':
       if(action.payload.result === true){
+        console.log(action.payload.user)
         return {
           ...state,
           isLoggedIn: action.payload.result,

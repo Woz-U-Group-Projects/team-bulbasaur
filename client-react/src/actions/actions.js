@@ -9,6 +9,7 @@ const authAxios = axios.create({
   },
   credentials: 'same-origin'
 })
+//========================================================================================
 
 export const signup = async (object) => {
   const req = await axios.post('/users/api/signup', object)
@@ -29,6 +30,7 @@ export const login = async (object) => {
 
   const req = await authAxios.post('/users/api/login', object)
   const data = await req.data
+  console.log(data)
   
   if(data.result===false){
     return data
@@ -43,6 +45,7 @@ export const login = async (object) => {
         email: data.user.Email,
       }
     }
+    console.log(newData)
     return newData
   }
 }
@@ -115,10 +118,18 @@ export const getPosts = async () => {
   const posts = data.map(post => ({
     id: post.PostId,
     author: post.user.UserName,
+    authorId: post.UserId,
     title: post.PostHead,
     body: post.PostBody,
     likes: post.Likes,
-    dislikes: post.Dislikes
+    dislikes: post.Dislikes,
+    comments: post.comments.reverse().map(comment => ({
+      id: comment.CommentId,
+      body: comment.CommentBody,
+      likes: comment.Likes,
+      dislikes: comment.Dislikes,
+      author: comment.user.UserName
+    }))
   }))
   return posts.reverse()
 }
@@ -132,14 +143,21 @@ export const getPostsCompleted = (posts) => ({
 export const getPostsByUserId = async (userId) => {
   const req = await axios.get(`/posts/api/${userId}`)
   const data = await req.data
-  
   const posts = data.map(post => ({
     id: post.PostId,
     author: post.user.UserName,
+    authorId: post.UserId,
     title: post.PostHead,
     body: post.PostBody,
     likes: post.Likes,
-    dislikes: post.Dislikes
+    dislikes: post.Dislikes,
+    comments: post.comments.reverse().map(comment => ({
+      id: comment.CommentId,
+      body: comment.CommentBody,
+      likes: comment.Likes,
+      dislikes: comment.Dislikes,
+      author: comment.user.UserName
+    }))
   }))
   return posts.reverse()
 }
@@ -158,10 +176,18 @@ export const updateVotes = async (type, current, postId) => {
     const posts = data.map(post => ({
       id: post.PostId,
       author: post.user.UserName,
+      authorId: post.UserId,
       title: post.PostHead,
       body: post.PostBody,
       likes: post.Likes,
-      dislikes: post.Dislikes
+      dislikes: post.Dislikes,
+      comments: post.comments.reverse().map(comment => ({
+        id: comment.CommentId,
+        body: comment.CommentBody,
+        likes: comment.Likes,
+        dislikes: comment.Dislikes,
+        author: comment.user.UserName
+      }))
     }))
 
     return posts.reverse()
@@ -173,10 +199,18 @@ export const updateVotes = async (type, current, postId) => {
     const posts = data.map(post => ({
       id: post.PostId,
       author: post.user.UserName,
+      authorId: post.UserId,
       title: post.PostHead,
       body: post.PostBody,
       likes: post.Likes,
-      dislikes: post.Dislikes
+      dislikes: post.Dislikes,
+      comments: post.comments.reverse().map(comment => ({
+        id: comment.CommentId,
+        body: comment.CommentBody,
+        likes: comment.Likes,
+        dislikes: comment.Dislikes,
+        author: comment.user.UserName
+      }))
     }))
 
     return posts.reverse()
@@ -192,14 +226,23 @@ export const updateVotesCompleted = (posts) => ({
 export const makePost = async (object) => {
   const req = await authAxios.post('/posts/api', object)
   const res = await req.data
+  console.log(res)
 
   const posts = res.data.map(post => ({
     id: post.PostId,
     author: post.user.UserName,
+    authorId: post.UserId,
     title: post.PostHead,
     body: post.PostBody,
     likes: post.Likes,
-    dislikes: post.Dislikes
+    dislikes: post.Dislikes,
+    comments: post.comments.map(comment => ({
+      id: comment.CommentId,
+      body: comment.CommentBody,
+      likes: comment.Likes,
+      dislikes: comment.Dislikes,
+      author: comment.user.UserName
+    }))
   }))
   return posts.reverse()
 }
