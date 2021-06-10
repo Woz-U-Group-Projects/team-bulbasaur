@@ -8,7 +8,7 @@ const validate = yup.object({
   body: yup.string().required()
 })
 
-const CommentForm = ({postId, loggedInUser}) => {
+const CommentForm = ({postId, loggedInUser, onMakeComment}) => {
 
   const formik = useFormik({
     initialValues: {
@@ -18,7 +18,7 @@ const CommentForm = ({postId, loggedInUser}) => {
     },
     validationSchema: validate,
     onSubmit: (values) => {
-      alert(JSON.stringify(values))
+      onMakeComment(values)
     }
   })
 

@@ -224,8 +224,26 @@ router.delete('/api/:postId', (req, res, next) => {
                 models.posts.destroy({ where: { PostId: req.params.postId } })
                   .then(result => {
                     if (result) {
-                      res.header('Content-Type', 'application/json')
-                      res.send(JSON.stringify({ status: true, message: 'post was deleted' }))
+                      models.posts.findAll({
+                        Where: { Visible: 0 },
+                        include: [
+                          {
+                            model: models.users,
+                            attributes: ['UserName']
+                          },
+                          {
+                            model: models.comments,
+                            include: {
+                              model: models.users,
+                              attributes: ["UserName"]
+                            }
+                          }
+                        ]
+                      })
+                      .then( posts => {
+                        res.header('Content-Type', 'application/json')
+                        res.send(JSON.stringify({ status: true, message: 'Post Was Deleted Successfully', data: posts }))
+                      })
                     } else {
                       res.header('Content-Type', 'application/json')
                       res.send(JSON.stringify({ status: false, message: 'something whent worng' }))

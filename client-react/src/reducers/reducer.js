@@ -26,6 +26,7 @@ const reducer = (state = initialState, action)=>{
         posts: action.payload 
       }
     case 'GET_PROFILE_BY_ID_COMPLETED':
+      console.log('hi')
       return {
         ...state,
         profile: action.payload.data
@@ -42,13 +43,18 @@ const reducer = (state = initialState, action)=>{
       }
     case 'LOGIN_COMPLETED':
       if(action.payload.result === true){
-        console.log(action.payload.user)
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
         return {
           ...state,
           isLoggedIn: action.payload.result,
           loggedInUser: action.payload.user
         }
       } else {
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
         return {
           ...state
         }
@@ -63,6 +69,28 @@ const reducer = (state = initialState, action)=>{
       return {
         ...state,
         posts: action.payload
+      }
+    case 'MAKE_COMMENT_COMPLETED': 
+      return {
+        ...state,
+        posts: action.payload
+      }
+    case 'DELETE_POST_COMPLETED': 
+      if(action.payload.status === true){
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
+        return{
+          ...state,
+          posts: action.payload.data
+        }
+      } else {
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
+        return{
+          ...state
+        }
       }
     default: 
       return{

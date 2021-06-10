@@ -29,24 +29,41 @@ export const signupCompleted = (data) => ({
 export const login = async (object) => {
 
   const req = await authAxios.post('/users/api/login', object)
-  const data = await req.data
-  console.log(data)
+  const res = await req.data
   
-  if(data.result===false){
-    return data
+  if(res.result===false){
+    return res
   } else {
-    const newData = {
+    const data = {
       result: true,
-      message: '',
+      message: res.message,
       user: {
-        id: data.user.UserId,
-        name: data.user.FullName,
-        userName: data.user.UserName,
-        email: data.user.Email,
+        id: res.user.UserId,
+        name: res.user.FullName,
+        userName: res.user.UserName,
+        email: res.user.Email,
+        admin: res.user.Admin,
+        posts: res.user.posts.map( post => ({
+          id: post.PostId,
+          authorId: post.UserId,
+          author: post.user.UserName,
+          title: post.PostHead,
+          body: post.PostBody,
+          comments: post.comments.map( comment => ({
+            id: comment.CommentId,
+            authorId: comment.UserId,
+            author: comment.user.UserName,
+            body: comment.CommentBody,
+            likes: comment.Likes,
+            dislikes: comment.Dislikes
+          })),
+          likes: post.Likes,
+          dislikes: post.Dislikes,
+          isHidden: post.Visible
+        }))
       }
     }
-    console.log(newData)
-    return newData
+    return data
   }
 }
 
@@ -73,12 +90,40 @@ export const getUsers = async () => {
   const req = await axios.get('/users/api')
   const data = await req.data
 
-  const users = data.map(user => ({
-    id: user.UserId,
-    name: user.FullName,
-    userName: user.UserName,
-    email: user.Email
-  }))
+  const users = data.map( user => {
+    const posts = user.posts.map( post => {
+      const comments = post.comments.map( comment => ({
+        id: comment.CommentId,
+        PostId: comment.PostId,
+        authorId: comment.UserId,
+        author: comment.user.UserName,
+        body: comment.CommentBody,
+        likes: comment.Likes,
+        dislikes: comment.Dislikes
+      }))
+
+      return {
+        id: post.PostId,
+        authorId: post.UserId,
+        author: post.user.UserName,
+        title: post.PostHead,
+        body: post.PostBody,
+        comments: comments,
+        likes: post.Likes,
+        dislikes: post.Dislikes,
+        isHidden: post.Visible
+      }
+    })
+
+    return {
+      id: user.UserId,
+      name: user.FullName,
+      userName: user.UserName,
+      email: user.Email,
+      posts: posts
+    }
+  })
+  
   return users
 }
 
@@ -252,3 +297,65 @@ export const makePostCompleted = (res) => ({
   payload: res
 })
 //========================================================================================
+
+export const makeComment = async (obj) => {
+  console.log(obj)
+  const req = await authAxios.post('/comments/api', obj)
+  const res = await req.data
+  
+  const posts = res.data.map(post => ({
+    id: post.PostId,
+    author: post.user.UserName,
+    authorId: post.UserId,
+    title: post.PostHead,
+    body: post.PostBody,
+    likes: post.Likes,
+    dislikes: post.Dislikes,
+    comments: post.comments.map(comment => ({
+      id: comment.CommentId,
+      body: comment.CommentBody,
+      likes: comment.Likes,
+      dislikes: comment.Dislikes,
+      author: comment.user.UserName
+    }))
+  }))
+  return posts.reverse()
+}
+
+export const makeCommentCompleted = (obj) => ({
+  type: 'MAKE_COMMENT_COMPLETED',
+  payload: obj
+})
+//========================================================================================
+
+export const deletePost = async (postId) => {
+  const req = await authAxios.delete(`posts/api/${postId}`)
+  const res = await req.data
+
+  const posts = res.data.map(post => ({
+    id: post.PostId,
+    author: post.user.UserName,
+    authorId: post.UserId,
+    title: post.PostHead,
+    body: post.PostBody,
+    likes: post.Likes,
+    dislikes: post.Dislikes,
+    comments: post.comments.map(comment => ({
+      id: comment.CommentId,
+      body: comment.CommentBody,
+      likes: comment.Likes,
+      dislikes: comment.Dislikes,
+      author: comment.user.UserName
+    }))
+  }))
+  return {
+    status: res.status,
+    message: res.message,
+    data: posts.reverse()
+  }
+}
+
+export const deletePostCompleted = (data) => ({
+  type: 'DELETE_POST_COMPLETED',
+  payload: data
+})

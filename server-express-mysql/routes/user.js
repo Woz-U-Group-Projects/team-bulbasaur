@@ -10,8 +10,25 @@ router.get('/api', (req, res, next) => {
     where: { 
       UserId: { 
         [Op.gt]: 1 
-      } 
-    }
+      }
+    },
+    attributes: ['UserId', 'FullName', 'UserName', 'Email'],
+    include: {
+      model: models.posts,
+      include: [
+        {
+          model: models.users,
+          attributes: ['UserName']
+        },
+        {
+          model: models.comments,
+          include: {
+            model: models.users,
+            attributes: ['UserName']
+          }
+        }
+      ]
+    },
   })
   .then(users => {
     res.header('Content-Type', 'application/json')
@@ -44,7 +61,22 @@ router.post('/api/signup', (req, res, next) => {
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
     where: { Email: req.body.email },
-    // attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin']
+    include: {
+      model: models.posts,
+      include: [
+        {
+          model: models.users,
+          attributes: ['UserName']
+        },
+        {
+          model: models.comments,
+          include: {
+            model: models.users,
+            attributes: ["userName"]
+          }
+        }
+      ]
+    }
   })
   .then(user => {
     if(!user){

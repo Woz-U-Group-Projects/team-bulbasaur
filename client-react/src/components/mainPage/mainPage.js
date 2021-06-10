@@ -4,7 +4,7 @@ import PostForm from '../forms/postForm'
 import Post from './post'
 
 const MainPage = (props) => {
-  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, setUserId, isLoggedIn } = props
+  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, setProfile, isLoggedIn } = props
   let [postList, setPosts] = useState([])
   let [usersList, setUsers] = useState([])
 
@@ -21,13 +21,10 @@ const MainPage = (props) => {
   return (
     <div className='mainPage-container'>
       <div className='postsList'>
-        <div className='postForm'>
-          <div>
-            <div style={isLoggedIn === true ? {display: 'block'} : {display: 'none'}}>
-              <h3>Make A New Post</h3>
-              <PostForm {...props} />
-            </div>
-          </div>
+        <h2>Make Posts Here to Start Conversations With Users Around The World</h2>
+        <div className='postForm' style={isLoggedIn === true ? { display: 'block' } : { display: 'none' }}>
+          <h3>Make A New Post</h3>
+          <PostForm {...props} />
         </div>
         <div className='posts'>
           {postList.length === 0 ? <p>no posts have been made yet</p> : postList.map(post => {
@@ -41,7 +38,7 @@ const MainPage = (props) => {
         </h3>
         {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map(user => (
           <div key={user.id}>
-            <Link onClick={() => setUserId(user.id)} to={`/profile/${user.id}`} style={{ textDecoration: 'none' }} >
+            <Link onClick={() => setProfile(user)} to={`/profile/${user.name}`} style={{ textDecoration: 'none' }} >
               {user.userName}
             </Link>
           </div>

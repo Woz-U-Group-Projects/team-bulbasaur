@@ -26,8 +26,26 @@ router.post('/api', (req, res, next) => {
   })
   .spread((result, created) => {
     if(created){
-      res.header('Content-Type', 'application/json')
-      res.send(JSON.stringify(result))
+      models.posts.findAll({
+        where: { Visible: 0 },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
+      })
+      .then(posts => {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify({result: true, data: posts}))
+      })
     } else {
       res.header('Content-Type', 'application/json')
       res.send(JSON.stringify({ result: false, message: 'Something Went Wrong' }))
