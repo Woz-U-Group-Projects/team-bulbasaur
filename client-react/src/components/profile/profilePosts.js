@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import CommentView from '../../comments/commentView/comments'
-import EditPostForm from '../../forms/editPostForm/editPostForm'
+import React, { useState, useEffect } from "react";
+import CommentView from "../comments/commentView/comments";
+import EditPostForm from "../forms/editPostForm/editPostForm";
 
-const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, setProfile } = props
+const ProfilePosts = (props) => {
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -20,13 +19,7 @@ const Post = (props) => {
   return (
     <div style={{ margin: 20, borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
       <div style={{ borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
-        <Link 
-          onClick={() => setProfile(props.users.filter(user => user.id === post.author.id)[0])} 
-          to={`/profile`} 
-          style={{ textDecoration: 'none', color: 'black' }}
-        >
-          <h3>{post.author.userName}</h3>
-        </Link>
+        <h3>{post.author.userName}</h3>
       </div>
       <div>
         <h4>{post.title}</h4>
@@ -64,4 +57,4 @@ const Post = (props) => {
   )
 }
 
-export default Post
+export default ProfilePosts

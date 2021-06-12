@@ -32,7 +32,6 @@ const MainPage = (props) => {
       </div>
       <div className='usersList'>
         <h3>Popular Groups</h3>
-        
       </div>
     </div>
   )

@@ -41,9 +41,6 @@ function _App(props) {
           <Route path='/signup'>
             <SignUp {...props} />
           </Route>
-          <Route path={`/user/${profile.name}`} >
-            <Profile {...props} profile={profile} />
-          </Route>
           <Route path='/profile'>
             <Profile {...props} profile={profile} />
           </Route>

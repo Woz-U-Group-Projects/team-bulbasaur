@@ -19,8 +19,10 @@ const mapUser = (data) => {
     admin: data.Admin,
     posts: data.posts.map(post => ({
       id: post.PostId,
-      authorId: post.UserId,
-      author: post.user.UserName,
+      author: {
+        id: post.UserId,
+        userName: post.user.UserName
+      },
       title: post.PostHead,
       body: post.PostBody,
       edit: post.Edit,
@@ -56,8 +58,10 @@ const mapUsers = (data) => {
 
       return {
         id: post.PostId,
-        authorId: post.UserId,
-        author: post.user.UserName,
+        author: {
+          id: post.UserId,
+          userName: post.user.UserName
+        },
         title: post.PostHead,
         body: post.PostBody,
         edit: post.Edit,
@@ -83,8 +87,10 @@ const mapUsers = (data) => {
 const mapPosts = (data) => {
   const posts = data.map(post => ({
     id: post.PostId,
-    author: post.user.UserName,
-    authorId: post.UserId,
+    author: {
+      id: post.UserId,
+      userName: post.user.UserName
+    },
     title: post.PostHead,
     edit: post.Edit,
     body: post.PostBody,
