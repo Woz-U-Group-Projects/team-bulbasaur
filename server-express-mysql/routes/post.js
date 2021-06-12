@@ -5,13 +5,23 @@ var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
+//inUse
 router.get('/api', (req, res, next) => {
   models.posts.findAll({
     where: { Visible: 0 },
-    include: {
-      model: models.users,
-      attributes: ['UserName']
-    }
+    include: [
+      {
+        model: models.users,
+        attributes: ['UserName']
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }
+    ]
   })
     .then(posts => {
       res.header('Content-Type', 'application/json')
@@ -19,8 +29,8 @@ router.get('/api', (req, res, next) => {
     })
 })
 
+//inUse
 router.post('/api', (req, res, next) => {
-  console.log(req.body)
   let token = req.cookies.jwt
   if (token) {
     authService.verifyUser(token)
@@ -30,6 +40,7 @@ router.post('/api', (req, res, next) => {
             where: { PostId: 0 },
             defaults: {
               UserId: user.UserId,
+              GroupId: req.body.groupId === undefined ? 0 : req.body.groupId,
               PostHead: req.body.title,
               PostBody: req.body.body,
               Likes: 0,
@@ -39,12 +50,21 @@ router.post('/api', (req, res, next) => {
           })
             .spread((result, created) => {
               if (created) {
-                models.posts.findAll({ 
-                  where: { visible: 0 },
-                  include: {
-                    model: models.users,
-                    attributes: ['UserName']
-                  } 
+                models.posts.findAll({
+                  where: { Visible: 0 },
+                  include: [
+                    {
+                      model: models.users,
+                      attributes: ['UserName']
+                    },
+                    {
+                      model: models.comments,
+                      include: {
+                        model: models.users,
+                        attributes: ['UserName']
+                      }
+                    }
+                  ]
                 })
                   .then(posts => {
                     res.header('Content-Type', 'application/json')
@@ -74,10 +94,17 @@ router.get('/api/:id', (req, res, next) => {
         if (user.UserId == parseInt(req.params.id)) {
           models.posts.findAll({
             where: { UserId: parseInt(req.params.id) },
-            include: {
+            include: [{
               model: models.users,
               attributes: ['UserName']
-            }
+            },
+            {
+              model: models.comments,
+              include: {
+                model: models.users,
+                attributes: ['UserName']
+              }
+            }]
           })
             .then(posts => {
               res.header('Content-Type', 'application/json')
@@ -91,10 +118,17 @@ router.get('/api/:id', (req, res, next) => {
                 { visible: 0 }
               ]
             },
-            include: {
+            include: [{
               model: models.users,
               attributes: ['UserName']
-            }
+            },
+            {
+              model: models.comments,
+              include: {
+                model: models.users,
+                attributes: ['UserName']
+              }
+            }]
           })
             .then(posts => {
               res.header('Content-Type', 'application/json')
@@ -110,10 +144,17 @@ router.get('/api/:id', (req, res, next) => {
           { visible: 0 }
         ]
       },
-      include: {
+      include: [{
         model: models.users,
         attributes: ['UserName']
-      }
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }]
     })
       .then(posts => {
         res.header('Content-Type', 'application/json')
@@ -122,6 +163,7 @@ router.get('/api/:id', (req, res, next) => {
   }
 })
 
+//inUse
 router.put('/api/:type/:postId', (req, res, next) => {
   if (req.params.type == 'likes') {
     models.posts.update(
@@ -131,9 +173,19 @@ router.put('/api/:type/:postId', (req, res, next) => {
       .then(() => {
         return models.posts.findAll({
           where: { Visible: 0 },
-          include: {
-            model: models.users
-          }
+          include: [
+            {
+              model: models.users,
+              attributes: ['UserName']
+            },
+            {
+              model: models.comments,
+              include: {
+                model: models.users,
+                attributes: ['UserName']
+              }
+            }
+          ]
         })
       })
       .then(post => {
@@ -149,9 +201,16 @@ router.put('/api/:type/:postId', (req, res, next) => {
       .then(() => {
         return models.posts.findAll({
           where: { Visible: 0 },
-          include: {
+          include: [{
             model: models.users
-          }
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }]
         })
       })
       .then(post => {
@@ -161,6 +220,52 @@ router.put('/api/:type/:postId', (req, res, next) => {
   }
 })
 
+router.put('/api/edit', (req, res, next) => {
+  console.log('start')
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token).then( user =>{
+      models.posts.findOne({
+        where: { PostId: parseInt(req.body.postId) }
+      }).then( post => {
+        if(parseInt(user.UserId) === parseInt(post.UserId)){
+          models.posts.update(
+            { Edit: req.body.edit },
+            { where: { PostId: parseInt(req.body.postId) }}
+          ).then(() => {
+            return models.posts.findAll({
+              where: { Visible: 0 },
+              include: [
+                {
+                  model: models.users,
+                  attributes: ['UserName']
+                },
+                {
+                  model: models.comments,
+                  include: {
+                    model: models.users,
+                    attributes: ['UserName']
+                  }
+                }
+              ]
+            })
+          }).then( posts => {
+            res.header('Content-Type', 'application/json')
+            res.send(JSON.stringify({status: true, message: 'Edit was Successful', data: posts}))
+          })
+        } else {
+          res.header('Content-Type', 'application/json')
+          res.send(JSON.stringify({ststus: false, message: 'Something Went Wrong', data: null}))
+        }
+      })
+    })
+  } else {
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify({ststus: false, message: 'Must Be Logged In', data: null}))
+  }
+})
+
+//inUse
 router.delete('/api/:postId', (req, res, next) => {
   let token = req.cookies.jwt
   if (token) {
@@ -173,8 +278,26 @@ router.delete('/api/:postId', (req, res, next) => {
                 models.posts.destroy({ where: { PostId: req.params.postId } })
                   .then(result => {
                     if (result) {
-                      res.header('Content-Type', 'application/json')
-                      res.send(JSON.stringify({ status: true, message: 'post was deleted' }))
+                      models.posts.findAll({
+                        where: { Visible: 0 },
+                        include: [
+                          {
+                            model: models.users,
+                            attributes: ['UserName']
+                          },
+                          {
+                            model: models.comments,
+                            include: {
+                              model: models.users,
+                              attributes: ['UserName']
+                            }
+                          }
+                        ]
+                      })
+                      .then( posts => {
+                        res.header('Content-Type', 'application/json')
+                        res.send(JSON.stringify({ status: true, message: 'Post Was Deleted Successfully', data: posts }))
+                      })
                     } else {
                       res.header('Content-Type', 'application/json')
                       res.send(JSON.stringify({ status: false, message: 'something whent worng' }))

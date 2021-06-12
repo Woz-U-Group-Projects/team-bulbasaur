@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
         key: 'UserId'
       }
     },
+    GroupId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     PostHead: {
       type: DataTypes.STRING(200),
       allowNull: false
@@ -23,6 +27,10 @@ module.exports = function(sequelize, DataTypes) {
     PostBody: {
       type: DataTypes.STRING(500),
       allowNull: false
+    },
+    Edit: {
+      type: DataTypes.STRING(500),
+      allowNull: true
     },
     Likes: {
       type: DataTypes.INTEGER(10).UNSIGNED.ZEROFILL,

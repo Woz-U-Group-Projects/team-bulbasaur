@@ -9,15 +9,13 @@ import {
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted,
-  getProfileById, getProfileByIdCompleted,
-  getPosts, getPostsCompleted,
-  getPostsByUserId, getPostsByUserIdCompleted,
-  updateVotes, updateVotesCompleted,
-  signup, signupCompleted,
-  login, loginCompleted,
-  logout, logoutCompleted,
-  makePost, makePostCompleted
+  getUsers, getUsersCompleted, getProfileById, getProfileByIdCompleted,
+  getPosts, getPostsCompleted, getPostsByUserId, getPostsByUserIdCompleted,
+  updateVotes, updateVotesCompleted, signup, signupCompleted,
+  login, loginCompleted, logout, logoutCompleted,
+  makePost, makePostCompleted, makeComment, makeCommentCompleted,
+  deletePost, deletePostCompleted, editPost, editPostCompleted,
+  updateCommentVotes, updateCommentVotesCompleted,
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -27,14 +25,15 @@ import Profile from './components/profile/profile'
 import Navigation from "./components/navigation/nav";
 
 function _App(props) {
-  let [userId, setUserId] = useState(1)
+  let [profile, setProfile] = useState({name: undefined})
+
   return (
     <Router>
       <div className="App">
-        <Navigation {...props} />
+        <Navigation {...props} setProfile={setProfile} />
         <Switch>
           <Route exact path='/'>
-            <MainPage {...props} setUserId={setUserId} />
+            <MainPage {...props} setProfile={setProfile} />
           </Route>
           <Route path='/login'>
             <Login {...props} />
@@ -42,8 +41,11 @@ function _App(props) {
           <Route path='/signup'>
             <SignUp {...props} />
           </Route>
-          <Route path={`/profile/${userId}`} >
-            <Profile {...props} userId={userId} />
+          <Route path={`/user/${profile.name}`} >
+            <Profile {...props} profile={profile} />
+          </Route>
+          <Route path='/profile'>
+            <Profile {...props} profile={profile} />
           </Route>
         </Switch>
       </div>
@@ -61,7 +63,11 @@ const mapDispatchToProps = (dispatch, state) => {
     onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data))),
     onLogin: (object) => login(object).then( data => dispatch(loginCompleted(data))),
     onLogout: () => logout().then( data => dispatch(logoutCompleted(data))),
-    onMakePost: (obj) => makePost(obj).then( res => dispatch(makePostCompleted(res)))
+    onMakePost: (obj) => makePost(obj).then( res => dispatch(makePostCompleted(res))),
+    onMakeComment: (obj) => makeComment(obj).then( data => dispatch(makeCommentCompleted(data))),
+    onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
+    onEditPost: (obj) => editPost(obj).then( data => dispatch(editPostCompleted(data))),
+    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data)))
   }
 }
 
