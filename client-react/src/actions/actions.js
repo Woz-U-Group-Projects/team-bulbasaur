@@ -11,7 +11,6 @@ const authAxios = axios.create({
 })
 
 const mapUser = (data) => {
-  console.log('data', data)
   const user = {
     id: data.UserId,
     name: data.FullName,

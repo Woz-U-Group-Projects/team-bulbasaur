@@ -6,6 +6,7 @@ const Comment = (props) => {
   let [dislikes, setDislikes] = useState()
   let isVisible = isLoggedIn && ( comment.authorId === loggedInUser.id || postAuthor === loggedInUser.id || loggedInUser.admin === 1 )
 
+  
   useEffect(() => {
     setDislikes(comment.dislikes)
     setLikes(comment.likes)

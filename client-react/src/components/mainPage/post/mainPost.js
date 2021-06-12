@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import CommentView from '../comments/comments'
-import EditPostForm from '../forms/editPostForm'
+import CommentView from '../../comments/commentView/comments'
+import EditPostForm from '../../forms/editPostForm/editPostForm'
 
 const Post = (props) => {
   let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost } = props
