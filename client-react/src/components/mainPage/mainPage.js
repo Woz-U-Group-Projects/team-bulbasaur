@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import PostForm from '../forms/postForm'
 import Post from './post'
 
 const MainPage = (props) => {
-  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, setProfile, isLoggedIn } = props
+  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn } = props
   let [postList, setPosts] = useState([])
-  let [usersList, setUsers] = useState([])
 
   useEffect(() => {
     onGetPosts()
@@ -15,7 +14,6 @@ const MainPage = (props) => {
 
   useEffect(() => {
     setPosts(posts)
-    setUsers(users)
   }, [posts, users])
 
   return (
@@ -33,16 +31,8 @@ const MainPage = (props) => {
         </div>
       </div>
       <div className='usersList'>
-        <h3>People You're Following
-
-        </h3>
-        {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map(user => (
-          <div key={user.id}>
-            <Link onClick={() => setProfile(user)} to={`/profile/${user.name}`} style={{ textDecoration: 'none' }} >
-              {user.userName}
-            </Link>
-          </div>
-        ))}
+        <h3>Popular Groups</h3>
+        
       </div>
     </div>
   )

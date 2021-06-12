@@ -6,11 +6,11 @@ const CommentView = (props) => {
   let { commentList, commentView } = props
 
   return (
-    <div>
+    <div style={commentView === false ? {display: 'none'} : {display: 'block'}}>
       {commentList.length === 0 ? <p>No Comments Yet</p> : 
-        <div style={commentView === false ? {display: 'none'} : {display: 'block'}}>
+        <div>
           {commentList.map(comment => (
-            <Comment key={comment.id} comment={comment} />
+            <Comment key={comment.id} {...props} comment={comment} />
           ))}
         </div>
       }

@@ -13,6 +13,7 @@ router.get('/api/:postId', (req, res, next) => {
   })
 })
 
+//inUse
 router.post('/api', (req, res, next) => {
   models.comments.findOrCreate({
     where: { CommentId: 0 },
@@ -68,35 +69,58 @@ router.delete('/api/:commentId', (req, res, next) => {
   })
 })
 
+//inUse
 router.put('/api/:type/:commentId', (req, res, next) => {
   if(req.params.type == 'likes'){
     models.comments.update(
       {Likes: parseInt(req.body.likes + 1)}, 
       {where: { CommentId: parseInt(req.params.commentId) }}
-    )
-    .then(() => {
-      return models.comments.findOne({
-        where: { CommentId: parseInt(req.params.commentId)}
+    ).then(() => {
+      return models.posts.findAll({
+        where: { Visible: 0 },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
       })
-    })
-    .then( comment => {
+    }).then( posts => {
       res.header('Content-Type', 'application/json')
-      res.send(JSON.stringify(comment))
+      res.send(JSON.stringify({status: true, message: 'Edit was Successful', data: posts}))
     })
   }
   if(req.params.type == 'dislikes'){
     models.comments.update(
       { Dislikes: parseInt(req.body.dislikes + 1) }, 
       { where: { CommentId: parseInt(req.params.commentId) } }
-    )
-    .then( () => { 
-      return models.comments.findOne({ 
-        where: { CommentId: req.params.commentId } 
+    ).then(() => {
+      return models.posts.findAll({
+        where: { Visible: 0 },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
       })
-    })
-    .then( comment => {
+    }).then( posts => {
       res.header('Content-Type', 'application/json')
-      res.send(JSON.stringify(comment))
+      res.send(JSON.stringify({status: true, message: 'Edit was Successful', data: posts}))
     })
   }
 })

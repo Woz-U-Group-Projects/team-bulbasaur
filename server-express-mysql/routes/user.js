@@ -5,6 +5,7 @@ var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
+//inUse
 router.get('/api', (req, res, next) => {
   models.users.findAll({
     where: { 
@@ -12,7 +13,7 @@ router.get('/api', (req, res, next) => {
         [Op.gt]: 1 
       }
     },
-    attributes: ['UserId', 'FullName', 'UserName', 'Email'],
+    attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
     include: {
       model: models.posts,
       include: [
@@ -36,6 +37,7 @@ router.get('/api', (req, res, next) => {
   })
 })
 
+//inUse
 router.post('/api/signup', (req, res, next) => {
   models.users.findOrCreate({
     where: { Email: req.body.email },
@@ -58,6 +60,7 @@ router.post('/api/signup', (req, res, next) => {
   })
 })
 
+//inUse
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
     where: { Email: req.body.email },
@@ -157,6 +160,7 @@ router.get('/api/profile/:id', (req, res, next) => {
   }
 })
 
+//inUse
 router.get('/api/logout', (req, res, next) => {
   res.cookie('jwt', "", { expires: new Date(0) })
   res.send(JSON.stringify({ result: true, message: 'logged out'}))

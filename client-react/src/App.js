@@ -9,17 +9,13 @@ import {
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted,
-  getProfileById, getProfileByIdCompleted,
-  getPosts, getPostsCompleted,
-  getPostsByUserId, getPostsByUserIdCompleted,
-  updateVotes, updateVotesCompleted,
-  signup, signupCompleted,
-  login, loginCompleted,
-  logout, logoutCompleted,
-  makePost, makePostCompleted,
-  makeComment, makeCommentCompleted,
-  deletePost, deletePostCompleted
+  getUsers, getUsersCompleted, getProfileById, getProfileByIdCompleted,
+  getPosts, getPostsCompleted, getPostsByUserId, getPostsByUserIdCompleted,
+  updateVotes, updateVotesCompleted, signup, signupCompleted,
+  login, loginCompleted, logout, logoutCompleted,
+  makePost, makePostCompleted, makeComment, makeCommentCompleted,
+  deletePost, deletePostCompleted, editPost, editPostCompleted,
+  updateCommentVotes, updateCommentVotesCompleted,
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -34,7 +30,7 @@ function _App(props) {
   return (
     <Router>
       <div className="App">
-        <Navigation {...props} />
+        <Navigation {...props} setProfile={setProfile} />
         <Switch>
           <Route exact path='/'>
             <MainPage {...props} setProfile={setProfile} />
@@ -45,7 +41,10 @@ function _App(props) {
           <Route path='/signup'>
             <SignUp {...props} />
           </Route>
-          <Route path={`/profile/${profile.name}`} >
+          <Route path={`/user/${profile.name}`} >
+            <Profile {...props} profile={profile} />
+          </Route>
+          <Route path='/profile'>
             <Profile {...props} profile={profile} />
           </Route>
         </Switch>
@@ -67,6 +66,8 @@ const mapDispatchToProps = (dispatch, state) => {
     onMakePost: (obj) => makePost(obj).then( res => dispatch(makePostCompleted(res))),
     onMakeComment: (obj) => makeComment(obj).then( data => dispatch(makeCommentCompleted(data))),
     onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
+    onEditPost: (obj) => editPost(obj).then( data => dispatch(editPostCompleted(data))),
+    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data)))
   }
 }
 
