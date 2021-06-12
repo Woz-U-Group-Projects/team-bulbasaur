@@ -5,13 +5,31 @@ var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
 var authService = require("../services/auth")
 
+//inUse
 router.get('/api', (req, res, next) => {
   models.users.findAll({
     where: { 
       UserId: { 
         [Op.gt]: 1 
-      } 
-    }
+      }
+    },
+    attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
+    include: {
+      model: models.posts,
+      include: [
+        {
+          model: models.users,
+          attributes: ['UserName']
+        },
+        {
+          model: models.comments,
+          include: {
+            model: models.users,
+            attributes: ['UserName']
+          }
+        }
+      ]
+    },
   })
   .then(users => {
     res.header('Content-Type', 'application/json')
@@ -19,6 +37,7 @@ router.get('/api', (req, res, next) => {
   })
 })
 
+//inUse
 router.post('/api/signup', (req, res, next) => {
   models.users.findOrCreate({
     where: { Email: req.body.email },
@@ -41,9 +60,26 @@ router.post('/api/signup', (req, res, next) => {
   })
 })
 
+//inUse
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
-    where: { Email: req.body.email }
+    where: { Email: req.body.email },
+    include: {
+      model: models.posts,
+      include: [
+        {
+          model: models.users,
+          attributes: ['UserName']
+        },
+        {
+          model: models.comments,
+          include: {
+            model: models.users,
+            attributes: ["userName"]
+          }
+        }
+      ]
+    }
   })
   .then(user => {
     if(!user){
@@ -102,7 +138,14 @@ router.get('/api/profile/:id', (req, res, next) => {
           res.send(JSON.stringify({ result: true, data: result}))
         })
       } else {
-        res.send(JSON.stringify({ result: false,  }))
+        models.users.findOne({
+          where: { UserId: parseInt(req.params.id) },
+          attributes: ['UserId', 'FullName', 'UserName']
+        })
+        .then( user => {
+          res.header('Content-Type', 'application/json') 
+          res.send(JSON.stringify({ result: false, data: user}))
+        })
       }
     })
   } else {
@@ -117,6 +160,7 @@ router.get('/api/profile/:id', (req, res, next) => {
   }
 })
 
+//inUse
 router.get('/api/logout', (req, res, next) => {
   res.cookie('jwt', "", { expires: new Date(0) })
   res.send(JSON.stringify({ result: true, message: 'logged out'}))

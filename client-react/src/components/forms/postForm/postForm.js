@@ -8,7 +8,8 @@ const validate = yup.object({
   isHidden: yup.boolean()
 })
 
-const PostForm = () => {
+const PostForm = (props) => {
+  let { onMakePost } = props
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -18,7 +19,8 @@ const PostForm = () => {
     validationSchema: validate,
     onSubmit: (values, actions) => {
       actions.resetForm()
-      alert(JSON.stringify(values))
+      console.log(values)
+      onMakePost(values)
     }
   })
 

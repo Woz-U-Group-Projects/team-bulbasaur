@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import PostForm from '../forms/postForm'
-import Post from './post'
+// import { Link } from 'react-router-dom'
+import PostForm from '../forms/postForm/postForm'
+import Post from './post/mainPost'
 
-const MainPage = ({ posts, users, onGetPosts, onGetUsers, onUpdateVotes, setUserId }) => {
+const MainPage = (props) => {
+  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn } = props
   let [postList, setPosts] = useState([])
-  let [usersList, setUsers] = useState([])
 
   useEffect(() => {
     onGetPosts()
@@ -14,29 +14,25 @@ const MainPage = ({ posts, users, onGetPosts, onGetUsers, onUpdateVotes, setUser
 
   useEffect(() => {
     setPosts(posts)
-    setUsers(users)
   }, [posts, users])
 
   return (
-    <div>
-      <div className='usersList'>
-        {usersList.length === 0 ? <p>Something Went Wrong</p> : usersList.map(user => (
-          <div key={user.id}>
-            <Link onClick={() => setUserId(user.id)} to={`/profile/${user.id}`} style={{ textDecoration: 'none' }} >
-              {user.userName}
-            </Link>
-          </div>
-        ))}
-      </div>
+    <div className='mainPage-container'>
       <div className='postsList'>
-        <div className='postForm'>
-          <PostForm />
+        <h2>Make Posts Here to Start Conversations With Users Around The World</h2>
+        <div className='postForm' style={isLoggedIn === true ? { display: 'block' } : { display: 'none' }}>
+          <h3>Make A New Post</h3>
+          <PostForm {...props} />
         </div>
         <div className='posts'>
           {postList.length === 0 ? <p>no posts have been made yet</p> : postList.map(post => {
-            return <Post key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+            return <Post {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
           })}
         </div>
+      </div>
+      <div className='usersList'>
+        <h3>Popular Groups</h3>
+        
       </div>
     </div>
   )

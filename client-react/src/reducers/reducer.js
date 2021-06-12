@@ -8,8 +8,8 @@ const initialState = {
   isLoggedIn: false
 }
 
-const reducer = (state = initialState, action)=>{
-  switch(action.type){
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
     case 'GET_USERS_COMPLETED':
       return {
         ...state,
@@ -23,9 +23,10 @@ const reducer = (state = initialState, action)=>{
     case 'ADD_VOTE_COMPLETED':
       return {
         ...state,
-        posts: action.payload 
+        posts: action.payload
       }
     case 'GET_PROFILE_BY_ID_COMPLETED':
+      console.log('hi')
       return {
         ...state,
         profile: action.payload.data
@@ -41,13 +42,19 @@ const reducer = (state = initialState, action)=>{
         signupStatus: action.payload
       }
     case 'LOGIN_COMPLETED':
-      if(action.payload.result === true){
+      if (action.payload.result === true) {
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
         return {
           ...state,
           isLoggedIn: action.payload.result,
           loggedInUser: action.payload.user
         }
       } else {
+        setTimeout(() => {
+          alert(action.payload.message)
+        }, 100);
         return {
           ...state
         }
@@ -58,8 +65,39 @@ const reducer = (state = initialState, action)=>{
         isLoggedIn: false,
         loggedInUser: undefined
       }
-    default: 
-      return{
+    case 'MAKE_POST_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
+    case 'MAKE_COMMENT_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
+    case 'DELETE_POST_COMPLETED':
+      setTimeout(() => {
+        alert(action.payload.message)
+      }, 100);
+      return {
+        ...state,
+        posts: action.payload.data
+      }
+    case 'EDIT_POST_COMPLETED':
+      setTimeout(() => {
+        alert(action.payload.message)
+      }, 100);
+      return {
+        ...state,
+        posts: action.payload.data
+      }
+    case 'COMMENT_VOTES_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
+    default:
+      return {
         ...state
       }
   }
