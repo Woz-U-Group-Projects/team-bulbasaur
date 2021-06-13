@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import CommentView from "../comments/commentView/comments";
-import EditPostForm from "../forms/editPostForm/editPostForm";
+import CommentView from "../../comments/commentView/comments";
+import EditPostForm from "../../forms/editPostForm/editPostForm";
 
 const ProfilePosts = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost } = props
+  let { post, onUpdateVotesByUserId, isLoggedIn, loggedInUser, onDeletePost, userId } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -28,19 +28,19 @@ const ProfilePosts = (props) => {
         <div style={editModal ? { display: 'block' } : { display: 'none' }}>
           <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
         </div>
-        {isLoggedIn && post.authorId === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
+        {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.authorId === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
-          {isLoggedIn && post.authorId === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
+          {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
+          {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
         </div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
+          <button onClick={() => onUpdateVotesByUserId('likes', likes, userId, post.id)}>
             <div>Likes</div>
             <div>{likes}</div>
           </button>
-          <button onClick={() => onUpdateVotes('dislikes', dislikes, post.id)}>
+          <button onClick={() => onUpdateVotesByUserId('dislikes', dislikes, userId, post.id)}>
             <div>dislikes</div>
             <div>{dislikes}</div>
           </button>
@@ -52,7 +52,7 @@ const ProfilePosts = (props) => {
           </button>
         </div>
       </div>
-      <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} commentList={commentList} />
+      <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.author.id} commentList={commentList} />
     </div>
   )
 }

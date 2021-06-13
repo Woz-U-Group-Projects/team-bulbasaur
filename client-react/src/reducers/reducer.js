@@ -5,6 +5,7 @@ const initialState = {
   profile: {},
   signupStatus: {},
   loggedInUser: undefined,
+  profilePosts: [],
   isLoggedIn: false
 }
 
@@ -49,7 +50,7 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           isLoggedIn: action.payload.result,
-          loggedInUser: action.payload.user
+          loggedInUser: action.payload.user,
         }
       } else {
         setTimeout(() => {
@@ -95,6 +96,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         posts: action.payload
+      }
+    case 'UPDATE_VOTES_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
       }
     default:
       return {

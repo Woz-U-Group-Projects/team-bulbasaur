@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
 import PostForm from '../forms/postForm/postForm'
 import Post from './post/mainPost'
+//css
+import './mainPage.css'
 
 const MainPage = (props) => {
   let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn } = props

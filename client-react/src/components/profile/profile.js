@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PostForm from '../forms/postForm/postForm'
-import ProfilePosts from './profilePosts'
+import ProfilePosts from './posts/profilePosts'
 
 const Profile = (props) => {
-  let { profile, loggedInUser, onUpdateVotes, isLoggedIn} = props
-  console.log("profile", profile)
+  let { profile, loggedInUser, isLoggedIn, profilePosts } = props
+  let [posts, setPosts] = useState()
 
-
+  useEffect(() => {
+    if(profilePosts.length === 0){
+      setPosts(profile.posts)
+      console.log('1',posts)
+    } else {
+      setPosts(ProfilePosts)
+      console.log('2',posts)
+    }
+  },[profilePosts, profile.posts])
+  
   return (
     <div>
       {isLoggedIn && loggedInUser.id === profile.id ?
@@ -20,7 +29,7 @@ const Profile = (props) => {
           </div>
           <div>
             {profile.posts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profile.posts.map(post => (
-              <ProfilePosts {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+              <ProfilePosts {...props} key={post.id} userId={profile.id} post={post} />
             ))}
           </div>
         </div> :
@@ -29,7 +38,7 @@ const Profile = (props) => {
           <h2>{profile.userName}</h2>
           <div>
             {profile.posts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profile.posts.filter(post => post.isHidden === 0).map(post => (
-              <ProfilePosts {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+              <ProfilePosts {...props} key={post.id} post={post} />
             ))}
           </div>
         </div> 

@@ -15,7 +15,7 @@ import {
   login, loginCompleted, logout, logoutCompleted,
   makePost, makePostCompleted, makeComment, makeCommentCompleted,
   deletePost, deletePostCompleted, editPost, editPostCompleted,
-  updateCommentVotes, updateCommentVotesCompleted,
+  updateCommentVotes, updateCommentVotesCompleted, updateVotesByUserId, updateVotesByUserIdCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -64,7 +64,8 @@ const mapDispatchToProps = (dispatch, state) => {
     onMakeComment: (obj) => makeComment(obj).then( data => dispatch(makeCommentCompleted(data))),
     onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
     onEditPost: (obj) => editPost(obj).then( data => dispatch(editPostCompleted(data))),
-    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data)))
+    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data))),
+    onUpdateVotesByUserId: (type, current, userId, postId) => updateVotesByUserId(type, current, userId, postId).then( data => dispatch(updateVotesByUserIdCompleted(data))),
   }
 }
 
@@ -76,7 +77,8 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.isLoggedIn,
     posts: state.posts,
     userPosts: state.userPosts,
-    profile: state.profile
+    profile: state.profile,
+    profilePosts: state.profilePosts
   }
 }
 
