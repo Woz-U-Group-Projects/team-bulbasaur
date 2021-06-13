@@ -18,9 +18,9 @@ const Post = (props) => {
   }, [post])
 
   return (
-    <div style={{ margin: 20, borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
-      <div style={{ borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
-        <Link to={`/user/${post.author}`} style={{ textDecoration: 'none', color: 'black' }} >
+    <div>
+      <div >
+        <Link to={`/user/${post.author}`}>
           <h3>{post.author}</h3>
         </Link>
       </div>
@@ -28,17 +28,17 @@ const Post = (props) => {
         <h4>{post.title}</h4>
         <p>{post.body}</p>
         {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
-        <div style={editModal ? { display: 'block' } : { display: 'none' }}>
+        <div>
           <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
         </div>
         {isLoggedIn && post.authorId === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
       </div>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div>
+        <div>
           {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.authorId === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
           {isLoggedIn && post.authorId === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div>
           <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
             <div>Likes</div>
             <div>{likes}</div>

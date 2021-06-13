@@ -19,7 +19,6 @@ const MainPage = (props) => {
   return (
     <div className='mainPage-container'>
       <div className='postsList'>
-        <h2>Make Posts Here to Start Conversations With Users Around The World</h2>
         <div className='postForm' style={isLoggedIn === true ? { display: 'block' } : { display: 'none' }}>
           <h3>Make A New Post</h3>
           <PostForm {...props} />

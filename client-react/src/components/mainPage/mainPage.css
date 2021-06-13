@@ -1,28 +1,5 @@
-
-/*large-size*/
-@media screen and (min-width: 770px) {
-  .mainPage-container{
-    width: 100%;
-    margin-top: 40px;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-  }
-
-  .postsList{
-    grid-column: 1/10;
-  }
-
-  .usersList{
-    grid-column: 10/13;
-  }
-}
-
-/* medium-size */
-@media screen and (max-width: 769px) and (min-width: 425px){
-  
-}
-
-/* small-size */
-@media screen and (max-width: 424px){
-  
+.mainPage-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
 }
