@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-const Comment = (props) => {
-  let { comment, postAuthor, loggedInUser, isLoggedIn, onUpdateCommentVotes, ondeleteComment } = props
+const ProfileComment = (props) => {
+  let { comment, postAuthor, loggedInUser, isLoggedIn, onUpdateCommentVotesByUserId, userId, ondeleteCommentByUserId } = props
   let [likes, setLikes] = useState()
   let [dislikes, setDislikes] = useState()
   let isVisible = isLoggedIn && ( comment.authorId === loggedInUser.id || postAuthor === loggedInUser.id || loggedInUser.admin === 1 )
@@ -17,17 +17,17 @@ const Comment = (props) => {
       <h5>{comment.author}</h5>
       <p>{comment.body}</p>
       <div>
-        <button onClick={() => onUpdateCommentVotes('likes', likes, comment.id)}>
+        <button onClick={() => onUpdateCommentVotesByUserId({type:'likes',current:likes,commentId:comment.id,userId:userId})}>
           <div>Likes</div>
           <div>{likes}</div>
         </button>
-        <button onClick={() => onUpdateCommentVotes('dislikes', dislikes, comment.id)}>
+        <button onClick={() => onUpdateCommentVotesByUserId({type:'dislikes',current:dislikes,commentId:comment.id,userId:userId})}>
           <div>Dislikes</div>
           <div>{dislikes}</div>
         </button>
         <button
           style={isVisible ? { display: 'block' } : { display: 'none' }}
-          onClick={() => isVisible ? ondeleteComment({commentId:comment.id}) : null}
+          onClick={() => ondeleteCommentByUserId({commentId:comment.id,userId:userId})}
         >
           Delete
         </button>
@@ -36,4 +36,4 @@ const Comment = (props) => {
   )
 }
 
-export default Comment
+export default ProfileComment

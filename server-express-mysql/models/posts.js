@@ -18,7 +18,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     GroupId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'groups',
+        key: 'GroupId'
+      }
     },
     PostHead: {
       type: DataTypes.STRING(200),

@@ -1,10 +1,9 @@
 import React from 'react'
-import PostForm from '../forms/postForm/postForm'
-// import Post from '../mainPage/post/post'
+import ProfilePostForm from '../forms/profilePostForm/profilePostForm'
+import ProfilePosts from './posts/profilePosts'
 
 const Profile = (props) => {
-  let { profile, loggedInUser, onUpdateVotes, isLoggedIn} = props
-
+  let { profile, loggedInUser, isLoggedIn, profilePosts } = props
 
   return (
     <div>
@@ -14,26 +13,24 @@ const Profile = (props) => {
           <h2>{profile.userName}</h2>
           <h3>{profile.email}</h3>
           <div>
-            <div>
-              <h3>Make A New Post</h3>
-              <PostForm {...props} />
-            </div>
+            <h3>Make A New Post</h3>
+            <ProfilePostForm {...props} userId={profile.id} />
           </div>
-          {/* <div>
-            {profile.posts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profile.posts.map(post => (
-              <Post {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+          <div>
+            {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.map(post => (
+              <ProfilePosts {...props} key={post.id} userId={profile.id} post={post} />
             ))}
-          </div> */}
+          </div>
         </div> :
         <div>
           <h1>{profile.name}'s Profile</h1>
           <h2>{profile.userName}</h2>
-          {/* <div>
-            {profile.posts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profile.posts.filter(post => post.isHidden === 0).map(post => (
-              <Post {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+          <div>
+            {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.filter(post => post.isHidden === 0).map(post => (
+              <ProfilePosts {...props} userId={profile.id} key={post.id} post={post} />
             ))}
-          </div> */}
-        </div> 
+          </div>
+        </div>
       }
     </div>
   )

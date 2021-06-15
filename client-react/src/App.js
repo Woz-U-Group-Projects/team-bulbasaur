@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
@@ -9,13 +9,16 @@ import {
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted, getProfileById, getProfileByIdCompleted,
-  getPosts, getPostsCompleted, getPostsByUserId, getPostsByUserIdCompleted,
-  updateVotes, updateVotesCompleted, signup, signupCompleted,
+  getUsers, getUsersCompleted, signup, signupCompleted,
   login, loginCompleted, logout, logoutCompleted,
-  makePost, makePostCompleted, makeComment, makeCommentCompleted,
-  deletePost, deletePostCompleted, editPost, editPostCompleted,
-  updateCommentVotes, updateCommentVotesCompleted,
+  getPosts, getPostsCompleted, makePost, makePostCompleted,
+  updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
+  editPost, editPostCompleted, makeComment, makeCommentCompleted, 
+  updateCommentVotes, updateCommentVotesCompleted, deleteComment, deleteCommentCompleted,
+  getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
+  updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
+  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete,
+  updateCommentVotesByUserId, updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -25,15 +28,14 @@ import Profile from './components/profile/profile'
 import Navigation from "./components/navigation/nav";
 
 function _App(props) {
-  let [profile, setProfile] = useState({name: undefined})
 
   return (
     <Router>
       <div className="App">
-        <Navigation {...props} setProfile={setProfile} />
+        <Navigation {...props} />
         <Switch>
           <Route exact path='/'>
-            <MainPage {...props} setProfile={setProfile} />
+            <MainPage {...props} />
           </Route>
           <Route path='/login'>
             <Login {...props} />
@@ -41,11 +43,8 @@ function _App(props) {
           <Route path='/signup'>
             <SignUp {...props} />
           </Route>
-          <Route path={`/user/${profile.name}`} >
-            <Profile {...props} profile={profile} />
-          </Route>
           <Route path='/profile'>
-            <Profile {...props} profile={profile} />
+            <Profile {...props} />
           </Route>
         </Switch>
       </div>
@@ -55,10 +54,9 @@ function _App(props) {
 
 const mapDispatchToProps = (dispatch, state) => {
   return {
+    onGetProfile: userId => getProfile(userId).then(data => dispatch(getProfileCompleted(data))),
     onGetUsers: () => getUsers().then(users => dispatch(getUsersCompleted(users))),
-    onGetProfileById: (userId) => getProfileById(userId).then((user) => dispatch(getProfileByIdCompleted(user))),
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
-    onGetPostsById: (userId) => getPostsByUserId(userId).then(posts => dispatch(getPostsByUserIdCompleted(posts))),
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
     onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data))),
     onLogin: (object) => login(object).then( data => dispatch(loginCompleted(data))),
@@ -67,7 +65,15 @@ const mapDispatchToProps = (dispatch, state) => {
     onMakeComment: (obj) => makeComment(obj).then( data => dispatch(makeCommentCompleted(data))),
     onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
     onEditPost: (obj) => editPost(obj).then( data => dispatch(editPostCompleted(data))),
-    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data)))
+    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data))),
+    ondeleteComment: obj => deleteComment(obj).then(data => dispatch(deleteCommentCompleted(data))),
+    onUpdateVotesByUserId: (type, current, userId, postId) => updateVotesByUserId(type, current, userId, postId).then( data => dispatch(updateVotesByUserIdCompleted(data))),
+    onMakePostByUserId: (obj) => makePostByUserId(obj).then( data => dispatch(makePostByUserIdCompleted(data))),
+    onEditPostByUserId: obj => editPostByUserId(obj).then( data => dispatch(editPostByUserIdCompleted(data))),
+    onDeletePostByUserId: (postId, userId) => deletePostByUserId(postId, userId).then( data => dispatch(deletePostByUserIdCompleted(data))),
+    onMakeCommentByUserId: obj => makeCommentByUserId(obj).then( data => dispatch(makeCommentByUserIdComplete(data))),
+    onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then( data => dispatch(updateCommentVotesByUserIdCompleted(data))),
+    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data)))
   }
 }
 
@@ -79,7 +85,8 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.isLoggedIn,
     posts: state.posts,
     userPosts: state.userPosts,
-    profile: state.profile
+    profile: state.profile,
+    profilePosts: state.profilePosts
   }
 }
 
