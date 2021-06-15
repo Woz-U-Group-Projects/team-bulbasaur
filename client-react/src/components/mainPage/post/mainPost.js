@@ -4,7 +4,7 @@ import CommentView from '../../comments/commentView/comments'
 import EditPostForm from '../../forms/editPostForm/editPostForm'
 
 const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, setProfile } = props
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -21,7 +21,7 @@ const Post = (props) => {
     <div style={{ margin: 20, borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
       <div style={{ borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
         <Link 
-          onClick={() => setProfile(props.users.filter(user => user.id === post.author.id)[0])} 
+          onClick={() => onGetProfile(post.author.id)} 
           to={`/profile`} 
           style={{ textDecoration: 'none', color: 'black' }}
         >

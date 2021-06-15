@@ -26,16 +26,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         posts: action.payload
       }
-    case 'GET_PROFILE_BY_ID_COMPLETED':
-      console.log('hi')
+    case 'GET_PROFILE_COMPLETED':
       return {
         ...state,
-        profile: action.payload.data
-      }
-    case 'GET_POSTS_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        userPosts: action.payload
+        profile: action.payload.profile,
+        profilePosts: action.payload.posts
       }
     case 'SIGNUP_COMPLETED':
       return {
@@ -71,11 +66,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         posts: action.payload
       }
-    case 'MAKE_COMMENT_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
     case 'DELETE_POST_COMPLETED':
       setTimeout(() => {
         alert(action.payload.message)
@@ -92,12 +82,52 @@ const reducer = (state = initialState, action) => {
         ...state,
         posts: action.payload.data
       }
+    case 'MAKE_COMMENT_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
     case 'COMMENT_VOTES_COMPLETED':
       return {
         ...state,
         posts: action.payload
       }
+    case 'DELETE_COMMENT_COMPLETED':
+      return {
+        ...state,
+        posts: action.payload
+      }
     case 'UPDATE_VOTES_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'MAKE_POST_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'EDIT_POST_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'DELETE_POST_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'MAKE_COMMENT_BY_USER_ID_COMPLETED': 
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'UPDATE_COMMENT_VOTES_BY_USER_ID_COMPLETED':
+      return {
+        ...state,
+        profilePosts: action.payload
+      }
+    case 'DELETE_COMMENT_BY_USER_ID_COMPLETED':
       return {
         ...state,
         profilePosts: action.payload

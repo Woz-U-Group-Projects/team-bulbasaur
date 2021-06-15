@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 //CSS
 import './nav.css'
 
-const Navigation = ({isLoggedIn, onLogout, setProfile, loggedInUser}) => {
+const Navigation = ({isLoggedIn, onLogout, onGetProfile, loggedInUser}) => {
   let[isUserLoggedIn, setUserLoggedIn] = useState()
 
 
@@ -19,7 +19,7 @@ const Navigation = ({isLoggedIn, onLogout, setProfile, loggedInUser}) => {
       <ul className='linksList'>
         <li className='signup'>{
             isUserLoggedIn ? 
-            <Link to='/profile' onClick={() => setProfile(loggedInUser)} style={{ textDecoration: 'none' }}>Profile</Link> : 
+            <Link to='/profile' onClick={() => onGetProfile(loggedInUser.id)} style={{ textDecoration: 'none' }}>Profile</Link> : 
             <Link to='/signup' style={{ textDecoration: 'none' }} >SignUp</Link>
         }</li>
 

@@ -1,3 +1,11 @@
+/*
+  table of contents
+  basic actions: lines 119-164
+  admin actions: lines 165-177
+  all post actions: lines 178-292
+  user post actions: lines 293-
+*/
+
 import axios from 'axios';
 
 const cookie = document.cookie
@@ -102,7 +110,8 @@ const mapPosts = (data) => {
       body: comment.CommentBody,
       likes: comment.Likes,
       dislikes: comment.Dislikes,
-      author: comment.user.UserName
+      author: comment.user.UserName,
+      authorId: comment.UserId
     }))
   }))
 
@@ -251,7 +260,6 @@ export const deletePostCompleted = (data) => ({
 //=========================================================
 
 export const makeComment = async (obj) => {
-  console.log(obj)
   const req = await authAxios.post('/comments/api', obj)
   const res = await req.data
   const posts = mapPosts(res.data)
@@ -283,46 +291,99 @@ export const updateCommentVotesCompleted = (data) => ({
   type: 'COMMENT_VOTES_COMPLETED',
   payload: data
 })
-//=====================================================================================================================
+//=========================================================
 
-export const getProfileById = async (userId) => {
+export const deleteComment = async (obj) => {
+  let { commentId } = obj
+  const req = await authAxios.delete(`/comments/api/${commentId}`)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const deleteCommentCompleted = (data) => ({
+  type: 'DELETE_COMMENT_COMPLETED',
+  payload: data
+})
+// actions to edit posts/comments and returns posts with comments for a single user ===================================
+
+const getProfileById = async (userId) => {
   const req = await authAxios.get(`/users/api/profile/${userId}`)
   const res = await req.data
   const profile = mapUser(res.data)
   return profile
 }
 
-export const getProfileByIdCompleted = (user) => {
-  return ({
-    type: 'GET_PROFILE_BY_ID_COMPLETED',
-    payload: user
-  })
-}
-//=========================================================
-
-export const getPostsByUserId = async (userId) => {
+const getPostsByUserId = async (userId) => {
   const req = await axios.get(`/posts/api/${userId}`)
   const res = await req.data
   const posts = mapPosts(res)
   return posts.reverse()
 }
 
-export const getPostsByUserIdCompleted = (posts) => ({
-  type: 'GET_POSTS_BY_USER_ID_COMPLETED',
-  payload: posts
+export const getProfile = async (userId) => {
+  const profile = await getProfileById(userId)
+  const profilePosts = await getPostsByUserId(userId)
+
+  const data = {
+    profile: profile,
+    posts: profilePosts
+  }
+
+  return data
+}
+
+export const getProfileCompleted = (data) => ({
+  type: 'GET_PROFILE_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const makePostByUserId = async (obj) => {
+  const req = await authAxios.post(`/posts/api/${obj.userId}`, obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const makePostByUserIdCompleted = (data) => ({
+  type: 'MAKE_POST_BY_USER_ID_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const editPostByUserId = async (obj) => {
+  const req = await authAxios.put(`/posts/api/${obj.userId}`, obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const editPostByUserIdCompleted = (data) => ({
+  type: 'EDIT_POST_BY_USER_ID_COMPLETED',
+  payload: data
 })
 //=========================================================
 
 export const updateVotesByUserId = async (type, current, userId, postId) => {
-  console.log(type)
   if (type === 'likes') {
-    const req = await axios.put(`/posts/api/profile/${type}`, { postId: postId, userId: userId, likes: current })
+    const req = await axios.put('/posts/api/user/profile/votes', {
+      type: type,
+      postId: postId,
+      userId: userId,
+      likes: current
+    })
     const res = await req.data
     const posts = mapPosts(res)
     return posts.reverse()
   }
   if (type === 'dislikes') {
-    const req = await axios.put(`/posts/api/profile/${type}`, { postId: postId, userId: userId, dislikes: current })
+    const req = await axios.put('/posts/api/user/profile/votes', {
+      type: type,
+      postId: postId,
+      userId: userId,
+      dislikes: current
+    })
     const res = await req.data
     const posts = mapPosts(res)
     return posts.reverse()
@@ -331,5 +392,74 @@ export const updateVotesByUserId = async (type, current, userId, postId) => {
 
 export const updateVotesByUserIdCompleted = (data) => ({
   type: 'UPDATE_VOTES_BY_USER_ID_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const deletePostByUserId = async (postId, userId) => {
+  const req = await authAxios.delete(`/posts/api/${postId}/${userId}`)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const deletePostByUserIdCompleted = (data) => ({
+  type: 'DELETE_POST_BY_USER_ID_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const makeCommentByUserId = async (obj) => {
+  const req = await authAxios.post(`/comments/api/${obj.profileId}`, obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const makeCommentByUserIdComplete = (data) => ({
+  type: 'MAKE_COMMENT_BY_USER_ID_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const updateCommentVotesByUserId = async (obj) => {
+  let {type, userId, current, commentId} = obj
+  if (type === 'likes') {
+    const req = await axios.put(`/comments/api/update/votes/${commentId}`, {
+      type: type,
+      userId: userId,
+      likes: current
+    })
+    const res = await req.data
+    const posts = mapPosts(res.data)
+    return posts.reverse()
+  }
+  if (type === 'dislikes') {
+    const req = await axios.put(`/comments/api/update/votes/${commentId}`, {
+      type: type,
+      userId: userId,
+      dislikes: current
+    })
+    const res = await req.data
+    const posts = mapPosts(res.data)
+    return posts.reverse()
+  }
+}
+
+export const updateCommentVotesByUserIdCompleted = (data) => ({
+  type: 'UPDATE_COMMENT_VOTES_BY_USER_ID_COMPLETED',
+  payload: data
+})
+
+export const deleteCommentByUserId = async (obj) => {
+  let { commentId, userId } = obj
+  const req = await authAxios.delete(`/comments/api/${commentId}/${userId}`)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const deleteCommentByUserIdCompleted = (data) => ({
+  type: 'DELETE_COMMENT_BY_USER_ID_COMPLETED',
   payload: data
 })

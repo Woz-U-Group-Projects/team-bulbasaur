@@ -8,18 +8,19 @@ const validate = yup.object({
   body: yup.string().required()
 })
 
-const CommentForm = ({postId, loggedInUser, onMakeComment}) => {
+const ProfileCommentForm = ({postId, userId, loggedInUser, onMakeCommentByUserId}) => {
 
   const formik = useFormik({
     initialValues: {
       postId: postId,
       userId: loggedInUser === undefined ? 1 : loggedInUser.id,
+      profileId: userId,
       body: ''
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
       actions.resetForm()
-      onMakeComment(values)
+      onMakeCommentByUserId(values)
     }
   })
 
@@ -44,4 +45,4 @@ const CommentForm = ({postId, loggedInUser, onMakeComment}) => {
   )
 }
 
-export default CommentForm
+export default ProfileCommentForm
