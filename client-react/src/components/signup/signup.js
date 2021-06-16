@@ -95,4 +95,4 @@ const SignUp = ({ onSignup, signupStatus }) => {
   )
 }
 
-export default SignUp
+export default SignUp;
