@@ -3,15 +3,15 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 
 const validate = yup.object({
-  edit: yup.string().required('You must provide An Edit To The Post')
+  body: yup.string().required('You must provide An Edit To The Post')
 })
 
-const EditProfilePostForm = ({ setEditModal, postId, onEditPostByUserId, userId }) => {
+const EditProfilePostForm = ({ setEditModal, post, onEditPostByUserId, userId }) => {
   const formik = useFormik({
     initialValues: {
       userId: userId,
-      postId: postId,
-      edit: ''
+      postId: post.id,
+      body: post.body
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
@@ -24,17 +24,17 @@ const EditProfilePostForm = ({ setEditModal, postId, onEditPostByUserId, userId 
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '25%' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <label htmlFor='edit'><p>Edit Post:</p></label>
+        <label htmlFor='body'><p>Edit Post:</p></label>
         <textarea
-          name='edit'
-          id='edit'
+          name='body'
+          id='body'
           cols={25}
           rows={5}
-          value={formik.values.edit}
+          value={formik.values.body}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         ></textarea>
-        {formik.touched.edit && formik.errors.edit ? <div>{formik.errors.edit}</div> : null}
+        {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
       </div>
       <div>
         <button onClick={() => setEditModal(false)}>Cancel</button>

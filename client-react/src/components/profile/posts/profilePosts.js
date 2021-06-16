@@ -26,7 +26,7 @@ const ProfilePosts = (props) => {
         <p>{post.body}</p>
         {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
         <div style={editModal ? { display: 'block' } : { display: 'none' }}>
-          <EditProfilePostForm {...props} setEditModal={setEditModal} postId={post.id} userId={post.author.id} />
+          <EditProfilePostForm {...props} setEditModal={setEditModal} post={post} userId={post.author.id} />
         </div>
         {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
       </div>
