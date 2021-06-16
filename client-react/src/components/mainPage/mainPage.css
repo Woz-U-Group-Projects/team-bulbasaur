@@ -1,5 +1,23 @@
 .mainPage-container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: row;
 }
+
+.groupList {
+  border: 1px solid black;
+  width: 20%;
+  margin: 20px;
+}
+
+.postsList {
+  width: 60%;
+  margin-top: 20px;
+}
+
+.friendList {
+  border: 1px solid black;
+  width: 20%;
+  margin: 20px;
+}
+
