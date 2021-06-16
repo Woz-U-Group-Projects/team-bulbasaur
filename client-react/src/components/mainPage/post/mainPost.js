@@ -31,16 +31,15 @@ const Post = (props) => {
       <div>
         <h4>{post.title}</h4>
         <p>{post.body}</p>
-        {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
         <div style={editModal ? { display: 'block' } : { display: 'none' }}>
-          <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
+          <EditPostForm {...props} setEditModal={setEditModal} post={post} />
         </div>
-        {isLoggedIn && post.authorId === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
+        {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.authorId === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
-          {isLoggedIn && post.authorId === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
+          {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => {setEditModal(true)}}>Edit</button> : null}
         </div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <button onClick={() => onUpdateVotes('likes', likes, post.id)}>

@@ -1,12 +1,13 @@
 const initialState = {
   users: [],
   posts: [],
+  groups: [],
   userPosts: [],
   profile: {},
   signupStatus: {},
   loggedInUser: undefined,
   profilePosts: [],
-  isLoggedIn: false
+  isLoggedIn: false,
 }
 
 const reducer = (state = initialState, action) => {
@@ -131,6 +132,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         profilePosts: action.payload
+      }
+    case 'GET_ALL_GROUPS_COMPLETED':
+      return {
+        ...state,
+        groups: action.payload
+      }
+    case 'JOIN_GROUP_COMPLETED':
+      return {
+        ...state,
+        groups: action.payload
       }
     default:
       return {

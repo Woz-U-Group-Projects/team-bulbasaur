@@ -18,7 +18,8 @@ import {
   getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
   updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
   deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete,
-  updateCommentVotesByUserId, updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted
+  updateCommentVotesByUserId, updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted,
+  getAllGroups, getAllGroupsCompleted, joinGroup, joinGroupCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -73,7 +74,9 @@ const mapDispatchToProps = (dispatch, state) => {
     onDeletePostByUserId: (postId, userId) => deletePostByUserId(postId, userId).then( data => dispatch(deletePostByUserIdCompleted(data))),
     onMakeCommentByUserId: obj => makeCommentByUserId(obj).then( data => dispatch(makeCommentByUserIdComplete(data))),
     onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then( data => dispatch(updateCommentVotesByUserIdCompleted(data))),
-    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data)))
+    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data))),
+    onGetGroups: () => getAllGroups().then(data => dispatch(getAllGroupsCompleted(data))),
+    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data)))
   }
 }
 
@@ -81,6 +84,7 @@ const mapStateToProps = (state) => {
   return {
     signupStatus: state.signupStatus,
     users: state.users,
+    groups: state.groups,
     loggedInUser: state.loggedInUser,
     isLoggedIn: state.isLoggedIn,
     posts: state.posts,

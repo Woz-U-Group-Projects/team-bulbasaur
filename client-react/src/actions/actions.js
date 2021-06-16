@@ -1,11 +1,3 @@
-/*
-  table of contents
-  basic actions: lines 119-164
-  admin actions: lines 165-177
-  all post actions: lines 178-292
-  user post actions: lines 293-
-*/
-
 import axios from 'axios';
 
 const cookie = document.cookie
@@ -92,6 +84,16 @@ const mapUsers = (data) => {
   return users
 }
 
+const mapGroupUsers = (data) => {
+  const users = data.map(user => ({
+      id: user.UserId,
+      userName: user.UserName,
+      membership: user.grouped_users.Membership
+  }))
+
+  return users
+}
+
 const mapPosts = (data) => {
   const posts = data.map(post => ({
     id: post.PostId,
@@ -116,6 +118,25 @@ const mapPosts = (data) => {
   }))
 
   return posts
+}
+
+const mapGroups = (data) => {
+  const groups = data.map(group => {
+    const users = mapGroupUsers(group.users)
+    const posts = mapPosts(group.posts)
+
+    return {
+      groupId: group.GroupId,
+      groupName: group.GroupName,
+      discription: group.Discription,
+      likes: group.Likes,
+      dislikes: group.Dislikes,
+      private: group.IsPrivate,
+      users: users,
+      posts: posts.reverse()
+    }
+  })
+  return groups
 }
 // basic actions for applications =====================================================================================
 
@@ -461,5 +482,37 @@ export const deleteCommentByUserId = async (obj) => {
 
 export const deleteCommentByUserIdCompleted = (data) => ({
   type: 'DELETE_COMMENT_BY_USER_ID_COMPLETED',
+  payload: data
+})
+// actions for retrieving/editing groups ==============================================================================
+
+export const getAllGroups = async () => {
+  const req = await authAxios.get('/groups/api/groups')
+  const res = await req.data
+  const groups = mapGroups(res)
+  return groups
+}
+
+export const getAllGroupsCompleted = (data) => ({
+  type: 'GET_ALL_GROUPS_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const createGroup = (obj) => {
+  // const req = await authAxios.post('/groups')
+}
+
+export const createGroupCompleted = (data) => {}
+//=========================================================
+export const joinGroup = async (obj) => {
+  const req = await authAxios.post('/groups/api/join', obj)
+  const res = await req.data
+  const groups = mapGroups(res.data)
+  return groups
+}
+
+export const joinGroupCompleted = (data) => ({
+  type: 'JOIN_GROUP_COMPLETED',
   payload: data
 })

@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     GroupId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
     },
     GroupName: {
       type: DataTypes.STRING(45),

@@ -146,7 +146,7 @@ router.put('/api/edit', (req, res, next) => {
       }).then(post => {
         if (parseInt(user.UserId) === parseInt(post.UserId)) {
           models.posts.update(
-            { Edit: req.body.edit },
+            { PostBody: req.body.body },
             { where: { PostId: parseInt(req.body.postId) } }
           ).then(() => {
             return models.posts.findAll({
@@ -366,7 +366,7 @@ router.put('/api/:id', (req, res, next) => {
     authService.verifyUser(token).then( user => {
       if(parseInt(user.UserId) === parseInt(req.body.userId)){
         models.posts.update(
-          { Edit: req.body.edit},
+          { PostBody: req.body.body},
           { where: { PostId: parseInt(req.body.postId)} }
         ).then( () => {
           return models.posts.findAll({
