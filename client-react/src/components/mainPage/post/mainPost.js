@@ -38,10 +38,7 @@ const Post = (props) => {
         </div>
 
         <div>
-          <div>
-            {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
-            {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
-          </div>
+          
           <div>
             <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
               <div>Likes</div>
@@ -68,6 +65,12 @@ const Post = (props) => {
         </div>
         <div>
           <button>Add Friend</button>
+        </div>
+        <div>
+          {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
+        </div>
+        <div>
+          {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null} 
         </div>
       </div>
     </div>
