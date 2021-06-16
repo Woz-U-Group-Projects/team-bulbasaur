@@ -23,7 +23,7 @@ const Post = (props) => {
       <div className='post-detail'>
         <div className='userName'>
           <Link to={`/user/${post.author}`}>
-            <h3>{post.author}</h3>
+            <h3>{post.author.userName}</h3>
           </Link>
         </div>
 

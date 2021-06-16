@@ -35,7 +35,7 @@ const Navigation = ({isLoggedIn, onLogout, onGetProfile, loggedInUser}) => {
           </li>
           <li className='signup'>{
               isUserLoggedIn ? 
-              <Link to='/profile' onClick={() => setProfile(loggedInUser)} style={{ textDecoration: 'none' }}>Profile</Link> : 
+              <Link to='/profile' onClick={() => onGetProfile(loggedInUser.id)} style={{ textDecoration: 'none' }}>Profile</Link> : 
               <Link to='/signup' style={{ textDecoration: 'none' }} >SignUp</Link>
           }</li>
 

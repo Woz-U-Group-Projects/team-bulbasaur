@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
-import PostForm from '../forms/postForm/postForm'\
+import PostForm from '../forms/postForm/postForm';
 import Post from './post/mainPost'
 import CreateGroupForm from '../forms/createGroupForm/createGroupFrom'
 //css
