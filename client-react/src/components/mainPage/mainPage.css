@@ -13,11 +13,18 @@
 .postsList {
   width: 60%;
   margin-top: 20px;
+  background-color: rgb(146, 141, 141);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .friendList {
   border: 1px solid black;
   width: 20%;
   margin: 20px;
+}
+
+.post {
+  background-color: #fff;
 }
 

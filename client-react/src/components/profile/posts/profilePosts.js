@@ -24,7 +24,6 @@ const ProfilePosts = (props) => {
       <div>
         <h4>{post.title}</h4>
         <p>{post.body}</p>
-        {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
         <div style={editModal ? { display: 'block' } : { display: 'none' }}>
           <EditProfilePostForm {...props} setEditModal={setEditModal} post={post} userId={post.author.id} />
         </div>

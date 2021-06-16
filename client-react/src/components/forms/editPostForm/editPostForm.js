@@ -23,23 +23,26 @@ const EditPostForm = ({ setEditModal, post, onEditPost }) => {
 
   return (
     <div className='modal'>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor='edit'><p>Edit Post:</p></label>
+      <form onSubmit={formik.handleSubmit} className='edit-form-wrapper'>
+        <div className='edit-form-title'>
+          <p>Title: {post.title}</p>
+        </div>
+      
+        <div className='edit-form-body'>
+          <label htmlFor='body'></label>
           <textarea
-            name='edit'
-            id='edit'
-            cols={25}
-            rows={5}
-            value={formik.values.edit}
+            name='body'
+            id='body'
+            value={formik.values.body}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></textarea>
-          {formik.touched.edit && formik.errors.edit ? <div>{formik.errors.edit}</div> : null}
+          {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
         </div>
-        <div>
-          <button onClick={() => setEditModal(false)}>Cancel</button>
-          <button type='submit' >Submit</button>
+
+        <div className='edit-form-btn'>
+          <button className='edit-form-cancel-btn' onClick={() => setEditModal(false)}>Cancel</button>
+          <button className='edit-form-submit-btn' type='submit' >Submit</button>
         </div>
       </form>
     </div>
