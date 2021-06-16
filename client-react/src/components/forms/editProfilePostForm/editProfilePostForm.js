@@ -6,16 +6,17 @@ const validate = yup.object({
   body: yup.string().required('You must provide An Edit To The Post')
 })
 
-const EditPostForm = ({ setEditModal, post, onEditPost }) => {
+const EditProfilePostForm = ({ setEditModal, post, onEditPostByUserId, userId }) => {
   const formik = useFormik({
     initialValues: {
+      userId: userId,
       postId: post.id,
       body: post.body
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
       actions.resetForm()
-      onEditPost(values)
+      onEditPostByUserId(values)
       setEditModal(false)
     }
   })
@@ -43,4 +44,4 @@ const EditPostForm = ({ setEditModal, post, onEditPost }) => {
   )
 }
 
-export default EditPostForm
+export default EditProfilePostForm

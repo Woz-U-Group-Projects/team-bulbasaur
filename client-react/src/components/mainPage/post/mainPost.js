@@ -4,7 +4,7 @@ import CommentView from '../../comments/commentView/comments'
 import EditPostForm from '../../forms/editPostForm/editPostForm'
 
 const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost } = props
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -20,23 +20,26 @@ const Post = (props) => {
   return (
     <div style={{ margin: 20, borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
       <div style={{ borderWidth: 2, borderColor: 'black', borderStyle: 'solid' }}>
-        <Link to={`/user/${post.author}`} style={{ textDecoration: 'none', color: 'black' }} >
-          <h3>{post.author}</h3>
+        <Link 
+          onClick={() => onGetProfile(post.author.id)} 
+          to={`/profile`} 
+          style={{ textDecoration: 'none', color: 'black' }}
+        >
+          <h3>{post.author.userName}</h3>
         </Link>
       </div>
       <div>
         <h4>{post.title}</h4>
         <p>{post.body}</p>
-        {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
         <div style={editModal ? { display: 'block' } : { display: 'none' }}>
-          <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
+          <EditPostForm {...props} setEditModal={setEditModal} post={post} />
         </div>
-        {isLoggedIn && post.authorId === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
+        {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.authorId === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
-          {isLoggedIn && post.authorId === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
+          {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => {setEditModal(true)}}>Edit</button> : null}
         </div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
