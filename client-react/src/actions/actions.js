@@ -499,8 +499,11 @@ export const getAllGroupsCompleted = (data) => ({
 })
 //=========================================================
 
-export const createGroup = (obj) => {
+export const createGroup = async (obj) => {
   // const req = await authAxios.post('/groups')
+  // const res = await req.data
+  // console.log(res)
+  // return res
 }
 
 export const createGroupCompleted = (data) => {}
