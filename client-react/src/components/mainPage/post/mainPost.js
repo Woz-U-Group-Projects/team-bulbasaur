@@ -5,7 +5,7 @@ import EditPostForm from '../../forms/editPostForm/editPostForm'
 import './mainPost.css'
 
 const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost } = props
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -34,13 +34,13 @@ const Post = (props) => {
           <div style={editModal ? {display: 'block'} : {display: 'none'}}>
             <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
           </div>
-          {isLoggedIn && post.authorId === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
+          {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
         </div>
 
         <div>
           <div>
-            {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.authorId === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
-            {isLoggedIn && post.authorId === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
+            {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
+            {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
           </div>
           <div>
             <button onClick={() => onUpdateVotes('likes', likes, post.id)}>

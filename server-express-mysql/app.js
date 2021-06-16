@@ -9,6 +9,7 @@ var tasksRouter = require("./routes/tasks");
 var userRouter = require("./routes/user");
 var postRouter = require("./routes/post");
 var commentRouter = require("./routes/comment")
+var groupRouter = require("./routes/groups")
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use("/tasks", tasksRouter);
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 app.use("/comments", commentRouter)
+app.use("/groups", groupRouter)
 
 models.sequelize.sync().then(function() {
   console.log("DB Sync'd up");

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 //CSS
 import './nav.css'
 
-const Navigation = ({isLoggedIn, onLogout, setProfile, loggedInUser}) => {
+const Navigation = ({isLoggedIn, onLogout, onGetProfile, loggedInUser}) => {
   let[isUserLoggedIn, setUserLoggedIn] = useState()
 
 
@@ -47,6 +47,7 @@ const Navigation = ({isLoggedIn, onLogout, setProfile, loggedInUser}) => {
         </ul>
       </nav>
     </header>
+            
   )
 }
 

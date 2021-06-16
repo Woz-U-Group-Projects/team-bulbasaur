@@ -4,14 +4,14 @@ import * as yup from 'yup';
 import './editPostForm.css'
 
 const validate = yup.object({
-  edit: yup.string().required('You must provide An Edit To The Post')
+  body: yup.string().required('You must provide An Edit To The Post')
 })
 
-const EditPostForm = ({ setEditModal, postId, onEditPost }) => {
+const EditPostForm = ({ setEditModal, post, onEditPost }) => {
   const formik = useFormik({
     initialValues: {
-      postId: postId,
-      edit: ''
+      postId: post.id,
+      body: post.body
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
