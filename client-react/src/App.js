@@ -3,23 +3,24 @@ import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 //CSS
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted, signup, signupCompleted,
-  login, loginCompleted, logout, logoutCompleted,
-  getPosts, getPostsCompleted, makePost, makePostCompleted,
+  getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted, 
+  logout, logoutCompleted, getPosts, getPostsCompleted, makePost, makePostCompleted,
   updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
   editPost, editPostCompleted, makeComment, makeCommentCompleted, 
   updateCommentVotes, updateCommentVotesCompleted, deleteComment, deleteCommentCompleted,
-  getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
+  getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted, cleanUpProfile,
   updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
   deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete,
   updateCommentVotesByUserId, updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted,
-  getAllGroups, getAllGroupsCompleted, joinGroup, joinGroupCompleted
+  getAllGroups, getAllGroupsCompleted, joinGroup, joinGroupCompleted, createGroup, createGroupCompleted,
+  getGroupPage, getGroupPageCompleted,
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -27,11 +28,12 @@ import Login from "./components/login/login";
 import SignUp from "./components/signup/signup";
 import Profile from './components/profile/profile'
 import Navigation from "./components/navigation/nav";
+import GroupPage from "./components/groupsView/groupPage/groupPage";
 
 function _App(props) {
-
   return (
     <Router>
+      { !props.profile && !props.selectedGroup?<Redirect to='/'/>:null}
       <div className="App">
         <Navigation {...props} />
         <Switch>
@@ -47,6 +49,9 @@ function _App(props) {
           <Route path='/profile'>
             <Profile {...props} />
           </Route>
+          <Route path={'/groupPage'}>
+            <GroupPage {...props} />
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -56,6 +61,7 @@ function _App(props) {
 const mapDispatchToProps = (dispatch, state) => {
   return {
     onGetProfile: userId => getProfile(userId).then(data => dispatch(getProfileCompleted(data))),
+    onCleanUpProfile: () => dispatch(cleanUpProfile()),
     onGetUsers: () => getUsers().then(users => dispatch(getUsersCompleted(users))),
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
@@ -76,7 +82,9 @@ const mapDispatchToProps = (dispatch, state) => {
     onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then( data => dispatch(updateCommentVotesByUserIdCompleted(data))),
     ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data))),
     onGetGroups: () => getAllGroups().then(data => dispatch(getAllGroupsCompleted(data))),
-    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data)))
+    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data))),
+    onCreateGroup: (obj) => createGroup(obj).then(data => dispatch(createGroupCompleted(data))),
+    onGetGroupPage: (groupId) => getGroupPage(groupId).then(data => dispatch(getGroupPageCompleted(data)))
   }
 }
 
@@ -90,7 +98,9 @@ const mapStateToProps = (state) => {
     posts: state.posts,
     userPosts: state.userPosts,
     profile: state.profile,
-    profilePosts: state.profilePosts
+    profilePosts: state.profilePosts,
+    selectedGroup: state.selectedGroup,
+    groupPosts: state.groupPosts
   }
 }
 

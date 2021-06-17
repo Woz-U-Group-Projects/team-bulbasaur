@@ -3,15 +3,23 @@ const initialState = {
   posts: [],
   groups: [],
   userPosts: [],
-  profile: {},
+  profile: undefined,
   signupStatus: {},
   loggedInUser: undefined,
   profilePosts: [],
   isLoggedIn: false,
+  selectedGroup: undefined,
+  groupPosts: []
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'CLEAN_UP_PROFILE':
+      return{
+        ...state,
+        profile: undefined,
+        profilePosts: []
+      }
     case 'GET_USERS_COMPLETED':
       return {
         ...state,
@@ -138,10 +146,21 @@ const reducer = (state = initialState, action) => {
         ...state,
         groups: action.payload
       }
+    case 'CREATE_GROUP_COMPLETED':
+      return {
+        ...state,
+        groups: action.payload
+      }
     case 'JOIN_GROUP_COMPLETED':
       return {
         ...state,
         groups: action.payload
+      }
+    case 'GET_GROUP_PAGE_COMPLETE':
+      return {
+        ...state,
+        selectedGroup: action.payload.group,
+        groupPosts: action.payload.posts
       }
     default:
       return {

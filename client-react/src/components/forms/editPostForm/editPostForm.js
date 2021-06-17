@@ -25,17 +25,17 @@ const EditPostForm = ({ setEditModal, post, onEditPost }) => {
     <div className='modal'>
       <form onSubmit={formik.handleSubmit}>
         <div>
-          <label htmlFor='edit'><p>Edit Post:</p></label>
+          <label htmlFor='body'><p>Edit Post:</p></label>
           <textarea
-            name='edit'
-            id='edit'
+            name='body'
+            id='body'
             cols={25}
             rows={5}
-            value={formik.values.edit}
+            value={formik.values.body}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></textarea>
-          {formik.touched.edit && formik.errors.edit ? <div>{formik.errors.edit}</div> : null}
+          {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
         </div>
         <div>
           <button onClick={() => setEditModal(false)}>Cancel</button>

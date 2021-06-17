@@ -14,22 +14,27 @@ router.get('/api', (req, res, next) => {
    }
   },
   attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
-  include: {
-   model: models.posts,
-   include: [
-    {
-     model: models.users,
-     attributes: ['UserName']
-    },
-    {
-     model: models.comments,
-     include: {
+  include: [
+   {
+    model: models.groups
+   },
+   {
+    model: models.posts,
+    include: [
+     {
       model: models.users,
       attributes: ['UserName']
+     },
+     {
+      model: models.comments,
+      include: {
+       model: models.users,
+       attributes: ['UserName']
+      }
      }
-    }
-   ]
-  },
+    ]
+   }
+  ],
  }).then(users => {
   res.header('Content-Type', 'application/json')
   res.send(JSON.stringify(users))
@@ -104,22 +109,27 @@ router.get('/api/profile', (req, res, next) => {
     models.users.findOne({
      where: { Email: user.Email },
      attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
-     include: {
-      model: models.posts,
-      include: [
-       {
-        model: models.users,
-        attributes: ['UserName']
-       },
-       {
-        model: models.comments,
-        include: {
+     include: [
+      {
+       model: models.groups
+      },
+      {
+       model: models.posts,
+       include: [
+        {
          model: models.users,
          attributes: ['UserName']
+        },
+        {
+         model: models.comments,
+         include: {
+          model: models.users,
+          attributes: ['UserName']
+         }
         }
-       }
-      ]
-     }
+       ]
+      }
+     ],
     })
      .then(result => {
       res.header('Content-Type', 'application/json')
@@ -144,22 +154,27 @@ router.get('/api/profile/:id', (req, res, next) => {
     models.users.findOne({
      where: { Email: user.Email },
      attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
-     include: {
-      model: models.posts,
-      include: [
-       {
-        model: models.users,
-        attributes: ['UserName']
-       },
-       {
-        model: models.comments,
-        include: {
+     include: [
+      {
+       model: models.groups
+      },
+      {
+       model: models.posts,
+       include: [
+        {
          model: models.users,
          attributes: ['UserName']
+        },
+        {
+         model: models.comments,
+         include: {
+          model: models.users,
+          attributes: ['UserName']
+         }
         }
-       }
-      ]
-     }
+       ]
+      }
+     ],
     }).then(result => {
      res.header('Content-Type', 'application/json')
      res.send(JSON.stringify({ result: true, data: result }))
@@ -168,22 +183,27 @@ router.get('/api/profile/:id', (req, res, next) => {
     models.users.findOne({
      where: { UserId: parseInt(req.params.id) },
      attributes: ['UserId', 'FullName', 'UserName'],
-     include: {
-      model: models.posts,
-      include: [
-       {
-        model: models.users,
-        attributes: ['UserName']
-       },
-       {
-        model: models.comments,
-        include: {
+     include: [
+      {
+       model: models.groups
+      },
+      {
+       model: models.posts,
+       include: [
+        {
          model: models.users,
          attributes: ['UserName']
+        },
+        {
+         model: models.comments,
+         include: {
+          model: models.users,
+          attributes: ['UserName']
+         }
         }
-       }
-      ]
-     }
+       ]
+      }
+     ],
     }).then(user => {
      res.header('Content-Type', 'application/json')
      res.send(JSON.stringify({ result: false, data: user }))
@@ -194,22 +214,27 @@ router.get('/api/profile/:id', (req, res, next) => {
   models.users.findOne({
    where: { UserId: parseInt(req.params.id) },
    attributes: ['UserId', 'FullName', 'UserName'],
-   include: {
-    model: models.posts,
-    include: [
-     {
-      model: models.users,
-      attributes: ['UserName']
-     },
-     {
-      model: models.comments,
-      include: {
+   include: [
+    {
+     model: models.groups
+    },
+    {
+     model: models.posts,
+     include: [
+      {
        model: models.users,
        attributes: ['UserName']
+      },
+      {
+       model: models.comments,
+       include: {
+        model: models.users,
+        attributes: ['UserName']
+       }
       }
-     }
-    ]
-   }
+     ]
+    }
+   ],
   }).then(user => {
    res.header('Content-Type', 'application/json')
    res.send(JSON.stringify({ result: false, data: user }))
@@ -223,7 +248,7 @@ router.get('/api/logout', (req, res, next) => {
  res.send(JSON.stringify({ result: true, message: 'logged out' }))
 })
 
-//inUse
+//
 router.delete('/api/:userId', (req, res, next) => {
  let token = req.cookies.jwt
  if (token) {

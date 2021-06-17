@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProfilePostForm from '../forms/profilePostForm/profilePostForm'
 import ProfilePosts from './posts/profilePosts'
 
 const Profile = (props) => {
-  let { profile, loggedInUser, isLoggedIn, profilePosts } = props
+  let { profile, loggedInUser, isLoggedIn, profilePosts, onCleanUpProfile } = props
+
+  useEffect(()=>{
+    return ()=>{
+      onCleanUpProfile()
+    }
+  }, [onCleanUpProfile])
 
   return (
     <div>
-      {isLoggedIn && loggedInUser.id === profile.id ?
+      {profile ? isLoggedIn && loggedInUser.id === profile.id ?
         <div>
           <h1>{profile.name}'s Profile</h1>
           <h2>{profile.userName}</h2>
@@ -30,8 +36,7 @@ const Profile = (props) => {
               <ProfilePosts {...props} userId={profile.id} key={post.id} post={post} />
             ))}
           </div>
-        </div>
-      }
+        </div> : <span>Loading Profile...</span>}
     </div>
   )
 }

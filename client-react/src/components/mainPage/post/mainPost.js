@@ -22,17 +22,14 @@ const Post = (props) => {
     <div className='main-post-wrapper'>
       <div className='post-detail'>
         <div className='userName'>
-          <Link to={`/user/${post.author}`}>
-            <h3>{post.author.userName}</h3>
-          </Link>
+          <h3>{post.author.userName}</h3>
         </div>
 
         <div>
           <h4>{post.title}</h4>
           <p>{post.body}</p>
-          {post.edit === null ? null : <p><span>Edit:</span> {post.edit}</p>}
           <div style={editModal ? {display: 'block'} : {display: 'none'}}>
-            <EditPostForm {...props} setEditModal={setEditModal} postId={post.id} />
+            <EditPostForm {...props} setEditModal={setEditModal} post={post} />
           </div>
           {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
         </div>
@@ -64,7 +61,9 @@ const Post = (props) => {
 
       <div className='post-control'>
         <div>
-          <button>Profile</button>
+          <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
+            <button>Profile</button>
+          </Link>
         </div>
         <div>
           <button>Add Friend</button>

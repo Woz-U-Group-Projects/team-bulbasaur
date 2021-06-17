@@ -496,4 +496,27 @@ router.delete('/api/:postId/:userId', (req, res, next) => {
   }
 })
 
+//inUse
+router.get('/api/groupPost/:groupId', (req, res, next) => {
+  models.posts.findAll({ 
+    where: { GroupId: req.params.groupId },
+    include: [
+      {
+        model: models.users,
+        attributes: ['UserName']
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }
+    ]
+  }).then(posts => {
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify(posts))
+  })
+})
+
 module.exports = router

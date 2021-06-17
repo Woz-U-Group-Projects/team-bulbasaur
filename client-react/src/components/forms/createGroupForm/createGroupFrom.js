@@ -9,18 +9,20 @@ const validate = yup.object({
 })
 
 const CreateGroupForm = (props) => {
-  let { setFormView, loggedInUser, isLoggedIn } = props
+  let { setFormView, loggedInUser, isLoggedIn, onCreateGroup } = props
+
   const formik = useFormik({
     initialValues: {
       groupName: '',
       discription: '',
       private: false,
-      UserId: isLoggedIn?loggedInUser.Id:undefined
+      userId: isLoggedIn?loggedInUser.id:undefined
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
-      alert(JSON.stringify(values))
+      onCreateGroup(values)
       actions.resetForm()
+      setFormView(false)
     }
   })
 
