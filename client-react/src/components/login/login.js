@@ -31,37 +31,42 @@ const Login = ({ onLogin, loggedInUser, isLoggedIn }) => {
   }
 
   return (
-    <div>
-      <h1>Login Page</h1>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor='email'>Email: </label>
-          <input
-            id='email'
-            name='email'
-            type='email'
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
-        </div>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            id='password'
-            name='password'
-            type='password'
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
-        </div>
-        <div>
-          <button type='submit'>Submit</button>
-        </div>
-      </form>
+    <div className="login-container">
+      <div className="login-text">
+        <h1>Login Page</h1>
+      </div>
+
+      <div className="login-full-name">
+        <form onSubmit={formik.handleSubmit}>
+          <div>
+            <label htmlFor='email'>Email: </label>
+            <input
+              id='email'
+              name='email'
+              type='email'
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
+          </div>
+          <div>
+            <label htmlFor='password'>Password</label>
+            <input
+              id='password'
+              name='password'
+              type='password'
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
+          </div>
+          <div>
+            <button type='submit'>Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

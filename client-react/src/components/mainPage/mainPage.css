@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
+  margin: 0;
 }
 
 .groupList {
@@ -28,3 +29,30 @@
   background-color: #fff;
 }
 
+@media (min-width: 481px) and (max-width: 767px) {
+  .friendList, .groupList {
+    display: none;
+  }
+
+  .postsList {
+    width: 80%;
+  }
+
+  .mainPage-container {
+    /* margin: 0 -50px; */
+  }
+}
+
+@media (max-width: 480px) {
+  .friendList, .groupList {
+    display: none;
+  }
+
+  .postsList {
+    width: 80%;
+  }
+
+  .mainPage-container {
+    margin: 0 -20px;
+  }
+}

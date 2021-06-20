@@ -41,7 +41,7 @@ const EditPostForm = ({ setEditModal, post, onEditPost }) => {
         </div>
 
         <div className='edit-form-btn'>
-          <button className='edit-form-cancel-btn' onClick={() => setEditModal(false)}>Cancel</button>
+          <button className='edit-form-cancel-btn' type='button' onClick={() => setEditModal(false)}>Cancel</button>
           <button className='edit-form-submit-btn' type='submit' >Submit</button>
         </div>
       </form>

@@ -1,0 +1,53 @@
+.comment-view-container {
+    margin: 10px 60px;
+    border-top: 1px solid #eaeaea;
+    overflow-wrap: break-word;
+}
+
+.comment-body {
+    margin: 10px 0;
+}    
+
+.comment-vote-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+h5 {
+    display: inline;
+    color: blue;
+}
+
+.link-profile {
+    margin-left: 5px;
+    text-decoration: none;
+}
+
+p {
+    display: inline;
+}
+
+.comment-delete-btn {
+    border: none;
+    background: #fff;
+    margin-left: 9px;
+    margin-top: 5px;
+}
+
+.comment-delete-icon {
+    color: red;
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    .comment-view-container {
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .comment-view-container {
+        margin: 5px 0;
+    }
+}

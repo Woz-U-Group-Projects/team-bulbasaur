@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
+import './signup.css';
+
 const validate = yup.object({
   name: yup.string().required('Your Full Name Is Required').min(3, 'Your Name Must Be 4 Characters Long Or More'),
   email: yup.string().email('Invalid Email Address').required('You Need An Email To Sign Up'),
@@ -36,11 +38,14 @@ const SignUp = ({ onSignup, signupStatus }) => {
   }
 
   return (
-    <div>
-      <h1>SignUp Page</h1>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor='name'>Full Name:</label>
+    <div className="signup-container">
+      <div className="signup-text">
+        <h1>Sign Up</h1>
+      </div>
+
+      <form onSubmit={formik.handleSubmit} className="signup-form-wrapper">
+        <div className="signup-fullname">
+          {/* <label htmlFor='name'>Full Name:</label> */}
           <input
             id='name'
             name='name'
@@ -51,8 +56,8 @@ const SignUp = ({ onSignup, signupStatus }) => {
           />
           {formik.touched.name && formik.errors.name ? <div>{formik.errors.name}</div> : null}
         </div>
-        <div>
-          <label htmlFor='email'>Email:</label>
+        <div className="signup-email">
+          {/* <label htmlFor='email'>Email:</label> */}
           <input
             id='email'
             name='email'
@@ -63,8 +68,8 @@ const SignUp = ({ onSignup, signupStatus }) => {
           />
           {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
         </div>
-        <div>
-          <label htmlFor='userName'>User Name:</label>
+        <div className="signup-username">
+          {/* <label htmlFor='userName'>User Name:</label> */}
           <input
             id='userName'
             name='userName'
@@ -75,8 +80,8 @@ const SignUp = ({ onSignup, signupStatus }) => {
           />
           {formik.touched.userName && formik.errors.userName ? <div>{formik.errors.userName}</div> : null}
         </div>
-        <div>
-          <label htmlFor='password'>Password:</label>
+        <div className="signup-password">
+          {/* <label htmlFor='password'>Password:</label> */}
           <input
             id='password'
             name='password'
@@ -87,7 +92,7 @@ const SignUp = ({ onSignup, signupStatus }) => {
           />
           {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
         </div>
-        <div>
+        <div className="signup-btn">
           <button type='submit'>Submit</button>
         </div>
       </form>

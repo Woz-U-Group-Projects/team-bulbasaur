@@ -29,24 +29,24 @@ const Post = (props) => {
       <div className='post-detail'>
         <div className='userName'>
           <div>
-            <Link to={`/user/${post.author}`}>
+            <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
               <h3>{post.author.userName}</h3>
             </Link>
           </div>
           <div className='control-group'>
             <div className="svg-icons">
-              <Link to={`/user/${post.author}`}>
-                <FontAwesomeIcon icon="user" />
+              <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
+                <FontAwesomeIcon className="user-icon" icon="user" />
               </Link>
             </div>
             <div className="svg-icons">
-              <FontAwesomeIcon icon="user-plus" />
+              <FontAwesomeIcon  className="user-plus-icon" icon="user-plus" />
             </div>
             <div className="svg-icons">
               {isLoggedIn && post.author.id === loggedInUser.id ? <FontAwesomeIcon icon="edit" onClick={() => setEditModal(true)} /> : null} 
             </div>
             <div className="svg-icons">
-              {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <FontAwesomeIcon icon="trash-alt" onClick={() => onDeletePost(post.id)} /> : null}
+              {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <FontAwesomeIcon className="trash-icon" icon="trash-alt" onClick={() => onDeletePost(post.id)} /> : null}
             </div>
           </div>
         </div>
@@ -65,17 +65,17 @@ const Post = (props) => {
         </div>
 
         <div className='post-vote'>
-          <div>
-            <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateVotes('likes', likes, post.id)} /> {likes}
+          <div className="votes">
+            <div className="thumbs-up">
+              <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateVotes('likes', likes, post.id)} /> <span>{likes}</span>
+            </div>
+            <div className="thumbs-down">
+              <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateVotes('dislikes', dislikes, post.id)} /> <div className="vote-count">{dislikes}</div>
+            </div>
           </div>
-        
+            
           <div>
-            <FontAwesomeIcon icon="thumbs-down" onClick={() => onUpdateVotes('dislikes', dislikes, post.id)} /> {dislikes}
-          </div>
-
-          <div>
-            <FontAwesomeIcon icon="comment-dots" onClick={() => setView(!commentView)} />
-              <div>Comments: {commentList.length}</div>
+            <FontAwesomeIcon icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
           </div>
         </div>
         <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} commentList={commentList} />
