@@ -37,10 +37,6 @@
   .postsList {
     width: 80%;
   }
-
-  .mainPage-container {
-    /* margin: 0 -50px; */
-  }
 }
 
 @media (max-width: 480px) {
