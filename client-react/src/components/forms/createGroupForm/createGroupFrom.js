@@ -61,7 +61,7 @@ const CreateGroupForm = (props) => {
         />
       </div>
       <div>
-        <button onClick={() => setFormView(false)}>Cancel</button>
+        <button type="button"  onClick={() => setFormView(false)}>Cancel</button>
         <button type='submit' >Submit</button>
       </div>
     </form>

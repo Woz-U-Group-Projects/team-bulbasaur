@@ -1,0 +1,38 @@
+.container{
+  border: solid 1px black;
+}
+
+.usersList{
+  height: 82vh;
+  overflow-y: auto;
+}
+
+.toLeft{
+  width: 68%; 
+  float: left;
+}
+
+.toRight{
+  width: 28%;
+  float: right;
+}
+
+.info{
+  float: left;
+  width: 70%;
+}
+
+.form{
+  height: 160px;
+  float: right;
+  width: 30%;
+  border: solid 1px black;
+}
+
+.buttons{
+  display: flex;
+  float: left;
+  width: 70%;
+  justify-content: space-between;
+  padding: 5px;
+}

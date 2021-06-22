@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 // import { Link } from 'react-router-dom'
 import PostForm from '../forms/postForm/postForm';
 import Post from './post/mainPost'
-import GroupView from '../groupsView/groupView';
+import GroupView from './groupsView/groupView';
 //css
 import './mainPage.css'
 

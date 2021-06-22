@@ -7,15 +7,17 @@ const valitade = yup.object({
 })
 
 const EditGroupDescription = (props) => {
-  let { group,setView } = props
+  let { group, setView, onEditGroupDescription } = props
   const formik = useFormik({
     initialValues: {
+      groupId: group.groupId,
       discription: group.discription
     },
     validationSchema:valitade,
     onSubmit: (values, actions) => {
-      alert(JSON.stringify(values))
+      onEditGroupDescription(values)
       actions.resetForm()
+      setView(false)
     }
   })
 

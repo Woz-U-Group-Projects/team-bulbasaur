@@ -539,23 +539,9 @@ export const createGroupCompleted = (data) => ({
   type: 'CREATE_GROUP_COMPLETED',
   payload: data
 })
-//=========================================================
-
-export const joinGroup = async (obj) => {
-  const req = await authAxios.post('/groups/api/join', obj)
-  const res = await req.data
-  const groups = mapGroups(res.data)
-  return groups
-}
-
-export const joinGroupCompleted = (data) => ({
-  type: 'JOIN_GROUP_COMPLETED',
-  payload: data
-})
 // actions for retrieving/editing a single groups =====================================================================
 
 const getGroupById = async (groupId) => {
-  console.log('start group')
   const req = await authAxios.get(`/groups/api/groups/${groupId}`)
   const res = await req.data
   const group = mapGroup(res)
@@ -563,11 +549,10 @@ const getGroupById = async (groupId) => {
 }
 
 const getGroupPosts = async (groupId) => {
-  console.log('start posts')
   const req = await authAxios.get(`/posts/api/groupPost/${groupId}`)
   const res = await req.data
-  console.log(res)
-  return res
+  const posts = mapPosts(res)
+  return posts.reverse()
 }
 
 export const getGroupPage = async (groupId) => {
@@ -583,3 +568,220 @@ export const getGroupPageCompleted = (data) => ({
   type: 'GET_GROUP_PAGE_COMPLETE',
   payload: data
 })
+//=========================================================
+
+export const cleanUpGroupPgae = () => ({
+  type: 'CLEAN_UP_GROUP_PAGE'
+})
+//=========================================================
+
+export const joinGroup = async (obj) => {
+  const req = await authAxios.post('/groups/api/join', obj)
+  const res = await req.data
+  const group = mapGroup(res.data)
+  return group
+}
+
+export const joinGroupCompleted = (data) => ({
+  type: 'JOIN_GROUP_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const leaveGroup = async (obj) => {
+  const req = await authAxios.delete(`/groups/api/leave/${obj.groupId}/${obj.userId}`)
+  const res = await req.data
+  const group = mapGroup(res)
+  return group
+}
+
+export const  leaveGroupCompleted = (data) => ({
+  type: 'LEAVE_GROUP_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const editGroupDescription = async (obj) => {
+  const req = await authAxios.put('/groups/api/discription', obj)
+  const res = await req.data
+  const group = mapGroup(res)
+  return group
+}
+
+export const editGroupDescriptionCompleted = (data) => ({
+  type: 'EDIT_GROUP_DESCRIPTION_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const updateGroupVotes = async (obj) => {
+  const req = await authAxios.put('/groups/api/groupPage/votes', obj)
+  const res = await req.data
+  const group = mapGroup(res)
+  return group
+}
+
+export const updateGroupVotesCompleted = (data) => ({
+  type: 'UPDATE_GROUP_VOTES_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const disbandGroup = async (obj) => {
+  const req = await authAxios.delete(`/groups/api/disband/${obj}`)
+  const res = await req.data 
+  return res
+}
+
+export const disbandGroupCompleted = (data) => ({
+  type: 'DISBAND_GROUP_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const createGroupPost = async (obj) => {
+  const req = await authAxios.post('/posts/api/groupPosts/create', obj)
+  const res = await req.data
+  const posts = mapPosts(res)
+  return posts.reverse()
+}
+
+export const createGroupPostCompleted = (data) => ({
+  type: 'CREATE_GROUP_POST_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const deleteGroupPost = async (obj) => {
+  let { groupId, postId } = obj 
+  const req = await authAxios.delete(`/posts/api/groupPost/${groupId}/${postId}`)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const deleteGroupPostCompleted = (data) => ({
+  type: 'DELETE_GROUP_POST_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const editGroupPost = async (obj) => {
+  const req = await authAxios.put('/posts/api/groupPost/edit/post', obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const editGroupPostCompleted = data => ({
+  type: 'EDIT_GROUP_POST_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const updateGroupPostVotes = async (obj) => {
+  const req = await authAxios.put('/posts/api/groupPost/edit/votes', obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const updateGroupPostVotesCompleted = data => ({
+  type: 'UPDATE_GROUP_POSTS_VOTES_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const makeGroupComment = async obj => {
+  console.log(obj)
+  const req = await authAxios.post('/comments/api/groupComments/create', obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const makeGroupCommentCompleted = data => ({
+  type: 'MAKE_GROUP_cOMMENT_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const updateGroupCommentVotes = async obj => {
+  const req = await authAxios.put('/comments/api/groupComments/update/votes', obj)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const updateGroupCommentVotesCompleted = data => ({
+  type: 'UPDATE_GROUP_COMMENT_VOTES_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const deleteGroupComment = async obj => {
+  let { commentId, groupId } = obj 
+  const req = await authAxios.delete(`/comments/api/groupComments/delete/${commentId}/${groupId}`)
+  const res = await req.data
+  const posts = mapPosts(res.data)
+  return posts.reverse()
+}
+
+export const deleteGroupCommentCompleted = data => ({
+  type: 'DELETE_GROUP_COMMENT_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const removeUser = async obj => {
+  let { groupId, userId } = obj
+  const req = await authAxios.delete(`/groups/api/remove/${groupId}/${userId}`)
+  const res = await req.data
+  const group = mapGroup(res.data)
+  return group
+}
+
+export const removeUserCompleted = data => ({
+  type: 'REMOVE_USER_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const makeGroupAdmin = async obj => {
+  const req = await authAxios.put('/groups/api/groups/groupAdmin', obj)
+  const res = await req.data
+  const group = mapGroup(res.data)
+  return group
+}
+
+export const makeGroupAdminCompleted = data => ({
+  type: 'MAKE_GROUP_ADMIN_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const removeGroupAdmin = async obj => {
+  const req = await authAxios.put('/groups/api/groups/remove/admin', obj)
+  const res = await req.data
+  const group = mapGroup(res.data)
+  return group
+}
+
+export const removeGroupAdminCompleted = data => ({
+  type: 'MAKE_GROUP_ADMIN_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const transferGroupOwner = async obj => {
+  const req = await authAxios.put('/groups/api/groups/make/owner', obj)
+  const res = await req.data
+  const group = mapGroup(res.data)
+  return group
+}
+
+export const transferGroupOwnerCompleted = data => ({
+  type: 'MAKE_GROUP_ADMIN_COMPLETED',
+  payload: data
+})
+

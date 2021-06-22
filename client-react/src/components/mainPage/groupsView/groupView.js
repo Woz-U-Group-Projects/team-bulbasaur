@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import CreateGroupForm from '../forms/createGroupForm/createGroupFrom'
+import CreateGroupForm from '../../forms/createGroupForm/createGroupFrom'
 
 const GroupView = (props) => {
   let { groups, loggedInUser, onJoinGroup, isLoggedIn, onGetGroupPage } = props
   let [groupFormView, setFormView] = useState(false)
-
   return (
     <div>
       <div style={groupFormView ? { display: 'block' } : { display: 'none' }}>
