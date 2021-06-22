@@ -37,7 +37,7 @@ const EditProfilePostForm = ({ setEditModal, post, onEditPostByUserId, userId })
         {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
       </div>
       <div>
-        <button onClick={() => setEditModal(false)}>Cancel</button>
+        <button type="button"  onClick={() => setEditModal(false)}>Cancel</button>
         <button type='submit' >Submit</button>
       </div>
     </form>

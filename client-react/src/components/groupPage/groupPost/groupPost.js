@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import CommentView from '../../comments/commentView/comments'
-import EditPostForm from '../../forms/editPostForm/editPostForm'
-import './mainPost.css'
+import GroupCommentView from './groupCommentView/groupCommentView'
+import EditGroupPostForm from '../../forms/editGroupPostForm/editGroupPostForm'
 
-const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
+const GroupPost = (props) => {
+  let { post, onUpdateGroupPostVotes, isLoggedIn, loggedInUser, onDeleteGroupPost, onGetProfile, selectedGroup, isOwner } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -29,22 +28,34 @@ const Post = (props) => {
           <h4>{post.title}</h4>
           <p>{post.body}</p>
           <div style={editModal ? {display: 'block'} : {display: 'none'}}>
-            <EditPostForm {...props} setEditModal={setEditModal} post={post} />
+            <EditGroupPostForm groupId={selectedGroup.groupId} {...props} setEditModal={setEditModal} post={post} />
           </div>
-          {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
         </div>
 
         <div>
           <div>
-            {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) ? <button onClick={() => onDeletePost(post.id)}>Delete</button> : null}
+            {
+              (isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) || isOwner ? 
+              <button onClick={() => onDeleteGroupPost({postId:post.id,groupId:selectedGroup.groupId})}>Delete</button> : null
+            }
             {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
           </div>
           <div>
-            <button onClick={() => onUpdateVotes('likes', likes, post.id)}>
+            <button onClick={() => onUpdateGroupPostVotes({
+              type: 'likes',
+              groupId: selectedGroup.groupId,
+              postId: post.id,
+              likes: likes
+            })}>
               <div>Likes</div>
               <div>{likes}</div>
             </button>
-            <button onClick={() => onUpdateVotes('dislikes', dislikes, post.id)}>
+            <button onClick={() => onUpdateGroupPostVotes({
+              type: 'dislikes',
+              groupId: selectedGroup.groupId,
+              postId: post.id,
+              dislikes: dislikes
+            })}>
               <div>dislikes</div>
               <div>{dislikes}</div>
             </button>
@@ -56,7 +67,14 @@ const Post = (props) => {
             </button>
           </div>
         </div>
-        <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} commentList={commentList} />
+        <GroupCommentView 
+          {...props} 
+          commentView={commentView} 
+          postId={post.id} 
+          postAuthor={post.authorId} 
+          groupId={selectedGroup.groupId} 
+          commentList={commentList} 
+        />
       </div>
 
       <div className='post-control'>
@@ -73,4 +91,4 @@ const Post = (props) => {
   )
 }
 
-export default Post
+export default GroupPost
