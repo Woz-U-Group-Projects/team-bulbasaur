@@ -61,7 +61,7 @@ const SignUp = ({ onSignup, signupStatus }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <FontAwesomeIcon className="icon-user-signup" icon="user-circle" />
+          <FontAwesomeIcon className="icon-signup" icon="user-circle" />
           {/* {formik.touched.name && formik.errors.name ? <div>{formik.errors.name}</div> : null} */}
         </div>
 
@@ -76,7 +76,7 @@ const SignUp = ({ onSignup, signupStatus }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <FontAwesomeIcon className="icon-user-signup" icon="envelope" />
+          <FontAwesomeIcon className="icon-signup" icon="envelope" />
           {/* {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null} */}
     
         </div>
@@ -91,7 +91,7 @@ const SignUp = ({ onSignup, signupStatus }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <FontAwesomeIcon className="icon-user-signup" icon="user" />
+          <FontAwesomeIcon className="icon-signup" icon="user" />
           {/* {formik.touched.userName && formik.errors.userName ? <div>{formik.errors.userName}</div> : null} */}
         </div>
 
@@ -106,7 +106,7 @@ const SignUp = ({ onSignup, signupStatus }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          <FontAwesomeIcon className="icon-user-signup" icon="lock" />
+          <FontAwesomeIcon className="icon-signup" icon="lock" />
           {/* {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null} */}
         </div>
 

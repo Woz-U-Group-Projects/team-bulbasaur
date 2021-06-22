@@ -1,21 +1,11 @@
-/* body {
-    background-color: red;
-    background-image:
-    linear-gradient(
-        to right, 
-        red, #f06d06
-    );
-} */
-
-.signup-container {
+.login-container {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    /* background-color: rgb(243, 242, 242); */
     background-color: #00bdc4;
     min-width: 450px;
-    min-height: 500px;
+    min-height: 350px;
     border-radius: 30px;
     box-shadow:
         0 2.8px 2.2px rgba(0, 0, 0, 0.034),
@@ -29,65 +19,11 @@
     align-items: center;
 }
 
-.signup-text {
+.login-text {
     margin: 20px
 }
 
-.signup-fullname {
-    min-width: 0;
-}
-
-.signup-fullname input {
-    height: 40px;
-    width: 300px;
-    overflow: hidden;
-    border-radius: 40px;
-    border: none;
-    margin: 15px 0;
-    padding-left: 50px;
-    outline: none;
-    box-shadow:
-        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-        overflow: hidden;
-}
-.signup-email input {
-    height: 40px;
-    width: 300px;
-    border-radius: 40px;
-    border: none;
-    margin: 15px 0;
-    padding-left: 50px;
-    outline: none;
-    box-shadow:
-        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-}
-.signup-username input {
-    height: 40px;
-    width: 300px;
-    border-radius: 40px;
-    border: none;
-    margin: 15px 0;
-    padding-left: 50px;
-    outline: none;
-    box-shadow:
-        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-}
-.signup-password input {
+.login-email input {
     height: 40px;
     width: 300px;
     border-radius: 40px;
@@ -104,11 +40,28 @@
         0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
-.signup-fullname, .signup-email, .signup-username, .signup-password {
+.login-password input {
+    height: 40px;
+    width: 300px;
+    border-radius: 40px;
+    border: none;
+    margin: 15px 0;
+    padding-left: 50px;
+    outline: none;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.login-email, .login-password {
     position: relative;
 }
 
-.icon-signup {
+.icon-login {
     position: absolute;
     font-size: 24px;
     left: 15px;
@@ -117,14 +70,14 @@
     text-shadow: -7px 8px 2px #c54040, -3px 5px #c74b16;
 }
 
-.signup-form-wrapper {
+.login-form-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.signup-btn button {
+.login-btn button {
     margin-top: 20px;
     height: 40px;
     width: 180px;
@@ -132,7 +85,6 @@
     border: none;
     cursor: pointer;
     border-radius: 40px;
-    background-color: #008489;
     background-image:
     linear-gradient(
         to right, 
@@ -149,9 +101,9 @@
 }
 
 @media screen and (min-width: 481px) and (max-width: 767px) {
-    .signup-container {
+    .login-container {
         width: 60%;
-        height: 60%;
+        height: 40%;
         margin-top: 30px;
     }
 
@@ -161,13 +113,13 @@
 }
 
 @media screen and (max-width: 480px) {
-    .signup-container {
-        margin-top: 50px;
+    .login-container {
+        margin-top: 30px;
         min-width: 300px;
-        min-height: 450px;
+        min-height: 330px;
     }
 
-    .signup-fullname input, .signup-email input, .signup-username input, .signup-password input {
+    .login-email input, .login-password input {
         width: 250px;
     }
 }
