@@ -1,52 +1,49 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup';
-import './editPostForm.css'
 
 const validate = yup.object({
   body: yup.string().required('You must provide An Edit To The Post')
 })
 
-const EditPostForm = ({ setEditModal, post, onEditPost }) => {
+const EditGroupPostForm = ({ setEditModal, post, onEditGroupPost, groupId }) => {
   const formik = useFormik({
     initialValues: {
+      groupId: groupId,
       postId: post.id,
       body: post.body
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
       actions.resetForm()
-      onEditPost(values)
+      onEditGroupPost(values)
       setEditModal(false)
     }
   })
 
   return (
     <div className='modal'>
-      <form onSubmit={formik.handleSubmit} className='edit-form-wrapper'>
-        <div className='edit-form-title'>
-          <p>Title: {post.title}</p>
-        </div>
-      
-        <div className='edit-form-body'>
-          <label htmlFor='body'></label>
+      <form onSubmit={formik.handleSubmit}>
+        <div>
+          <label htmlFor='body'><p>Edit Post:</p></label>
           <textarea
             name='body'
             id='body'
+            cols={25}
+            rows={5}
             value={formik.values.body}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           ></textarea>
           {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
         </div>
-
-        <div className='edit-form-btn'>
-          <button className='edit-form-cancel-btn' type='button' onClick={() => setEditModal(false)}>Cancel</button>
-          <button className='edit-form-submit-btn' type='submit' >Submit</button>
+        <div>
+          <button type="button" onClick={() => setEditModal(false)}>Cancel</button>
+          <button type='submit' >Submit</button>
         </div>
       </form>
     </div>
   )
 }
 
-export default EditPostForm
+export default EditGroupPostForm

@@ -3,15 +3,29 @@ const initialState = {
   posts: [],
   groups: [],
   userPosts: [],
-  profile: {},
+  profile: undefined,
   signupStatus: {},
   loggedInUser: undefined,
   profilePosts: [],
   isLoggedIn: false,
+  selectedGroup: undefined,
+  groupPosts: []
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'CLEAN_UP_PROFILE':
+      return{
+        ...state,
+        profile: undefined,
+        profilePosts: []
+      }
+    case 'CLEAN_UP_GROUP_PAGE':
+      return {
+        ...state,
+        selectedGroup: undefined,
+        groupPosts: []
+      }
     case 'GET_USERS_COMPLETED':
       return {
         ...state,
@@ -138,11 +152,88 @@ const reducer = (state = initialState, action) => {
         ...state,
         groups: action.payload
       }
-    case 'JOIN_GROUP_COMPLETED':
+    case 'CREATE_GROUP_COMPLETED':
       return {
         ...state,
         groups: action.payload
       }
+    case 'GET_GROUP_PAGE_COMPLETE':
+      return {
+        ...state,
+        selectedGroup: action.payload.group,
+        groupPosts: action.payload.posts
+      }
+    case 'JOIN_GROUP_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      }
+    case 'LEAVE_GROUP_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      }
+    case 'CREATE_GROUP_POST_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'UPDATE_GROUP_VOTES_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      } 
+    case 'DISBAND_GROUP_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: undefined,
+        groupPosts: []
+      }
+    case 'EDIT_GROUP_DESCRIPTION_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      }
+    case 'DELETE_GROUP_POST_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'EDIT_GROUP_POST_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'UPDATE_GROUP_POSTS_VOTES_COMPLETED':
+      return{
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'MAKE_GROUP_cOMMENT_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'DELETE_GROUP_COMMENT_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'UPDATE_GROUP_COMMENT_VOTES_COMPLETED':
+      return {
+        ...state,
+        groupPosts: action.payload
+      }
+    case 'REMOVE_USER_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      }
+    case 'MAKE_GROUP_ADMIN_COMPLETED':
+      return {
+        ...state,
+        selectedGroup: action.payload
+      } 
     default:
       return {
         ...state

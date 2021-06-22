@@ -8,7 +8,10 @@ var authService = require("../services/auth")
 //inUse
 router.get('/api', (req, res, next) => {
   models.posts.findAll({
-    where: { Visible: 0 },
+    where: {[Op.and]: [
+      { Visible: 0 },
+      { GroupId: 0 }
+    ]},
     include: [
       {
         model: models.users,
@@ -48,7 +51,10 @@ router.post('/api', (req, res, next) => {
         }).spread((result, created) => {
           if (created) {
             models.posts.findAll({
-              where: { Visible: 0 },
+              where: {[Op.and]: [
+                { Visible: 0 },
+                { GroupId: 0 }
+              ]},
               include: [
                 {
                   model: models.users,
@@ -90,7 +96,10 @@ router.put('/api/:type/:postId', (req, res, next) => {
       { where: { PostId: parseInt(req.params.postId) } }
     ).then(() => {
       return models.posts.findAll({
-        where: { Visible: 0 },
+        where: {[Op.and]: [
+          { Visible: 0 },
+          { GroupId: 0 }
+        ]},
         include: [
           {
             model: models.users,
@@ -116,7 +125,10 @@ router.put('/api/:type/:postId', (req, res, next) => {
       { where: { PostId: parseInt(req.params.postId) } }
     ).then(() => {
       return models.posts.findAll({
-        where: { Visible: 0 },
+        where: {[Op.and]: [
+          { Visible: 0 },
+          { GroupId: 0 }
+        ]},
         include: [{
           model: models.users
         },
@@ -150,7 +162,10 @@ router.put('/api/edit', (req, res, next) => {
             { where: { PostId: parseInt(req.body.postId) } }
           ).then(() => {
             return models.posts.findAll({
-              where: { Visible: 0 },
+              where: {[Op.and]: [
+                { Visible: 0 },
+                { GroupId: 0 }
+              ]},
               include: [
                 {
                   model: models.users,
@@ -192,7 +207,10 @@ router.delete('/api/:postId', (req, res, next) => {
             models.posts.destroy({ where: { PostId: req.params.postId } }).then(result => {
               if (result) {
                 models.posts.findAll({
-                  where: { Visible: 0 },
+                  where: {[Op.and]: [
+                    { Visible: 0 },
+                    { GroupId: 0 }
+                  ]},
                   include: [
                     {
                       model: models.users,
@@ -493,6 +511,208 @@ router.delete('/api/:postId/:userId', (req, res, next) => {
   } else {
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify({ status: false, message: 'not logged in', data: null }))
+  }
+})
+
+//inUse
+router.get('/api/groupPost/:groupId', (req, res, next) => {
+  models.posts.findAll({ 
+    where: { GroupId: req.params.groupId },
+    include: [
+      {
+        model: models.users,
+        attributes: ['UserName']
+      },
+      {
+        model: models.comments,
+        include: {
+          model: models.users,
+          attributes: ['UserName']
+        }
+      }
+    ]
+  }).then(posts => {
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify(posts))
+  })
+})
+
+router.post('/api/groupPosts/create', (req, res, next) => {
+  models.posts.findOrCreate({
+    where: { postId: 0 },
+    defaults: {
+      GroupId: req.body.groupId,
+      UserId: req.body.userId,
+      PostHead: req.body.title,
+      PostBody: req.body.body,
+      Likes: 0,
+      Dislikes: 0,
+      Visible: 0
+    }
+  }).spread((result, created) => {
+    if(created){
+      models.posts.findAll({
+        where: { GroupId: req.body.groupId },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
+      }).then(posts => {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify(posts))
+      })
+    } else {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify({message: 'something went wrong'}))
+    }
+  })
+})
+
+router.delete('/api/groupPost/:groupId/:postId', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token).then(user => {
+      models.grouped_users.findOne({
+        where: { [Op.and]: [
+          { GroupId: parseInt(req.params.groupId) },
+          { UserId: parseInt(user.UserId) }
+        ]}
+      }).then(relation => {
+        models.posts.findOne({
+          where: { PostId: parseInt(req.params.postId)}
+        }).then(post => {
+          if(user.Admin === 1||post.UserId===user.UserId||relation.MemberShip==='Owner'){
+            models.posts.destroy({
+              where: {PostId: parseInt(req.params.postId)}
+            }).then(result => {
+              if(result){
+                models.posts.findAll({
+                  where: { GroupId: parseInt(req.params.groupId)},
+                  include: [
+                    {
+                      model: models.users,
+                      attributes: ['UserName']
+                    },
+                    {
+                      model: models.comments,
+                      include: {
+                        model: models.users,
+                        attributes: ['UserName']
+                      }
+                    }
+                  ]
+                }).then(posts => {
+                  res.header('Content-Type', 'application/json')
+                  res.send(JSON.stringify({message:'successful', data:posts}))
+                })
+              }
+            })
+          }
+        })
+      })
+    })
+  } else {
+
+  }
+})
+
+router.put('/api/groupPost/edit/post', (req, res, next) => {
+  let token = req.cookies.jwt
+  if(token){
+    authService.verifyUser(token).then(user => {
+      models.posts.findOne({
+        where: { PostId: parseInt(req.body.postId) }
+      }).then(post => {
+        if(parseInt(post.UserId) === parseInt(user.UserId)){
+          models.posts.update(
+            { PostBody: req.body.body },
+            { where: { PostId: parseInt(req.body.postId) }}
+          ).then(() => {
+            return models.posts.findAll({
+              where: { GroupId: parseInt(req.body.groupId) },
+              include: [
+                {
+                  model: models.users,
+                  attributes: ['UserName']
+                },
+                {
+                  model: models.comments,
+                  include: {
+                    model: models.users,
+                    attributes: ['UserName']
+                  }
+                }
+              ]
+            })
+          }).then(posts => {
+            res.header('Content-Type', 'application/json')
+            res.send(JSON.stringify({message:'successful', data:posts}))
+          })
+        }
+      })
+    })
+  }
+})
+
+router.put('/api/groupPost/edit/votes', (req, res, next) => {
+  if(req.body.type==='likes'){
+    models.posts.update({ Likes: parseInt(req.body.likes + 1) },{
+      where: { PostId: parseInt(req.body.postId) }
+    }).then(() => {
+      return models.posts.findAll({
+        where: { GroupId: parseInt(req.body.groupId) },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
+      })
+    }).then(posts => {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify({message:'successful', data:posts}))
+    })
+  }
+  if(req.body.type==='dislikes'){
+    models.posts.update({ Dislikes: parseInt(req.body.dislikes + 1) },{
+      where: { PostId: parseInt(req.body.postId) }
+    }).then(() => {
+      return models.posts.findAll({
+        where: { GroupId: parseInt(req.body.groupId) },
+        include: [
+          {
+            model: models.users,
+            attributes: ['UserName']
+          },
+          {
+            model: models.comments,
+            include: {
+              model: models.users,
+              attributes: ['UserName']
+            }
+          }
+        ]
+      })
+    }).then(posts => {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify({message:'successful', data:posts}))
+    })
   }
 })
 

@@ -2,8 +2,12 @@
   "name": "client-react",
   "version": "0.1.0",
   "private": true,
-  "proxy": "localhost:3001",
+  "proxy": "http://localhost:3001",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "axios": "^0.19.2",
     "formik": "^2.2.9",
     "react": "^16.8.6",
