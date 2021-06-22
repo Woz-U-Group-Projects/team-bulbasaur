@@ -9,3 +9,69 @@
     align-items: center;
     justify-content: center;
 }
+
+.edit-form-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 800px;
+    height: 500px;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+}
+
+.edit-form-title {
+    background-color: #eaeaea;
+    width: 100%;
+    height: 20%;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    outline: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 10px;
+}
+
+.edit-form-body {
+    height: 100%;
+    width: 100%;
+    outline: none;
+}
+
+.edit-form-body textarea {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 10px;
+    resize: none;
+}
+
+.edit-form-btn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 20%;
+    background-color: #eaeaea;
+}
+
+.edit-form-cancel-btn {
+    width: 80px;
+    height: 30px;
+    background-color: #ac2e08;
+    color: #fff;
+    border-radius: 1.5em;
+    margin: 0 10px;
+}
+
+.edit-form-submit-btn {
+    width: 80px;
+    height: 30px;
+    background-color: #008391;
+    color: #fff;
+    border-radius: 1.5em;
+    margin: 0 10px;
+}
