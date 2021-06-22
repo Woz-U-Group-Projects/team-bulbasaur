@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
@@ -10,19 +10,19 @@ import {
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted,  logout, logoutCompleted, getPosts, 
+  getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted, logout, logoutCompleted, getPosts,
   getPostsCompleted, makePost, makePostCompleted, updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
-  editPost, editPostCompleted, makeComment, makeCommentCompleted,  updateCommentVotes, updateCommentVotesCompleted, 
-  deleteComment, deleteCommentCompleted, getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted, 
+  editPost, editPostCompleted, makeComment, makeCommentCompleted, updateCommentVotes, updateCommentVotesCompleted,
+  deleteComment, deleteCommentCompleted, getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
   cleanUpProfile, updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
-  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete, updateCommentVotesByUserId, 
-  updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted, getAllGroups, getAllGroupsCompleted, 
-  joinGroup, joinGroupCompleted, createGroup, createGroupCompleted, getGroupPage, getGroupPageCompleted, cleanUpGroupPgae, 
+  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete, updateCommentVotesByUserId,
+  updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted, getAllGroups, getAllGroupsCompleted,
+  joinGroup, joinGroupCompleted, createGroup, createGroupCompleted, getGroupPage, getGroupPageCompleted, cleanUpGroupPgae,
   editGroupDescription, editGroupDescriptionCompleted, createGroupPost, createGroupPostCompleted, leaveGroup, leaveGroupCompleted,
-  disbandGroup, disbandGroupCompleted, updateGroupVotes, updateGroupVotesCompleted, deleteGroupPost, deleteGroupPostCompleted, 
-  editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment, 
-  makeGroupCommentCompleted,  deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
-  removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted, 
+  disbandGroup, disbandGroupCompleted, updateGroupVotes, updateGroupVotesCompleted, deleteGroupPost, deleteGroupPostCompleted,
+  editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment,
+  makeGroupCommentCompleted, deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
+  removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted,
   transferGroupOwner, transferGroupOwnerCompleted
 } from './actions/actions'
 //components
@@ -34,9 +34,19 @@ import Navigation from "./components/navigation/nav";
 import GroupPage from "./components/groupPage/groupPage";
 
 function _App(props) {
+
+  const sendToken = () => {
+    let token = document.cookie
+    console.log(token)
+  }
+
+  useEffect(() => {
+    sendToken()
+  }, [])
+
   return (
     <Router>
-      { !props.profile && !props.selectedGroup?<Redirect to='/'/>:null}
+      {!props.profile && !props.selectedGroup ? <Redirect to='/' /> : null}
       <div className="App">
         <Navigation {...props} />
         <Switch>
@@ -68,23 +78,23 @@ const mapDispatchToProps = (dispatch, state) => {
     onCleanUpGroup: () => dispatch(cleanUpGroupPgae()),
     onGetUsers: () => getUsers().then(users => dispatch(getUsersCompleted(users))),
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
-    onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
+    onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then(posts => dispatch(updateVotesCompleted(posts))),
     onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data))),
-    onLogin: (object) => login(object).then( data => dispatch(loginCompleted(data))),
-    onLogout: () => logout().then( data => dispatch(logoutCompleted(data))),
-    onMakePost: (obj) => makePost(obj).then( res => dispatch(makePostCompleted(res))),
-    onMakeComment: (obj) => makeComment(obj).then( data => dispatch(makeCommentCompleted(data))),
+    onLogin: (object) => login(object).then(data => dispatch(loginCompleted(data))),
+    onLogout: () => logout().then(data => dispatch(logoutCompleted(data))),
+    onMakePost: (obj) => makePost(obj).then(res => dispatch(makePostCompleted(res))),
+    onMakeComment: (obj) => makeComment(obj).then(data => dispatch(makeCommentCompleted(data))),
     onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
-    onEditPost: (obj) => editPost(obj).then( data => dispatch(editPostCompleted(data))),
-    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then( data => dispatch(updateCommentVotesCompleted(data))),
+    onEditPost: (obj) => editPost(obj).then(data => dispatch(editPostCompleted(data))),
+    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then(data => dispatch(updateCommentVotesCompleted(data))),
     ondeleteComment: obj => deleteComment(obj).then(data => dispatch(deleteCommentCompleted(data))),
-    onUpdateVotesByUserId: (type, current, userId, postId) => updateVotesByUserId(type, current, userId, postId).then( data => dispatch(updateVotesByUserIdCompleted(data))),
-    onMakePostByUserId: (obj) => makePostByUserId(obj).then( data => dispatch(makePostByUserIdCompleted(data))),
-    onEditPostByUserId: obj => editPostByUserId(obj).then( data => dispatch(editPostByUserIdCompleted(data))),
-    onDeletePostByUserId: (postId, userId) => deletePostByUserId(postId, userId).then( data => dispatch(deletePostByUserIdCompleted(data))),
-    onMakeCommentByUserId: obj => makeCommentByUserId(obj).then( data => dispatch(makeCommentByUserIdComplete(data))),
-    onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then( data => dispatch(updateCommentVotesByUserIdCompleted(data))),
-    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data))),
+    onUpdateVotesByUserId: (type, current, userId, postId) => updateVotesByUserId(type, current, userId, postId).then(data => dispatch(updateVotesByUserIdCompleted(data))),
+    onMakePostByUserId: (obj) => makePostByUserId(obj).then(data => dispatch(makePostByUserIdCompleted(data))),
+    onEditPostByUserId: obj => editPostByUserId(obj).then(data => dispatch(editPostByUserIdCompleted(data))),
+    onDeletePostByUserId: (postId, userId) => deletePostByUserId(postId, userId).then(data => dispatch(deletePostByUserIdCompleted(data))),
+    onMakeCommentByUserId: obj => makeCommentByUserId(obj).then(data => dispatch(makeCommentByUserIdComplete(data))),
+    onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then(data => dispatch(updateCommentVotesByUserIdCompleted(data))),
+    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then(data => dispatch(deleteCommentByUserIdCompleted(data))),
     onGetGroups: () => getAllGroups().then(data => dispatch(getAllGroupsCompleted(data))),
     onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data))),
     onCreateGroup: (obj) => createGroup(obj).then(data => dispatch(createGroupCompleted(data))),
