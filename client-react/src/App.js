@@ -3,23 +3,27 @@ import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 //CSS
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted, signup, signupCompleted,
-  login, loginCompleted, logout, logoutCompleted,
-  getPosts, getPostsCompleted, makePost, makePostCompleted,
-  updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
-  editPost, editPostCompleted, makeComment, makeCommentCompleted, 
-  updateCommentVotes, updateCommentVotesCompleted, deleteComment, deleteCommentCompleted,
-  getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
-  updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
-  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete,
-  updateCommentVotesByUserId, updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted,
-  getAllGroups, getAllGroupsCompleted, joinGroup, joinGroupCompleted
+  getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted,  logout, logoutCompleted, getPosts, 
+  getPostsCompleted, makePost, makePostCompleted, updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
+  editPost, editPostCompleted, makeComment, makeCommentCompleted,  updateCommentVotes, updateCommentVotesCompleted, 
+  deleteComment, deleteCommentCompleted, getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted, 
+  cleanUpProfile, updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
+  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete, updateCommentVotesByUserId, 
+  updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted, getAllGroups, getAllGroupsCompleted, 
+  joinGroup, joinGroupCompleted, createGroup, createGroupCompleted, getGroupPage, getGroupPageCompleted, cleanUpGroupPgae, 
+  editGroupDescription, editGroupDescriptionCompleted, createGroupPost, createGroupPostCompleted, leaveGroup, leaveGroupCompleted,
+  disbandGroup, disbandGroupCompleted, updateGroupVotes, updateGroupVotesCompleted, deleteGroupPost, deleteGroupPostCompleted, 
+  editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment, 
+  makeGroupCommentCompleted,  deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
+  removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted, 
+  transferGroupOwner, transferGroupOwnerCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -27,11 +31,12 @@ import Login from "./components/login/login";
 import SignUp from "./components/signup/signup";
 import Profile from './components/profile/profile'
 import Navigation from "./components/navigation/nav";
+import GroupPage from "./components/groupPage/groupPage";
 
 function _App(props) {
-
   return (
     <Router>
+      { !props.profile && !props.selectedGroup?<Redirect to='/'/>:null}
       <div className="App">
         <Navigation {...props} />
         <Switch>
@@ -47,6 +52,9 @@ function _App(props) {
           <Route path='/profile'>
             <Profile {...props} />
           </Route>
+          <Route path={'/groupPage'}>
+            <GroupPage {...props} />
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -56,6 +64,8 @@ function _App(props) {
 const mapDispatchToProps = (dispatch, state) => {
   return {
     onGetProfile: userId => getProfile(userId).then(data => dispatch(getProfileCompleted(data))),
+    onCleanUpProfile: () => dispatch(cleanUpProfile()),
+    onCleanUpGroup: () => dispatch(cleanUpGroupPgae()),
     onGetUsers: () => getUsers().then(users => dispatch(getUsersCompleted(users))),
     onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
     onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then( posts => dispatch(updateVotesCompleted(posts))),
@@ -76,7 +86,24 @@ const mapDispatchToProps = (dispatch, state) => {
     onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then( data => dispatch(updateCommentVotesByUserIdCompleted(data))),
     ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then( data => dispatch(deleteCommentByUserIdCompleted(data))),
     onGetGroups: () => getAllGroups().then(data => dispatch(getAllGroupsCompleted(data))),
-    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data)))
+    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data))),
+    onCreateGroup: (obj) => createGroup(obj).then(data => dispatch(createGroupCompleted(data))),
+    onGetGroupPage: (groupId) => getGroupPage(groupId).then(data => dispatch(getGroupPageCompleted(data))),
+    onEditGroupDescription: (obj) => editGroupDescription(obj).then(data => dispatch(editGroupDescriptionCompleted(data))),
+    onCreateGroupPost: obj => createGroupPost(obj).then(data => dispatch(createGroupPostCompleted(data))),
+    onLeaveGroup: obj => leaveGroup(obj).then(data => dispatch(leaveGroupCompleted(data))),
+    onDisbandGroup: obj => disbandGroup(obj).then(data => dispatch(disbandGroupCompleted(data))),
+    onUpdateGroupVotes: obj => updateGroupVotes(obj).then(data => dispatch(updateGroupVotesCompleted(data))),
+    onDeleteGroupPost: obj => deleteGroupPost(obj).then(data => dispatch(deleteGroupPostCompleted(data))),
+    onEditGroupPost: obj => editGroupPost(obj).then(data => dispatch(editGroupPostCompleted(data))),
+    onUpdateGroupPostVotes: obj => updateGroupPostVotes(obj).then(data => dispatch(updateGroupPostVotesCompleted(data))),
+    onMakeGroupComment: obj => makeGroupComment(obj).then(data => dispatch(makeGroupCommentCompleted(data))),
+    onDeleteGroupComment: obj => deleteGroupComment(obj).then(data => dispatch(deleteGroupCommentCompleted(data))),
+    onUpdateGroupCommentVotes: obj => updateGroupCommentVotes(obj).then(data => dispatch(updateGroupCommentVotesCompleted(data))),
+    onRemoveUser: obj => removeUser(obj).then(data => dispatch(removeUserCompleted(data))),
+    onMakeGroupAdmin: obj => makeGroupAdmin(obj).then(data => dispatch(makeGroupAdminCompleted(data))),
+    onRemoveGroupAdmin: obj => removeGroupAdmin(obj).then(data => dispatch(removeGroupAdminCompleted(data))),
+    onTransferGroupOwner: obj => transferGroupOwner(obj).then(data => dispatch(transferGroupOwnerCompleted(data)))
   }
 }
 
@@ -90,7 +117,9 @@ const mapStateToProps = (state) => {
     posts: state.posts,
     userPosts: state.userPosts,
     profile: state.profile,
-    profilePosts: state.profilePosts
+    profilePosts: state.profilePosts,
+    selectedGroup: state.selectedGroup,
+    groupPosts: state.groupPosts
   }
 }
 
