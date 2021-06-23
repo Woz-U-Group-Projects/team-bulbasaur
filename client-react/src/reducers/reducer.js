@@ -14,6 +14,18 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SEND_TOKEN_COMPLETED':
+      if(action.payload.status){
+        return {
+          ...state,
+          isLoggedIn: true,
+          loggedInUser: action.payload.data
+        }
+      } else {
+        return {
+          ...state
+        }
+      }
     case 'CLEAN_UP_PROFILE':
       return{
         ...state,

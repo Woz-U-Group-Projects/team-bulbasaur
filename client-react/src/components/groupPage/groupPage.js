@@ -16,7 +16,6 @@ const GroupPage = (props) => {
   let [isAdmin, checkAdmin] = useState(false)
   let [messageView, setMessageView] = useState(false)
   let [isMember, setMembership] = useState(false)
-  console.log(isAdmin)
 
   useEffect(() => {
     setOwner(selectedGroup ? selectedGroup.users.filter(user => user.membership === 'Owner')[0] : undefined)

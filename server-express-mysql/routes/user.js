@@ -63,11 +63,63 @@ router.post('/api/signup', (req, res, next) => {
   })
 })
 
+
+router.get('/api/login', (req, res, next) => {
+  let token = req.cookies.jwt
+  if (token) {
+    try {
+      authService.verifyUser(token).then(user => {
+        models.users.findOne({
+          where: { UserId: user.UserId },
+          include: [
+            {
+              model: models.users,
+              as: 'Friends'
+            },
+            {
+              model: models.groups
+            },
+            {
+              model: models.posts,
+              include: [
+                {
+                  model: models.users,
+                  attributes: ['UserName']
+                },
+                {
+                  model: models.comments,
+                  include: {
+                    model: models.users,
+                    attributes: ['UserName']
+                  }
+                }
+              ]
+            }
+          ],
+        }).then(data => {
+          res.header('Content-Type', 'application/json')
+          res.send(JSON.stringify({ status: true, data }))
+        })
+      })
+    } catch (error) {
+      res.header('Content-Type', 'application/json')
+      res.send(JSON.stringify({ status: false, message: error.message }))
+    }
+  } else {
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify({ status: false, message: '' }))
+  }
+})
+
 //inUse
 router.post('/api/login', (req, res, next) => {
   models.users.findOne({
     where: { Email: req.body.email },
     include: [
+      {
+        model: models.users,
+        as: 'Friends'
+      },
       {
         model: models.groups
       },
@@ -160,6 +212,10 @@ router.get('/api/profile/:id', (req, res, next) => {
           where: { Email: user.Email },
           attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
           include: [
+            {
+              model: models.users,
+              as: 'Friends'
+            },
             {
               model: models.groups
             },

@@ -10,8 +10,8 @@ import {
 import "./App.css";
 //actions
 import {
-  getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted, logout, logoutCompleted, getPosts,
-  getPostsCompleted, makePost, makePostCompleted, updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
+  sendToken, sendTokenCompleted, getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted, logout, logoutCompleted, 
+  getPosts, getPostsCompleted, makePost, makePostCompleted, updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
   editPost, editPostCompleted, makeComment, makeCommentCompleted, updateCommentVotes, updateCommentVotesCompleted,
   deleteComment, deleteCommentCompleted, getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
   cleanUpProfile, updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
@@ -23,7 +23,7 @@ import {
   editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment,
   makeGroupCommentCompleted, deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
   removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted,
-  transferGroupOwner, transferGroupOwnerCompleted
+  transferGroupOwner, transferGroupOwnerCompleted, 
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -34,15 +34,14 @@ import Navigation from "./components/navigation/nav";
 import GroupPage from "./components/groupPage/groupPage";
 
 function _App(props) {
-
-  const sendToken = () => {
-    let token = document.cookie
-    console.log(token)
-  }
+   let { onSendToken } = props
 
   useEffect(() => {
-    sendToken()
-  }, [])
+    let token = document.cookie
+    if(token){
+      onSendToken()
+    }
+  }, [onSendToken])
 
   return (
     <Router>
@@ -73,6 +72,7 @@ function _App(props) {
 
 const mapDispatchToProps = (dispatch, state) => {
   return {
+    onSendToken: () => sendToken().then(data => dispatch(sendTokenCompleted(data))),
     onGetProfile: userId => getProfile(userId).then(data => dispatch(getProfileCompleted(data))),
     onCleanUpProfile: () => dispatch(cleanUpProfile()),
     onCleanUpGroup: () => dispatch(cleanUpGroupPgae()),

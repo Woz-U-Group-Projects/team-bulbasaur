@@ -7,8 +7,9 @@ import GroupView from './groupsView/groupView';
 import './mainPage.css'
 
 const MainPage = (props) => {
-  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups } = props
+  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups, loggedInUser } = props
   let [postList, setPosts] = useState([])
+  console.log(loggedInUser?loggedInUser:undefined)
 
   useEffect(() => {
     onGetPosts()
@@ -39,6 +40,7 @@ const MainPage = (props) => {
       
       <div className='friendList'>
         <h3>Friend List</h3>
+
       </div>
     </div>
   )

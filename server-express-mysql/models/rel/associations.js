@@ -45,4 +45,15 @@ module.exports = associations = (models) => {
   })
 
   //=========================================
+
+  models.users.belongsToMany(models.users, {
+    through: models.friends,
+    as: 'Friends',
+    foreignKey: 'UserId1'
+  })
+  models.users.belongsToMany(models.users, {
+    through: models.friends,
+    as: 'User',
+    foreignKey: 'UserId2'
+  })
 }
