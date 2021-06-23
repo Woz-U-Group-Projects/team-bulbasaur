@@ -10,6 +10,18 @@ const authAxios = axios.create({
   credentials: 'same-origin'
 })
 
+const mapFriends = (data) => {
+  const friends = data.map(user => ({
+    id: user.UserId,
+    name: user.FullName,
+    userName: user.UserName,
+    email: user.Email,
+    admin: user.Admin
+  }))
+
+  return friends
+}
+
 const mapUser = (data) => {
   const user = {
     id: data.UserId,
@@ -17,6 +29,7 @@ const mapUser = (data) => {
     userName: data.UserName,
     email: data.Email,
     admin: data.Admin,
+    friends: mapFriends(data.Friends),
     groups: data.groups.map(group => ({
       groupId: group.GroupId,
       groupName: group.GroupName,
@@ -162,6 +175,26 @@ const mapGroup = data => {
 }
 // basic actions for applications =====================================================================================
 
+export const sendToken = async () => {
+  try {
+    const req = await authAxios.get('/users/api/login')
+    const res = await req.data
+    if (res.status) {
+      const user = mapUser(res.data)
+      return { status: res.status, data: user }
+    } else {
+      return res
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const sendTokenCompleted = data => ({
+  type: 'SEND_TOKEN_COMPLETED',
+  payload: data
+})
+
 export const signup = async (object) => {
   const req = await axios.post('/users/api/signup', object)
   const data = await req.data
@@ -177,6 +210,7 @@ export const signupCompleted = (data) => ({
 export const login = async (object) => {
   const req = await authAxios.post('/users/api/login', object)
   const res = await req.data
+  console.log(res)
   if (res.result === false) {
     return res
   } else {
@@ -185,6 +219,7 @@ export const login = async (object) => {
       message: res.message,
       user: mapUser(res.user),
     }
+    console.log(data)
     return data
   }
 }
@@ -595,7 +630,7 @@ export const leaveGroup = async (obj) => {
   return group
 }
 
-export const  leaveGroupCompleted = (data) => ({
+export const leaveGroupCompleted = (data) => ({
   type: 'LEAVE_GROUP_COMPLETED',
   payload: data
 })
@@ -629,7 +664,7 @@ export const updateGroupVotesCompleted = (data) => ({
 
 export const disbandGroup = async (obj) => {
   const req = await authAxios.delete(`/groups/api/disband/${obj}`)
-  const res = await req.data 
+  const res = await req.data
   return res
 }
 
@@ -653,7 +688,7 @@ export const createGroupPostCompleted = (data) => ({
 //=========================================================
 
 export const deleteGroupPost = async (obj) => {
-  let { groupId, postId } = obj 
+  let { groupId, postId } = obj
   const req = await authAxios.delete(`/posts/api/groupPost/${groupId}/${postId}`)
   const res = await req.data
   const posts = mapPosts(res.data)
@@ -720,7 +755,7 @@ export const updateGroupCommentVotesCompleted = data => ({
 //=========================================================
 
 export const deleteGroupComment = async obj => {
-  let { commentId, groupId } = obj 
+  let { commentId, groupId } = obj
   const req = await authAxios.delete(`/comments/api/groupComments/delete/${commentId}/${groupId}`)
   const res = await req.data
   const posts = mapPosts(res.data)
