@@ -23,7 +23,7 @@ import {
   editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment,
   makeGroupCommentCompleted, deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
   removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted,
-  transferGroupOwner, transferGroupOwnerCompleted, 
+  transferGroupOwner, transferGroupOwnerCompleted, addFriend, addFriendCompleted, cancelFriend, cancelFriendCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -113,7 +113,9 @@ const mapDispatchToProps = (dispatch, state) => {
     onRemoveUser: obj => removeUser(obj).then(data => dispatch(removeUserCompleted(data))),
     onMakeGroupAdmin: obj => makeGroupAdmin(obj).then(data => dispatch(makeGroupAdminCompleted(data))),
     onRemoveGroupAdmin: obj => removeGroupAdmin(obj).then(data => dispatch(removeGroupAdminCompleted(data))),
-    onTransferGroupOwner: obj => transferGroupOwner(obj).then(data => dispatch(transferGroupOwnerCompleted(data)))
+    onTransferGroupOwner: obj => transferGroupOwner(obj).then(data => dispatch(transferGroupOwnerCompleted(data))),
+    onAddFriend: obj => addFriend(obj).then(data => dispatch(addFriendCompleted(data))),
+    onCancelFriend: obj => cancelFriend(obj).then(data => dispatch(cancelFriendCompleted(data)))
   }
 }
 

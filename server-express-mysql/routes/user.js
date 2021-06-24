@@ -3,7 +3,8 @@ var router = express.Router();
 var models = require("../models");
 var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
-var authService = require("../services/auth")
+var authService = require("../services/auth");
+const { TokenExpiredError } = require("jsonwebtoken");
 
 //inUse
 router.get('/api', (req, res, next) => {
@@ -66,48 +67,47 @@ router.post('/api/signup', (req, res, next) => {
 
 router.get('/api/login', (req, res, next) => {
   let token = req.cookies.jwt
-  if (token) {
-    try {
-      authService.verifyUser(token).then(user => {
-        models.users.findOne({
-          where: { UserId: user.UserId },
-          include: [
-            {
-              model: models.users,
-              as: 'Friends'
-            },
-            {
-              model: models.groups
-            },
-            {
-              model: models.posts,
-              include: [
-                {
+  try {
+    authService.verifyUser(token).then(user => {
+      models.users.findOne({
+        where: { UserId: user.UserId },
+        include: [
+          {
+            model: models.users,
+            as: 'Friends'
+          },
+          {
+            model: models.users,
+            as: 'Requests'
+          },
+          {
+            model: models.groups
+          },
+          {
+            model: models.posts,
+            include: [
+              {
+                model: models.users,
+                attributes: ['UserName']
+              },
+              {
+                model: models.comments,
+                include: {
                   model: models.users,
                   attributes: ['UserName']
-                },
-                {
-                  model: models.comments,
-                  include: {
-                    model: models.users,
-                    attributes: ['UserName']
-                  }
                 }
-              ]
-            }
-          ],
-        }).then(data => {
-          res.header('Content-Type', 'application/json')
-          res.send(JSON.stringify({ status: true, data }))
-        })
+              }
+            ]
+          }
+        ],
+      }).then(data => {
+        res.header('Content-Type', 'application/json')
+        res.send(JSON.stringify({ status: true, data }))
       })
-    } catch (error) {
-      res.header('Content-Type', 'application/json')
-      res.send(JSON.stringify({ status: false, message: error.message }))
-    }
-  } else {
+    })
+  } catch (error) {
     res.header('Content-Type', 'application/json')
-    res.send(JSON.stringify({ status: false, message: '' }))
+    res.send(JSON.stringify({ status: false, message: error.message }))
   }
 })
 
@@ -119,6 +119,10 @@ router.post('/api/login', (req, res, next) => {
       {
         model: models.users,
         as: 'Friends'
+      },
+      {
+        model: models.users,
+        as: 'Requests'
       },
       {
         model: models.groups
@@ -167,6 +171,14 @@ router.get('/api/profile', (req, res, next) => {
           where: { Email: user.Email },
           attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
           include: [
+            {
+              model: models.users,
+              as: 'Friends'
+            },
+            {
+              model: models.users,
+              as: 'Requests'
+            },
             {
               model: models.groups
             },
@@ -217,6 +229,10 @@ router.get('/api/profile/:id', (req, res, next) => {
               as: 'Friends'
             },
             {
+              model: models.users,
+              as: 'Requests'
+            },
+            {
               model: models.groups
             },
             {
@@ -245,6 +261,14 @@ router.get('/api/profile/:id', (req, res, next) => {
           where: { UserId: parseInt(req.params.id) },
           attributes: ['UserId', 'FullName', 'UserName'],
           include: [
+            {
+              model: models.users,
+              as: 'Friends'
+            },
+            {
+              model: models.users,
+              as: 'Requests'
+            },
             {
               model: models.groups
             },
@@ -276,6 +300,14 @@ router.get('/api/profile/:id', (req, res, next) => {
       where: { UserId: parseInt(req.params.id) },
       attributes: ['UserId', 'FullName', 'UserName'],
       include: [
+        {
+          model: models.users,
+          as: 'Friends'
+        },
+        {
+          model: models.users,
+          as: 'Requests'
+        },
         {
           model: models.groups
         },
@@ -330,6 +362,123 @@ router.delete('/api/:userId', (req, res, next) => {
       res.header('Content-Type', 'application/json')
       res.send(JSON.stringify(status))
     })
+  }
+})
+
+
+router.post('/api/add/friend', (req, res, nest) => {
+  let token = req.cookies.jwt
+  if (token) {
+    authService.verifyUser(token).then(user => {
+      models.friends.findOrCreate({
+        where: { FriendshipId: 0 },
+        defaults: {
+          UserId1: user.UserId,
+          UserId2: req.body.recieverId,
+          Status: 1,
+          Active: 1
+        }
+      }).spread((result, created) => {
+        if (created) {
+          models.users.findOne({
+            where: { Email: user.Email },
+            attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
+            include: [
+              {
+                model: models.users,
+                as: 'Friends'
+              },
+              {
+                model: models.users,
+                as: 'Requests'
+              },
+              {
+                model: models.groups
+              },
+              {
+                model: models.posts,
+                include: [
+                  {
+                    model: models.users,
+                    attributes: ['UserName']
+                  },
+                  {
+                    model: models.comments,
+                    include: {
+                      model: models.users,
+                      attributes: ['UserName']
+                    }
+                  }
+                ]
+              }
+            ],
+          }).then(result => {
+            res.header('Content-Type', 'application/json')
+            res.send(JSON.stringify({ result: true, data: result }))
+          })
+        } else {
+          res.header('Content-Type', 'application/json')
+          res.send(JSON.stringify({ result: false, }))
+        }
+      })
+    })
+  }
+})
+
+router.delete('/api/cancel/friend/:recieverId', (req, res, next) => {
+  let token = req.cookies.jwt
+  if (token) {
+    authService.verifyUser(token).then(user => {
+      models.friends.destroy({
+        where: {
+          [Op.and]: [
+            { UserId1: user.UserId },
+            { UserId2: parseInt(req.params.recieverId) }
+          ]
+        }
+      }).then(deleted => {
+        if (deleted) {
+          models.users.findOne({
+            where: { Email: user.Email },
+            attributes: ['UserId', 'FullName', 'UserName', 'Email', 'Admin'],
+            include: [
+              {
+                model: models.users,
+                as: 'Friends'
+              },
+              {
+                model: models.users,
+                as: 'Requests'
+              },
+              {
+                model: models.groups
+              },
+              {
+                model: models.posts,
+                include: [
+                  {
+                    model: models.users,
+                    attributes: ['UserName']
+                  },
+                  {
+                    model: models.comments,
+                    include: {
+                      model: models.users,
+                      attributes: ['UserName']
+                    }
+                  }
+                ]
+              }
+            ],
+          }).then(result => {
+            res.header('Content-Type', 'application/json')
+            res.send(JSON.stringify({ result: true, data: result }))
+          })
+        }
+      })
+    })
+  } else {
+
   }
 })
 

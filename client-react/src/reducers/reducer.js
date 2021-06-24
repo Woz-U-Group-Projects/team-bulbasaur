@@ -245,7 +245,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedGroup: action.payload
-      } 
+      }
+    case 'ADD_FRIEND_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
+    case 'CANCEL_FRIEND_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
     default:
       return {
         ...state

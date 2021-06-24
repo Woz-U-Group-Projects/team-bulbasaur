@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import PostForm from '../forms/postForm/postForm';
 import Post from './post/mainPost'
 import GroupView from './groupsView/groupView';
+import FriendsView from './friendsView/friendsView';
 //css
 import './mainPage.css'
 
 const MainPage = (props) => {
-  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups, loggedInUser } = props
+  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups } = props
   let [postList, setPosts] = useState([])
-  console.log(loggedInUser?loggedInUser:undefined)
 
   useEffect(() => {
     onGetPosts()
@@ -37,10 +37,9 @@ const MainPage = (props) => {
           })}
         </div>
       </div>
-      
-      <div className='friendList'>
-        <h3>Friend List</h3>
 
+      <div className='friendList'>
+        <FriendsView {...props} />
       </div>
     </div>
   )

@@ -53,7 +53,7 @@ module.exports = associations = (models) => {
   })
   models.users.belongsToMany(models.users, {
     through: models.friends,
-    as: 'User',
+    as: 'Requests',
     foreignKey: 'UserId2'
   })
 }
