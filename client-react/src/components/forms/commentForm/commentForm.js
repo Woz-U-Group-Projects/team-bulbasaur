@@ -42,10 +42,6 @@ const CommentForm = ({postId, loggedInUser, onMakeComment}) => {
         <div className="comment-submit-btn">
           <button type="submit">Send</button>
         </div>
-        {/* {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null} */}
-        {/* <button className="comment-btn" type='submit'>Send</button> */}
-        {/* <FontAwesomeIcon className="send-icon" icon="paper-plane" /> */}
-        
       </div>
     </form>
   )

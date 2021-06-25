@@ -6,7 +6,7 @@ import './mainPost.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core';
 
 const Post = (props) => {
   let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
@@ -70,7 +70,8 @@ const Post = (props) => {
               <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateVotes('likes', likes, post.id)} /> <span>{likes}</span>
             </div>
             <div className="thumbs-down">
-              <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateVotes('dislikes', dislikes, post.id)} /> <div className="vote-count">{dislikes}</div>
+              <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateVotes('dislikes', dislikes, post.id)} /> 
+              <div className="vote-count">{dislikes}</div>
             </div>
           </div>
             

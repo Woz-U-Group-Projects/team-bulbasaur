@@ -14,9 +14,7 @@
 .postsList {
   width: 60%;
   margin-top: 20px;
-  background-color: rgb(146, 141, 141);
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  /* background-color: rgb(146, 141, 141); */
 }
 
 .friendList {
@@ -52,3 +50,4 @@
     margin: 0 -20px;
   }
 }
+
