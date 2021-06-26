@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import MemberView from './memberView/memberView'
 import GroupDetails from './groupDetails/groupDetails'
+import GroupPostView from './groupPostView/groupPostView'
 
 import './groupPage.css'
-import GroupPostView from './groupPostView/groupPostView'
 
 const GroupPage = (props) => {
   let { selectedGroup, onCleanUpGroup, loggedInUser } = props
@@ -33,18 +33,26 @@ const GroupPage = (props) => {
   return (
     <div>
       {selectedGroup ?
-        <div >
-          {/* group details */}
-          <GroupDetails {...props} isOwner={isOwner} owner={owner} isMember={isMember} />
+      <div className="group-page-container">
+        <div className="group-page-detail">
+          <div className="group-page-owner">
+            {/* group details */}
+            <GroupDetails {...props} isOwner={isOwner} owner={owner} />
+          </div>
 
-          {/* group Members */}
-          <MemberView {...props} isOwner={isOwner} isAdmin={isAdmin} />
-
-          {/* group posts */}
-          <GroupPostView {...props} isOwner={isOwner} isAdmin={isAdmin} isMember={isMember} />
+          <div className="group-posts-view">
+            {/* group posts */}
+            <GroupPostView {...props} isOwner={isOwner} isAdmin={isAdmin} isMember={isMember} />
+          </div>
         </div>
 
-        : <span>Loading Page...</span>}
+        <div className="group-page-members">
+          {/* group Members */}
+          <MemberView {...props} isOwner={isOwner} isAdmin={isAdmin} />
+        </div>
+      </div>
+
+      : <span>Loading Page...</span>}
     </div>
   )
 }

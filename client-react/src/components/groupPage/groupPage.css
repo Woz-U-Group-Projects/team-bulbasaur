@@ -1,4 +1,4 @@
-.container{
+/* .container{
   border: solid 1px black;
 }
 
@@ -35,41 +35,34 @@
   width: 70%;
   justify-content: space-between;
   padding: 5px;
-}
+} */
 
-.group-container {
+.group-page-container {
   border: 1px solid red;
   margin: 0 auto;
+  margin-top: 20px;
   width: 80%;
   height: 100vh;
   display: flex;
   flex-direction: row;
 }
 
-.group-wrapper {
+.group-page-detail {
   border: 1px solid blue;
   width: 70%;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.group-members {
+.group-page-owner {
+  margin-bottom: 20px;
+  height: 20%;
+}
+
+.group-page-members {
   border: 1px solid green;
   width: 30%;
   height: 100vh;
 }
 
-.group-owner {
-  border: 1px solid red;
-  height: 20%;
-  display: flex;
-}
-
-.group-posts {
-  border: 1px solid blue;
-  height: 80%;
-}
-
-.group-owner-info {
-  border: 1px solid black;
-  width: 60%;
-}

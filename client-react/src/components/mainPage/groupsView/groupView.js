@@ -41,9 +41,7 @@ const GroupView = (props) => {
                     <p>Members: {group.users.length}</p>
                   </div>
                 </div>
-                <div className="group-description">
-                  Description:
-                </div>
+                
                 <div className="group-vote-main">
                   <div className="group-vote">
                     <span>{group.likes}</span> Likes
