@@ -1,6 +1,8 @@
 import React from 'react'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
+import * as yup from 'yup';
+
+import './createGroupForm.css';
 
 const validate = yup.object({
   groupName: yup.string().required().min(4).max(20),
@@ -27,44 +29,46 @@ const CreateGroupForm = (props) => {
   })
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor='groupName' >Enter the name of your group</label><br/>
-        <input 
-          id='groupName' 
-          name='groupName'
-          type=''
-          value={formik.values.groupName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur} 
-        />
-      </div>
-      <div>
-        <label htmlFor='discription' >And a description</label><br/>
-        <textarea
-          id='discription' 
-          name='discription'
-          value={formik.values.discription}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        ></textarea>
-      </div>
-      <div>
-        <label htmlFor='private' >Make it private</label>
-        <input 
-          id='private' 
-          name='private'
-          type='checkbox'
-          value={formik.values.private}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur} 
-        />
-      </div>
-      <div>
-        <button type="button"  onClick={() => setFormView(false)}>Cancel</button>
-        <button type='submit' >Submit</button>
-      </div>
-    </form>
+    <div className="modal">
+      <form onSubmit={formik.handleSubmit} className='create-group-form-wrapper'>
+        <div className="group-form-name">
+          <input 
+            id='groupName' 
+            name='groupName'
+            type=''
+            placeholder='Enter group name...'
+            value={formik.values.groupName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur} 
+          />
+        </div>
+        <div className="group-form-input">
+          <textarea
+            id='discription' 
+            name='discription'
+            placeholder='Enter group description...'
+            value={formik.values.discription}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          ></textarea>
+        </div>
+        <div className="group-form-private">
+          <label htmlFor='private' >Make it private</label>
+          <input 
+            id='private' 
+            name='private'
+            type='checkbox'
+            value={formik.values.private}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur} 
+          />
+        </div>
+        <div className="group-form-btn">
+          <button className="group-form-cancel-btn" type="button"  onClick={() => setFormView(false)}>Cancel</button>
+          <button className="group-form-submit-btn" type='submit' >Submit</button>
+        </div>
+      </form>
+    </div>
   )
 }
 

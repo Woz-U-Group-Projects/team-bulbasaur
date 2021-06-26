@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import EditGroupDescription from '../../forms/editGroupDescription/editGroupDescription'
+import EditGroupDescription from '../../forms/editGroupDescription/editGroupDescription';
+
+import './groupDetails.css';
 
 const GroupDetails = props => {
   let { isOwner, selectedGroup, owner, onUpdateGroupVotes } = props
@@ -7,12 +9,11 @@ const GroupDetails = props => {
   let [formView, setView] = useState(false)
 
   return (
-    <div className='container toLeft'>
-      <div className='info'>
+    <div className='group-owner-container'>
+      <div className='owner-info'>
         <h1>{selectedGroup.groupName}</h1><br />
         <div>
-          <h3>Owner: </h3>
-          <p>{owner ? owner.userName : null}</p>
+          <h3>Owner: <span>{owner ? owner.userName : null}</span></h3>
           <div>
             <button onClick={() => onUpdateGroupVotes({ type: 'likes', dislikes: selectedGroup.likes, groupId: selectedGroup.groupId })} >
               Likes
@@ -21,10 +22,10 @@ const GroupDetails = props => {
               Dislikes
             </button>
           </div>
-        </div><br />
+        </div>
       </div>
 
-      <div className='form'>
+      <div className='group-description'>
         <div className="group-owner-description">
           <div style={formView ? { display: 'none' } : { display: 'block' }}>
             <h3>Description</h3>
