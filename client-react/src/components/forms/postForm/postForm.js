@@ -42,6 +42,7 @@ const PostForm = (props) => {
           />
           {formik.touched.title && formik.errors.title ? <div>{formik.errors.title}</div> : null}
         </div>
+
         <div className='form-post-body'>
           <label htmlFor='body'></label>
           <textarea
@@ -54,6 +55,7 @@ const PostForm = (props) => {
           />
           {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
         </div>
+
         <div className='form-btn-wrapper'>
           <div className='private-option'>
             <label htmlFor='isHidden'>Private</label>
@@ -64,6 +66,7 @@ const PostForm = (props) => {
               onChange={formik.handleChange}
             />
           </div>
+          
           <div className='form-submit-btn'>
             <button className='form-submit-btn-action' type='submit'>Submit</button>
           </div>

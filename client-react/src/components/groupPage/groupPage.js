@@ -54,47 +54,21 @@ const GroupPage = (props) => {
                 <h3>Description</h3>
                 <p>{selectedGroup.discription}</p>
               </div>
-              <div style={formView && isOwner ? { display: 'block' } : { display: 'none' }}>
-                <EditGroupDescription {...props} group={selectedGroup} setView={setView} />
-              </div>
-              <button
-                style={isOwner ? formView ? { display: 'none' } : { display: 'block' } : { display: 'none' }}
-                onClick={() => setView(true)}
-              >
-                Edit Description
-              </button>
-            </div>
 
-            <div className='buttons'>
-              <div>
-                <button onClick={() => onUpdateGroupVotes({ type: 'likes', groupId: selectedGroup.groupId, likes: selectedGroup.likes })}>
-                  Likes: {selectedGroup.likes}
-                </button>
-                <button onClick={() => onUpdateGroupVotes({ type: 'dislikes', groupId: selectedGroup.groupId, dislikes: selectedGroup.dislikes })}>
-                  Dislikes: {selectedGroup.dislikes}
-                </button>
-              </div>
-              <div>
+              <div className="group-owner-description">
+                <p>Description</p>
+                <div style={formView ? { display: 'none' } : { display: 'block' }}>
+                  <h3>Description</h3>
+                  <p>{selectedGroup.discription}</p>
+                </div>
+                <div style={formView && isOwner ? { display: 'block' } : { display: 'none' }}>
+                  <EditGroupDescription {...props} group={selectedGroup} setView={setView} />
+                </div>
                 <button
-                  style={isMember ? { display: 'none' } : { display: 'inline' }}
-                  onClick={() => {
-                    isLoggedIn ? onJoinGroup({ groupId: selectedGroup.groupId, userId: isLoggedIn ? loggedInUser.id : null })
-                      : alert('you must login to join a group')
-                  }}
+                  style={isOwner ? formView ? { display: 'none' } : { display: 'block' } : { display: 'none' }}
+                  onClick={() => setView(true)}
                 >
-                  join
-                </button>
-                <button
-                  style={isOwner || !isMember ? { display: 'none' } : { display: 'inline' }}
-                  onClick={() => onLeaveGroup({ groupId: selectedGroup.groupId, userId: isLoggedIn ? loggedInUser.id : null })}
-                >
-                  Leave
-                </button>
-                <button
-                  style={isOwner ? { display: 'inline' } : { display: 'none' }}
-                  onClick={() => onDisbandGroup(selectedGroup.groupId)}
-                >
-                  Disband Group
+                  Edit Description
                 </button>
               </div>
             </div>
@@ -119,16 +93,18 @@ const GroupPage = (props) => {
                 <GroupPost key={post.id} {...props} post={post} isOwner={isOwner} />
               ))}
             </div>
-
-            <div style={messageView ? { display: 'block' } : { display: 'none' }}><div style={isMember ? { display: 'block' } : { display: 'none' }}>
-              <GroupPostForm {...props} group={selectedGroup} isAdmin={isAdmin} isOwner={isOwner} />
-            </div>
+            
+            <div style={messageView ? { display: 'block' } : { display: 'none' }}>
+              <div style={isMember ? { display: 'block' } : { display: 'none' }}>
+                <GroupPostForm {...props} group={selectedGroup} isAdmin={isAdmin} isOwner={isOwner} />
+              </div>
               {groupPosts.length === 0 ? <span>No Posts Have Been Made Yet</span> : groupPosts.filter(post => post.isHidden === 1).map(post => (
                 <GroupPost key={post.id} {...props} post={post} isOwner={isOwner} />
               ))}
             </div>
           </div>
         </div>
+
         : <span>Loading Page...</span>}
     </div>
   )

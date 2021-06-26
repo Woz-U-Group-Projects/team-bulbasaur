@@ -4,8 +4,14 @@ import ProfilePosts from './posts/profilePosts'
 
 import './profile.css';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core'
+
 const Profile = (props) => {
   let { profile, loggedInUser, isLoggedIn, profilePosts, onCleanUpProfile } = props
+
+  library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots, faUserCircle);
 
   useEffect(()=>{
     return ()=>{
@@ -19,9 +25,14 @@ const Profile = (props) => {
         <div className="profile-wrapper">
           <div className="profile-header">
             <div className="profile-detail">
-              <h1>{profile.name}</h1>
-              <h2>{profile.userName}</h2>
-              <h3>{profile.email}</h3>
+              <div className="user-name">
+                <FontAwesomeIcon  className="user-icon-profile" icon="user-circle" />
+                <h1>{profile.name}</h1>
+              </div>
+              <h2>User Name: {profile.userName}</h2>
+              <h3> Email: {profile.email}</h3>
+              <h3>Total posts: 0</h3>
+              <h3>Group: </h3>
             </div>
             <div className="profile-post-form">
               <ProfilePostForm {...props} userId={profile.id} />
