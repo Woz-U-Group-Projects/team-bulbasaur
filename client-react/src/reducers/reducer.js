@@ -15,19 +15,22 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SEND_TOKEN_COMPLETED':
-      if(action.payload.status){
+      if (action.payload.status) {
         return {
           ...state,
           isLoggedIn: true,
           loggedInUser: action.payload.data
         }
       } else {
+        setTimeout(() => {
+          alert('Must Login Again')
+        }, 100);
         return {
           ...state
         }
       }
     case 'CLEAN_UP_PROFILE':
-      return{
+      return {
         ...state,
         profile: undefined,
         profilePosts: []
@@ -144,7 +147,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         profilePosts: action.payload
       }
-    case 'MAKE_COMMENT_BY_USER_ID_COMPLETED': 
+    case 'MAKE_COMMENT_BY_USER_ID_COMPLETED':
       return {
         ...state,
         profilePosts: action.payload
@@ -194,7 +197,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedGroup: action.payload
-      } 
+      }
     case 'DISBAND_GROUP_COMPLETED':
       return {
         ...state,
@@ -217,7 +220,7 @@ const reducer = (state = initialState, action) => {
         groupPosts: action.payload
       }
     case 'UPDATE_GROUP_POSTS_VOTES_COMPLETED':
-      return{
+      return {
         ...state,
         groupPosts: action.payload
       }
@@ -252,6 +255,26 @@ const reducer = (state = initialState, action) => {
         loggedInUser: action.payload
       }
     case 'CANCEL_FRIEND_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
+    case 'ACCEPT_REQUEST_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
+    case 'DENY_REQUEST_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
+    case 'CONFIRM_NOTIFICATION_COMPLETED':
+      return {
+        ...state,
+        loggedInUser: action.payload
+      }
+    case 'REMOVE_FRIEND_COMPLETED':
       return {
         ...state,
         loggedInUser: action.payload

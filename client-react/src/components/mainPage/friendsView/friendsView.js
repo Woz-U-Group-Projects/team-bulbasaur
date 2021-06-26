@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
 const FriendsView = (props) => {
-  let { isLoggedIn, loggedInUser, onCancelFriend } = props
+  let { isLoggedIn, loggedInUser, onCancelFriend, onAcceptRequest, onDenyRequest, onConfirmNotification, onRemoveFriend } = props
   let [friendView, setView] = useState(false)
   let [pending, setPendingList] = useState(undefined)
   let [friends, setFriendsList] = useState(undefined)
   let [requests, setRequestList] = useState(undefined)
+  let [denied, setDeniedList] = useState(undefined)
+  let [accepted, setAcceptedList] = useState(undefined)
 
   useEffect(() => {
     setPendingList(loggedInUser?loggedInUser.friends.filter(user => user.relationShip.status === 1):undefined)
     setRequestList(loggedInUser?loggedInUser.requests.filter(user => user.relationShip.status === 1):undefined)
-    setFriendsList(loggedInUser?
-      [
-        ...loggedInUser.friends.filter(user => user.relationShip.status === 2),
-        ...loggedInUser.requests.filter(user => user.relationShip.status === 2)
-      ]:undefined)
+    setFriendsList(loggedInUser?loggedInUser.friends.filter(user => user.relationShip.status === 2):undefined)
+    setDeniedList(loggedInUser?loggedInUser.friends.filter(user => user.relationShip.status === 3 && user.relationShip.active === 1 ):undefined)
+    setAcceptedList(loggedInUser?loggedInUser.friends.filter(user => user.relationShip.status === 2 && user.relationShip.active === 1 ):undefined)
   }, [loggedInUser])
   
   return (
@@ -41,11 +41,30 @@ const FriendsView = (props) => {
               </div>
             )) : <span>loading...</span>}
             <hr/>
+            {denied?denied.map(user => (
+              <div
+                key={user.id}
+              >
+                <h4>{user.userName}</h4>
+                <p>Has Denied your request</p>
+                <button onClick={() => onConfirmNotification({userId: user.id})}>Okay</button>
+              </div>
+            )) : <span>loading...</span>}
+            {accepted?accepted.map(user => (
+              <div
+              key={user.id}
+            >
+              <h4>{user.userName}</h4>
+              <p>Has accepted your request</p>
+              <button onClick={() => onConfirmNotification({userId: user.id})}>Okay</button>
+            </div>
+            )) : <span>loading...</span>}
+            <hr/>
             <h2>Friends</h2>
             {friends?friends.map(user => (
               <div key={user.id}>
                 <h4>{user.userName}</h4>
-                <button>Remove</button>
+                <button onClick={()=>onRemoveFriend(user.id)}>Remove</button>
               </div>
             )):null}
           </div>
@@ -57,8 +76,10 @@ const FriendsView = (props) => {
               >
                 <h3>{user.userName}</h3>
                 <p>Has sent you a friend request</p>
-                <button>Cancel</button>
-                <button>Accept</button>
+                <br/>
+
+                <button onClick={() => onDenyRequest({userId:user.id})}>Deny</button>
+                <button onClick={() => onAcceptRequest({userId:user.id})}>Accept</button>
               </div>
             )) : <span>loading...</span>}
           </div>

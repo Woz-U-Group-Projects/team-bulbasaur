@@ -211,13 +211,10 @@ export const sendToken = async () => {
   try {
     const req = await authAxios.get('/users/api/login')
     const res = await req.data
-    console.log(res.data)
     if (res.status) {
       const user = mapUser(res.data)
-      console.log(user)
       return { status: res.status, data: user }
     } else {
-      console.log(res)
       return res
     }
   } catch (error) {
@@ -710,6 +707,7 @@ export const disbandGroupCompleted = (data) => ({
 //=========================================================
 
 export const createGroupPost = async (obj) => {
+  console.log(obj)
   const req = await authAxios.post('/posts/api/groupPosts/create', obj)
   const res = await req.data
   const posts = mapPosts(res)
@@ -763,7 +761,6 @@ export const updateGroupPostVotesCompleted = data => ({
 //=========================================================
 
 export const makeGroupComment = async obj => {
-  console.log(obj)
   const req = await authAxios.post('/comments/api/groupComments/create', obj)
   const res = await req.data
   const posts = mapPosts(res.data)
@@ -807,6 +804,7 @@ export const removeUser = async obj => {
   let { groupId, userId } = obj
   const req = await authAxios.delete(`/groups/api/remove/${groupId}/${userId}`)
   const res = await req.data
+  console.log(res)
   const group = mapGroup(res.data)
   return group
 }
@@ -857,10 +855,8 @@ export const transferGroupOwnerCompleted = data => ({
 // actions for retrieving/editing friends =============================================================================
 
 export const addFriend = async obj => {
-  console.log(obj)
   const req = await authAxios.post('/users/api/add/friend', obj)
   const res = await req.data
-  console.log(res)
   const user = mapUser(res.data)
   return user
 }
@@ -874,12 +870,65 @@ export const addFriendCompleted = data => ({
 export const cancelFriend = async obj => {
   const req = await authAxios.delete(`/users/api/cancel/friend/${obj}`)
   const res = await req.data
-  console.log(res)
   const user = mapUser(res.data)
   return user
 }
 
 export const cancelFriendCompleted = data => ({
   type: 'CANCEL_FRIEND_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const acceptRequest = async obj => {
+  const req = await authAxios.post('/users/api/accept/request', obj)
+  const res = await req.data
+  const user = mapUser(res.data)
+  return user
+}
+
+export const acceptRequestCompleted = data => ({
+  type: 'ACCEPT_REQUEST_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const denyRequest = async obj => {
+  const req = await authAxios.put('/users//api/deny/request', obj)
+  const res = await req.data
+  const user = mapUser(res.data)
+  return user
+}
+
+export const denyRequestCompleted = data => ({
+  type: 'DENY_REQUEST_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const confirmNotification = async obj => {
+  console.log(obj)
+  const req = await authAxios.put('/users/api/confirm/notification', obj)
+  const res = await req.data
+  console.log(res)
+  const user = mapUser(res.data)
+  return user
+}
+
+export const confirmNotificationCompleted = data => ({
+  type: 'CONFIRM_NOTIFICATION_COMPLETED',
+  payload: data
+})
+//=========================================================
+
+export const removeFriend = async obj => {
+  const req = await authAxios.delete(`/users/api/remove/friend/${obj}`)
+  const res = await req.data
+  const user = mapUser(res.data)
+  return user
+}
+
+export const removeFriendCompleted = data => ({
+  type: 'REMOVE_FRIEND_COMPLETED',
   payload: data
 })

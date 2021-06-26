@@ -23,7 +23,9 @@ import {
   editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment,
   makeGroupCommentCompleted, deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
   removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted,
-  transferGroupOwner, transferGroupOwnerCompleted, addFriend, addFriendCompleted, cancelFriend, cancelFriendCompleted
+  transferGroupOwner, transferGroupOwnerCompleted, addFriend, addFriendCompleted, cancelFriend, cancelFriendCompleted,
+  acceptRequest, acceptRequestCompleted, denyRequest, denyRequestCompleted, confirmNotification, confirmNotificationCompleted,
+  removeFriend, removeFriendCompleted
 } from './actions/actions'
 //components
 import MainPage from "./components/mainPage/mainPage";
@@ -115,7 +117,11 @@ const mapDispatchToProps = (dispatch, state) => {
     onRemoveGroupAdmin: obj => removeGroupAdmin(obj).then(data => dispatch(removeGroupAdminCompleted(data))),
     onTransferGroupOwner: obj => transferGroupOwner(obj).then(data => dispatch(transferGroupOwnerCompleted(data))),
     onAddFriend: obj => addFriend(obj).then(data => dispatch(addFriendCompleted(data))),
-    onCancelFriend: obj => cancelFriend(obj).then(data => dispatch(cancelFriendCompleted(data)))
+    onCancelFriend: obj => cancelFriend(obj).then(data => dispatch(cancelFriendCompleted(data))),
+    onAcceptRequest: obj => acceptRequest(obj).then(data => dispatch(acceptRequestCompleted(data))),
+    onDenyRequest: obj => denyRequest(obj).then(data => dispatch(denyRequestCompleted(data))),
+    onConfirmNotification: obj => confirmNotification(obj).then(data => dispatch(confirmNotificationCompleted(data))),
+    onRemoveFriend: obj => removeFriend(obj).then(data => dispatch(removeFriendCompleted(data)))
   }
 }
 

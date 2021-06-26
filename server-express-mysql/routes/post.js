@@ -547,7 +547,7 @@ router.post('/api/groupPosts/create', (req, res, next) => {
       PostBody: req.body.body,
       Likes: 0,
       Dislikes: 0,
-      Visible: 0
+      Visible: req.body.isHidden === false ? 0 : 1
     }
   }).spread((result, created) => {
     if(created){

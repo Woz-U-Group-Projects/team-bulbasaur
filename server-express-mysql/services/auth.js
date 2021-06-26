@@ -10,7 +10,7 @@ var authService = {
       Admin: user.Admin
     }, 'secretKey',
     {
-      expiresIn: '1h'
+      expiresIn: '4h'
     })
 
     return token
