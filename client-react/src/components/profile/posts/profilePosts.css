@@ -1,9 +1,10 @@
-.main-post-wrapper {
+.profile-posts-container {
     width: 100%;
     height: auto;
     margin-bottom: 20px;
     display: flex;
-    justify-content: column;
+    flex-direction: column;
+    justify-content: flex-start;
     background-color: #fff;
     padding: 0;
     border: none;
@@ -18,20 +19,7 @@
         0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
-.post-detail {
-    width: 100%;
-    margin-top: 10px;
-}
-
-/* .post-control {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
-
-.userName {
+.profile-posts-username {
     width: 100%;
     height: 35px;
     display: flex;
@@ -40,7 +28,7 @@
     align-items: center;
 }
 
-.control-group {
+.profile-posts-control-group {
     display: flex;
     flex-direction: row;
 }
@@ -49,12 +37,12 @@
     margin-left: 15px;
 }
 
-.post-body {
+.profile-posts-body {
     height: auto;
     margin-top: 15px;
 }
 
-.post-vote {
+.profile-posts-votes {
     width: 100%;
     height: 45px;
     margin-top: 15px;
@@ -64,7 +52,7 @@
     align-items: center;
 }
 
-.votes {
+.profile-votes {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -90,3 +78,4 @@
 .trash-icon {
     color: red;
 }
+

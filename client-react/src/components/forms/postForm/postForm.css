@@ -4,18 +4,23 @@
     flex-direction: column;
     width: 100%;
     height: 200px;
-    border: 1px solid #eaeaea;
-    /* margin-bottom: 10px; */
-    border-radius: 8px;
-    box-shadow: 0 1px 2px 1px rgba(130, 130, 130, 0.1)
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
 .form-title {
     background-color: #eaeaea;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     width: 100%;
     height: 26%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -63,6 +68,8 @@
     height: 45px;
     align-items: center;
     padding: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .private-option input {
