@@ -305,11 +305,11 @@ const GroupPage = (props) => {
           <div className="group-members">
             <h1>Members</h1>
             <div>
-              <h4>Owner:</h4>
+              {/* <h4>Owner:</h4> */}
               {selectedGroup ? selectedGroup.users.filter(user => user.membership === 'Owner').map(user => (
                 <div key={user.id}>
                   <div>
-                    <h3>{user.userName}</h3>
+                    <h3>Owner: {user.userName}</h3>
                   </div>
                   <div style={(isOwner || isAdmin) && isMember ? { display: 'block' } : { display: 'none' }}>
                     <button onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}>Remove</button>
