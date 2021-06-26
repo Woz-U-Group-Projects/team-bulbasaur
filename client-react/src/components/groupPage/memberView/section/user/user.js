@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const User = props => {
   let {
-    user, loggedInUser, onAddFriend, isOwner, onTransferGroupOwner, selectedGroup, onRemoveUser, 
+    user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser, 
     onRemoveGroupAdmin, onMakeGroupAdmin
   } = props
 

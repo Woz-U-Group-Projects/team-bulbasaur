@@ -211,6 +211,7 @@ export const sendToken = async () => {
   try {
     const req = await authAxios.get('/users/api/login')
     const res = await req.data
+    console.log(res)
     if (res.status) {
       const user = mapUser(res.data)
       return { status: res.status, data: user }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import EditGroupDescription from '../forms/editGroupDescription/editGroupDescription'
 import GroupPostForm from '../forms/groupPostForm/groupPostForm'
 import GroupPost from './groupPost/groupPost'
+import MemberView from './memberView/memberView'
 import './groupPage.css'
 
 const GroupPage = (props) => {
@@ -100,132 +101,7 @@ const GroupPage = (props) => {
           </div>
 
           {/* group Members */}
-          <div className='container toRight usersList'>
-            <h3>Group Members</h3><hr />
-            <div>
-              <div>
-                <h4>Owner:</h4>
-                {selectedGroup ? selectedGroup.users.filter(user => user.membership === 'Owner').map(user => (
-                  <div key={user.id}>
-                    <div>
-                      <h3>{user.userName}</h3>
-                      {/* <button>options</button> */}
-                    </div>
-                    <div>
-                      <div>
-                        <button
-                          style={
-                            loggedInUser && ((loggedInUser.id === user.id) || loggedInUser.friends.filter(friend => friend.id === user.id).length === 1) ?
-                              { display: 'none' } : { display: 'inline' }
-                          }
-                          onClick={() => onAddFriend({ recieverId: user.id })}
-                        >Add Friend</button>
-                      </div>
-                      <div>
-                        <button
-                          style={isOwner ? { display: 'inline' } : { display: 'none' }}
-                          onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}
-                        >Remove</button>
-                        <button
-                          style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                          onClick={() => onRemoveGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                        >Make Member</button>
-                        <button
-                          onClick={() => onTransferGroupOwner({ userId: user.id, groupId: selectedGroup.groupId })}
-                          style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                        >Make Owner</button>
-                        <button
-                          onClick={() => onMakeGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                          style={user.membership === 'Member' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                        >Make Admin</button>
-                      </div>
-                    </div>
-                  </div>
-                )) : null}
-              </div>
-              <hr />
-              <div style={admins.length === 0 ? { display: 'none' } : { display: 'inline' }}>
-                <h4>Admin</h4>
-                {selectedGroup ? selectedGroup.users.filter(user => user.membership === 'Admin').map(user => (<div>
-                  <div>
-                    <h3>{user.userName}</h3>
-                    {/* <button>options</button> */}
-                  </div>
-                  <div>
-                    <div>
-                      <button
-                        style={
-                          loggedInUser && ((loggedInUser.id === user.id) || loggedInUser.friends.filter(friend => friend.id === user.id).length === 1) ?
-                            { display: 'none' } : { display: 'inline' }
-                        }
-                        onClick={() => onAddFriend({ recieverId: user.id })}
-                      >Add Friend</button>
-                    </div>
-                    <div>
-                      <button
-                        style={isOwner ? { display: 'inline' } : { display: 'none' }}
-                        onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}
-                      >Remove</button>
-                      <button
-                        style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                        onClick={() => onRemoveGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                      >Make Member</button>
-                      <button
-                        onClick={() => onTransferGroupOwner({ userId: user.id, groupId: selectedGroup.groupId })}
-                        style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                      >Make Owner</button>
-                      <button
-                        onClick={() => onMakeGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                        style={user.membership === 'Member' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                      >Make Admin</button>
-                    </div>
-                  </div>
-                </div>
-                )) : null}
-              </div>
-              <hr />
-              <div>
-                <h4>Member:</h4>
-                {selectedGroup ? selectedGroup.users.filter(user => user.membership === 'Member').map(user => (<div>
-                  <div>
-                    <h3>{user.userName}</h3>
-                    {/* <button>options</button> */}
-                  </div>
-                  <div>
-                    <div>
-                      <button
-                        style={
-                          loggedInUser && ((loggedInUser.id === user.id) || loggedInUser.friends.filter(friend => friend.id === user.id).length === 1) ?
-                            { display: 'none' } : { display: 'inline' }
-                        }
-                        onClick={() => onAddFriend({ recieverId: user.id })}
-                      >Add Friend</button>
-                    </div>
-                    <div>
-                      <button
-                        style={isOwner || isAdmin ? { display: 'inline' } : { display: 'none' }}
-                        onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}
-                      >Remove</button>
-                      <button
-                        style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                        onClick={() => onRemoveGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                      >Make Member</button>
-                      <button
-                        onClick={() => onTransferGroupOwner({ userId: user.id, groupId: selectedGroup.groupId })}
-                        style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                      >Make Owner</button>
-                      <button
-                        onClick={() => onMakeGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                        style={user.membership === 'Member' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                      >Make Admin</button>
-                    </div>
-                  </div>
-                </div>
-                )) : null}
-              </div>
-              <hr />
-            </div>
-          </div>
+          <MemberView {...props} />
 
           {/* group posts */}
           <div className='container toLeft'>
