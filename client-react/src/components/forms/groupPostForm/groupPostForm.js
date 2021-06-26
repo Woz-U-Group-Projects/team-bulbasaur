@@ -20,8 +20,8 @@ const GroupPostForm = (props) => {
     },
     validationSchema: validate,
     onSubmit: (values, actions) => {
-      onCreateGroupPost(values)
       actions.resetForm()
+      onCreateGroupPost(values)
     }
   })
 
