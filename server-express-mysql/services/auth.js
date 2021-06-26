@@ -10,7 +10,7 @@ var authService = {
       Admin: user.Admin
     }, 'secretKey',
     {
-      expiresIn: '1h'
+      expiresIn: '4h'
     })
 
     return token
@@ -20,6 +20,10 @@ var authService = {
       let decoded = jwt.verify(token, 'secretKey')
       return models.users.findByPk(decoded.UserId)
     } catch(err){
+      if(err instanceof jwt.TokenExpiredError){
+        return err
+        console.log(err)
+      }
       console.log(err)
       return null
     }

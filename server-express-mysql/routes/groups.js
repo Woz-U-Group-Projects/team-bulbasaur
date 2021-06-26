@@ -325,7 +325,7 @@ router.delete('/api/remove/:groupId/:userId', (req, res, next) => {
           { UserId: parseInt(user.UserId) }
         ]}
       }).then(relation => {
-        if(relation.MemberShip === 'Owner'){
+        if(relation.MemberShip === 'Owner' || relation.MemberShip === 'Admin'){
           models.grouped_users.destroy({
             where: {[Op.and]: [
               { GroupId: parseInt(req.params.groupId) },

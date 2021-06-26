@@ -23,7 +23,11 @@ module.exports = function(sequelize, DataTypes) {
         key: 'UserId'
       }
     },
-    status: {
+    Status: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    Active: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

@@ -9,7 +9,7 @@ import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCom
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 const Post = (props) => {
-  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile } = props
+  let { post, onUpdateVotes, isLoggedIn, loggedInUser, onDeletePost, onGetProfile, onAddFriend } = props
   let [commentList, setList] = useState([])
   let [commentView, setView] = useState(false)
   let [editModal, setEditModal] = useState(false)
@@ -40,7 +40,7 @@ const Post = (props) => {
               </Link>
             </div>
             <div className="svg-icons">
-              <FontAwesomeIcon  className="user-plus-icon" icon="user-plus" />
+              <FontAwesomeIcon onClick={() => onAddFriend({recieverId:post.author.id})} className="user-plus-icon" icon="user-plus" />
             </div>
             <div className="svg-icons">
               {isLoggedIn && post.author.id === loggedInUser.id ? <FontAwesomeIcon icon="edit" onClick={() => setEditModal(true)} /> : null} 
