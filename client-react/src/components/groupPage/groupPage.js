@@ -36,7 +36,6 @@ const GroupPage = (props) => {
         <div >
           {/* group details */}
           <GroupDetails {...props} isOwner={isOwner} owner={owner} />
-          
 
           {/* group Members */}
           <MemberView {...props} isOwner={isOwner} isAdmin={isAdmin} />
