@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import EditGroupDescription from '../../forms/editGroupDescription/editGroupDescription'
 
 const GroupDetails = props => {
-  let { isOwner, selectedGroup, owner, onUpdateGroupVotes } = props
+  let { isOwner, selectedGroup, owner, onUpdateGroupVotes, isMember, onJoinGroup, onLeaveGroup, onDisbandGroup, loggedInUser } = props
 
   let [formView, setView] = useState(false)
 
@@ -15,10 +15,30 @@ const GroupDetails = props => {
           <p>{owner ? owner.userName : null}</p>
           <div>
             <button onClick={() => onUpdateGroupVotes({ type: 'likes', dislikes: selectedGroup.likes, groupId: selectedGroup.groupId })} >
-              Likes
+              Likes: {selectedGroup.likes}
             </button>
             <button onClick={() => onUpdateGroupVotes({ type: 'dislikes', dislikes: selectedGroup.dislikes, groupId: selectedGroup.groupId })} >
-              Dislikes
+              Dislikes: {selectedGroup.dislikes}
+            </button>
+          </div>
+          <div>
+            <button 
+              onClick={()=>onJoinGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
+              style={isMember?{display:'none'}:{display:'inline'}} 
+            >
+              Join
+            </button>
+            <button 
+              onClick={()=>onLeaveGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
+              style={isMember&&!isOwner?{display:'inline'}:{display:'none'}} 
+            >
+              Leave
+            </button>
+            <button 
+              onClick={()=>onDisbandGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
+              style={isOwner?{display:'inline'}:{display:'none'}} 
+            >
+              Disband
             </button>
           </div>
         </div><br />

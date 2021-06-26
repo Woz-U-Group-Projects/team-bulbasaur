@@ -35,7 +35,7 @@ const GroupPage = (props) => {
       {selectedGroup ?
         <div >
           {/* group details */}
-          <GroupDetails {...props} isOwner={isOwner} owner={owner} />
+          <GroupDetails {...props} isOwner={isOwner} owner={owner} isMember={isMember} />
 
           {/* group Members */}
           <MemberView {...props} isOwner={isOwner} isAdmin={isAdmin} />

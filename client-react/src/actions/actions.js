@@ -211,7 +211,6 @@ export const sendToken = async () => {
   try {
     const req = await authAxios.get('/users/api/login')
     const res = await req.data
-    console.log(res)
     if (res.status) {
       const user = mapUser(res.data)
       return { status: res.status, data: user }
@@ -243,7 +242,6 @@ export const signupCompleted = (data) => ({
 export const login = async (object) => {
   const req = await authAxios.post('/users/api/login', object)
   const res = await req.data
-  console.log(res)
   if (res.result === false) {
     return res
   } else {
@@ -252,7 +250,6 @@ export const login = async (object) => {
       message: res.message,
       user: mapUser(res.user),
     }
-    console.log(data)
     return data
   }
 }
@@ -266,7 +263,6 @@ export const loginCompleted = (data) => ({
 export const logout = async () => {
   const req = await axios.get('/users/api/logout')
   const data = await req.data
-  console.log(data)
   return data
 }
 
@@ -421,7 +417,6 @@ export const deleteCommentCompleted = (data) => ({
 const getProfileById = async (userId) => {
   const req = await authAxios.get(`/users/api/profile/${userId}`)
   const res = await req.data
-  console.log(res)
   const profile = mapUser(res.data)
   return profile
 }
@@ -429,7 +424,6 @@ const getProfileById = async (userId) => {
 const getPostsByUserId = async (userId) => {
   const req = await axios.get(`/posts/api/${userId}`)
   const res = await req.data
-  console.log(res)
   const posts = mapPosts(res)
   return posts.reverse()
 }

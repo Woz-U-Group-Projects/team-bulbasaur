@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { Redirect } from 'react-router'
@@ -17,10 +17,6 @@ const validate = yup.object({
 library.add(faUserCircle, faEnvelope, faUser, faLock);
 
 const Login = ({ onLogin, loggedInUser, isLoggedIn }) => {
-
-  useEffect( () => {
-    console.log(isLoggedIn)
-  },[isLoggedIn])
 
   const formik = useFormik({
     initialValues: {
