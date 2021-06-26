@@ -3,15 +3,9 @@ import React, { useEffect, useState } from 'react'
 const User = props => {
   let {
     user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser, 
-    onRemoveGroupAdmin, onMakeGroupAdmin
+    onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner
   } = props
-
-  let [isOwner, checkOwner] = useState(false)
-  let [isAdmin, checkAdmin] = useState(false)
-  let [isMember, setMembership] = useState(false)
-
   let [isFriend, checkFreindShip] = useState(false)
-  
   useEffect(() => {
     checkFreindShip(loggedInUser?loggedInUser.friends.filter(friend => friend.id === user.id ).length>0?true:false:false)
   }, [loggedInUser, user])

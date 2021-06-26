@@ -9,7 +9,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 const GroupView = (props) => {
-  let { groups, loggedInUser, onJoinGroup, isLoggedIn, onGetGroupPage } = props
+  let { groups, isLoggedIn, onGetGroupPage } = props
   let [groupFormView, setFormView] = useState(false)
 
   library.add(faPlus);

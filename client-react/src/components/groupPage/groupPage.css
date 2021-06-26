@@ -1,4 +1,4 @@
-/* .container{
+.container{
   border: solid 1px black;
 }
 
@@ -35,7 +35,7 @@
   width: 70%;
   justify-content: space-between;
   padding: 5px;
-} */
+}
 
 .group-container {
   border: 1px solid red;
