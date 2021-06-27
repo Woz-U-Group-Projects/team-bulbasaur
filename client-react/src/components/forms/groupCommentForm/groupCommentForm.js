@@ -26,20 +26,23 @@ const GroupCommentForm = ({postId, loggedInUser, onMakeGroupComment, groupId}) =
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor='body'>Comment</label>
-        <input 
-          id='body'
-          name='body'
-          type='text'
-          value={formik.values.body}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
-      </div>
-      <div>
-        <button type='submit'>Submit</button>
+      <div className="comment-wrapper">
+        <div className="comment-input">
+          <textarea 
+            id='body'
+            name='body'
+            type='text'
+            value={formik.values.body}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder='Write a comment ...'
+          />
+          {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
+        </div>
+
+        <div className="comment-submit-btn">
+          <button type='submit'>Send</button>
+        </div>
       </div>
     </form>
   )

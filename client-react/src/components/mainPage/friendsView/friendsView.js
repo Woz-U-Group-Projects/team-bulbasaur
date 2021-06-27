@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+
+import './friendsView.css';
 
 const FriendsView = (props) => {
   let { isLoggedIn, loggedInUser, onCancelFriend, onAcceptRequest, onDenyRequest, onConfirmNotification, onRemoveFriend } = props
@@ -18,76 +20,80 @@ const FriendsView = (props) => {
   }, [loggedInUser])
   
   return (
-    <>
+    <div>
       {isLoggedIn ?
-        <>
-          <div>
-            <button onClick={() => setView(false)}>
+        <div className="friends-container">
+          <div className="tab">
+            <button className="tablinks" onClick={() => setView(false)}>
               <h3>Friend List</h3>
             </button>
-            <button onClick={() => setView(true)}>
+            <button className="tablinks" onClick={() => setView(true)}>
               <h3>Friend Requests</h3>
             </button>
           </div>
-          <div style={friendView?{display:'none'}:{display:'block'}}>
+
+          <div className="friends-pending" style={friendView?{display:'none'}:{display:'block'}}>
             <h2>Pending Friends</h2>
             {pending?pending.map(user => (
-              <div
-                key={user.id}
-              >
-                <h4>{user.userName}</h4>
-                <p>Request Has Been Sent</p>
+              <div key={user.id} className="friends-request-notification">
+                <div>
+                  <h4>{user.userName}</h4>
+                  <p>Request Has Been Sent</p>
+                </div>
                 <button onClick={() => onCancelFriend(user.id)}>Cancel</button>
               </div>
             )) : <span>loading...</span>}
-            <hr/>
             {denied?denied.map(user => (
-              <div
-                key={user.id}
-              >
-                <h4>{user.userName}</h4>
-                <p>Has Denied your request</p>
+              <div key={user.id}>
+                <div>
+                  <h4>{user.userName}</h4>
+                  <p>Has Denied your request</p>
+                </div>
                 <button onClick={() => onConfirmNotification({userId: user.id})}>Okay</button>
               </div>
             )) : <span>loading...</span>}
             {accepted?accepted.map(user => (
-              <div
-              key={user.id}
-            >
-              <h4>{user.userName}</h4>
-              <p>Has accepted your request</p>
-              <button onClick={() => onConfirmNotification({userId: user.id})}>Okay</button>
+              <div key={user.id}>
+                <div>
+                  <h4>{user.userName}</h4>
+                  <p>Has accepted your request</p>
+                </div>
+                <button onClick={() => onConfirmNotification({userId: user.id})}>Okay</button>
             </div>
             )) : <span>loading...</span>}
-            <hr/>
-            <h2>Friends</h2>
+            
+          </div>
+
+          <div className="friends-list">
+            <h2>Friends List</h2>
             {friends?friends.map(user => (
-              <div key={user.id}>
+              <div key={user.id} className="friends">
                 <h4>{user.userName}</h4>
                 <button onClick={()=>onRemoveFriend(user.id)}>Remove</button>
               </div>
             )):null}
           </div>
-          <div style={friendView?{display:'block'}:{display:'none'}}>
-            {requests?requests.map(user => (
-              <div
-                key={user.id}
-                style={(user.relationShip.recieverId === loggedInUser.id) ? { display: 'block' } : { display: 'none' }}
-              >
-                <h3>{user.userName}</h3>
-                <p>Has sent you a friend request</p>
-                <br/>
 
-                <button onClick={() => onDenyRequest({userId:user.id})}>Deny</button>
-                <button onClick={() => onAcceptRequest({userId:user.id})}>Accept</button>
+          <div style={friendView?{display:'block'}:{display:'none'}} className="incoming-request-wrapper">
+            {requests?requests.map(user => (
+              <div key={user.id} style={(user.relationShip.recieverId === loggedInUser.id) ? { display: 'flex' } : { display: 'none' }} className="incoming-request">
+                <div>
+                  <h3>{user.userName}</h3>
+                  <p>Has sent you a friend request</p>
+                </div>
+
+                <div className="incoming-request-btn">
+                  <button className="incoming-request-deny-btn" onClick={() => onDenyRequest({userId:user.id})}>Deny</button>
+                  <button className="incoming-request-accept-btn" onClick={() => onAcceptRequest({userId:user.id})}>Accept</button>
+                </div>
               </div>
             )) : <span>loading...</span>}
           </div>
-        </>:
-        <>
-          <h3>nothing to show</h3>
-        </>}
-    </>
+        </div>:
+        <div>
+          <h3>Create an account to add friends</h3>
+        </div>}
+    </div>
   )
 }
 

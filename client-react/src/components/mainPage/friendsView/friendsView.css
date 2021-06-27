@@ -1,0 +1,113 @@
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.tablinks {
+    width: 50%;
+}
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.tablinks:active {
+    background-color: rgb(153, 151, 151);
+}
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+.friends-container {
+    height: 80%;
+}
+
+.friends-pending {
+    margin: 10px;
+    height: 220px;
+    overflow-y: auto;
+    border-bottom: 1px solid rgb(233, 227, 227);
+}
+
+.friends-request-notification {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.friends-request-notification button {
+    margin: 0 15px;
+    height: 25px;
+    width: 65px;
+    border-radius: 15px;
+    background-color: #ac2e08;
+    color: #fff;
+}
+
+.friends-list {
+    height: 30em;
+    margin: 10px;
+    overflow-y: auto;
+}
+
+.friends {
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.friends button {
+    margin: 0 15px;
+    height: 25px;
+    width: 65px;
+    border-radius: 15px;
+    background-color: #ac2e08;
+    color: #fff;
+}
+
+.incoming-request-wrapper {
+    height: 15em;
+    margin: 10px;
+    overflow-y: auto;
+}
+
+.incoming-request {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.incoming-request-btn button {
+    margin-left: 10px;
+}
+
+.incoming-request-deny-btn {
+    height: 25px;
+    width: 65px;
+    border-radius: 15px;
+    background-color: #ac2e08;
+    color: #fff;
+}
+
+.incoming-request-accept-btn {
+    height: 25px;
+    width: 65px;
+    border-radius: 15px;
+    background-color: #0E94A0;
+    color: #fff;
+}

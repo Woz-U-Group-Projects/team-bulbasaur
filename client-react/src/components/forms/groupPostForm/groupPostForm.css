@@ -1,4 +1,4 @@
-.form-container {
+.profile-form-container {
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -13,9 +13,10 @@
         0 22.3px 17.9px rgba(0, 0, 0, 0.072),
         0 41.8px 33.4px rgba(0, 0, 0, 0.086),
         0 100px 80px rgba(0, 0, 0, 0.12);
+    margin-bottom: 20px;
 }
 
-.form-title {
+.profile-form-title {
     background-color: #eaeaea;
     width: 100%;
     height: 26%;
@@ -28,11 +29,11 @@
     font-weight: 600;
 }
 
-.form-title label {
+.profile-form-title label {
     margin: 0 10px;
 }
 
-.form-title input {
+.profile-form-title input {
     border: none;
     width: 40%;
     height: 25px;
@@ -41,16 +42,16 @@
     outline: none;
 }
 
-.form-title input::placeholder {
+.profile-form-title input::placeholder {
     padding-left: 10px;
     font-weight: 200;
 }
 
-.form-post-body {
+.profile-form-post-body {
     height: 105px;
 }
 
-.form-post-body textarea {
+.profile-form-post-body textarea {
     outline: none;
     border: none;
     width: 100%;
@@ -60,26 +61,17 @@
     margin: 0px;
 }
 
-.form-btn-wrapper {
+.profile-form-btn-wrapper {
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: #eaeaea;
-    height: 45px;
     align-items: center;
-    padding: 20px;
+    background-color: #eaeaea;
+    padding: 0 10px;
+    height: 55px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-}
-
-.private-option input {
-    margin: 5px;
-}
-
-.form-submit-btn {
-    display: inline-block;
-    width: 38%;
-    text-align: right;
 }
 
 .form-submit-btn-action {
@@ -88,5 +80,14 @@
     background-color: #008391;
     color: #fff;
     border-radius: 1.5em;
-    cursor: pointer;
+    margin-left: 10px;
+}
+
+.form-cancel-btn-action {
+    width: 80px;
+    height: 30px;
+    background-color: #ac2e08;
+    color: #fff;
+    border-radius: 1.5em;
+    margin-left: 10px;
 }

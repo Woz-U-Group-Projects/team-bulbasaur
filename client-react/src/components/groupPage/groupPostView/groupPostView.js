@@ -8,7 +8,7 @@ const GroupPostView = props => {
   let [messageView, setMessageView] = useState(false)
 
   return (
-    <div className='container toLeft'>
+    <div>
       <button onClick={() => setMessageView(false)}>
         <h3>Posts</h3>
       </button>

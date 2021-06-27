@@ -27,8 +27,6 @@ const MainPage = (props) => {
         <GroupView {...props} />
       </div>
 
-      
-
       <div className='postsList'>
         <div className="group-view-modal">
           <button className="group-view-modal-btn">
