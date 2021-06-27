@@ -1,10 +1,10 @@
 .group-page-container {
   margin: 0 auto;
-  margin-top: 20px;
   width: 80%;
   height: 100vh;
   display: flex;
   flex-direction: row;
+  padding-top: 100px;
 }
 
 .group-page-detail {

@@ -28,12 +28,6 @@ const MainPage = (props) => {
       </div>
 
       <div className='postsList'>
-        {/* <div className="group-view-modal">
-          <button className="group-view-modal-btn">
-            Popular Groups
-          </button>
-        </div> */}
-
         <div className='postForm' style={isLoggedIn === true ? { display: 'block' } : { display: 'none' }}>
           <PostForm {...props} />
         </div>

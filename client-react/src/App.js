@@ -32,7 +32,7 @@ import MainPage from "./components/mainPage/mainPage";
 import Login from "./components/login/login";
 import SignUp from "./components/signup/signup";
 import Profile from './components/profile/profile'
-import Navigation from "./components/navigation/nav";
+import Navigation from "./components/navigation/NavBar";
 import GroupPage from "./components/groupPage/groupPage";
 
 function _App(props) {
