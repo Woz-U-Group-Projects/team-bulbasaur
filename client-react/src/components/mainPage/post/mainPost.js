@@ -76,7 +76,7 @@ const Post = (props) => {
           </div>
             
           <div>
-            <FontAwesomeIcon icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
+            <FontAwesomeIcon className="main-post-comment-icon" icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
           </div>
         </div>
         <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} commentList={commentList} />

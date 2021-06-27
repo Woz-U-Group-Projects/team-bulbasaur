@@ -7,7 +7,7 @@
 
 .owner-info {
     width: 50%;
-    height: 160px;
+    height: 180px;
     margin-right: 5px;
     border-radius: 10px;
     box-shadow:
@@ -24,6 +24,7 @@
 
 .group-description {
     width: 50%;
+    height: 180px;
     margin-left: 5px;
     border-radius: 10px;
     box-shadow:
@@ -40,7 +41,7 @@
 }
 
 .group-vote-btn {
-    margin-top: 25px;
+    margin-top: 45px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -104,7 +105,7 @@
 }
 
 .description-view {
-    height: 80px;
+    height: 100px;
     word-wrap: break-word;
 }
 
@@ -132,7 +133,6 @@
     font-size: 10px;
     font-weight: 400;
     line-height: 1;
-    /* margin-left: 70px; */
     padding: 1.2em 2.8em;
     text-decoration: none;
     text-align: center;

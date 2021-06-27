@@ -1,17 +1,24 @@
 import React from 'react'
 import MemberSection from './section/section'
-import User from './section/user/user';
 
+import './memberView.css'
+;
 const MemberView = props => {
   let { selectedGroup } = props
 
   return (
     <div>
-      <h3>Group Members</h3>
-      <div>
-        <MemberSection {...props} title='Owner' members={selectedGroup.users.filter(user => user.membership === 'Owner')} />
-        <MemberSection {...props} title='Admins' members={selectedGroup.users.filter(user => user.membership === 'Admin')} />
-        <MemberSection {...props} title='Members' members={selectedGroup.users.filter(user => user.membership === 'Member')} />
+      <h1>Group Members</h1>
+      <div className="group-member-container">
+        <div className="owner-section">
+          <MemberSection {...props} title='Owner' members={selectedGroup.users.filter(user => user.membership === 'Owner')} />
+        </div>
+        <div className="admins-section">
+          <MemberSection {...props} title='Admins' members={selectedGroup.users.filter(user => user.membership === 'Admin')} />
+        </div>
+        <div className="members-section">
+          <MemberSection {...props} title='Members' members={selectedGroup.users.filter(user => user.membership === 'Member')} />
+        </div>
       </div>
     </div>
   )

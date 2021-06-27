@@ -79,3 +79,7 @@
     color: red;
 }
 
+.profile-posts-wrapper p, h4 {
+    word-wrap: break-word;
+}
+

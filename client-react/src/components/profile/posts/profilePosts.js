@@ -40,7 +40,7 @@ const ProfilePosts = (props) => {
       </div>
 
       <div className="profile-posts-body">
-        <div>
+        <div className="profile-posts-wrapper">
           <h4>{post.title}</h4>
           <p>{post.body}</p>
         </div>

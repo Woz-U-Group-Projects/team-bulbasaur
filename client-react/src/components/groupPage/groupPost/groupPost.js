@@ -29,7 +29,7 @@ const GroupPost = (props) => {
     <div className='group-post-wrapper'>
       <div className='group-post-detail'>
         <div className='group-userName'>
-          <div>
+          <div className="user-link">
             <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
               <h3>{post.author.userName}</h3>
             </Link>
@@ -79,7 +79,7 @@ const GroupPost = (props) => {
           </div>
 
           <div>
-            <FontAwesomeIcon icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
+            <FontAwesomeIcon className="comment-icon" icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
           </div>
         </div>
 
