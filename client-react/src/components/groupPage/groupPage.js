@@ -37,7 +37,7 @@ const GroupPage = (props) => {
         <div className="group-page-detail">
           <div className="group-page-owner">
             {/* group details */}
-            <GroupDetails {...props} isOwner={isOwner} owner={owner} />
+            <GroupDetails {...props} isOwner={isOwner} owner={owner} isMember={isMember} />
           </div>
 
           <div className="group-posts-view">
