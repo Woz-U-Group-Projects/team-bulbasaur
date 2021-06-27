@@ -37,6 +37,17 @@ header .logo-text span {
     font-size: 20px;
 }
 
+.user{
+    text-decoration: none;
+    color: white;
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.NavBar nav ul .groups{
+    display: none;
+}
+
 .NavBar nav ul li a:hover {
     border-bottom: 5px solid rgb(216, 58, 216);
 }
@@ -74,6 +85,18 @@ header .logo-text span {
 
     .NavBar nav ul li {
         padding-left: 15%;
+    }
+
+    .NavBar nav ul .groups{
+        text-decoration: none;
+        color: white;
+        font-weight: 900;
+        font-size: 20px;
+    }
+
+    .groups:hover{
+        border-bottom: none;
+        color: rgb(216, 58, 216);
     }
 
     .NavBar {

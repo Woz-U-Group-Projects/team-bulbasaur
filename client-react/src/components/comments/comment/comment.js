@@ -23,7 +23,7 @@ const Comment = (props) => {
     <div key={comment.id} className="comment-view-container">
       <div className="comment-body">
         <p>{comment.body} -</p>  
-        <Link className="link-profile" onClick={() => onGetProfile(comment.author.id)} to={`/profile`}>
+        <Link className="link-profile" onClick={() => onGetProfile(comment.authorId)} to={`/profile`}>
           <h5>{comment.author}</h5>
         </Link>
       </div>

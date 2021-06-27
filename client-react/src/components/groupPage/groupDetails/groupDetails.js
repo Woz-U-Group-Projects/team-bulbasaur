@@ -8,7 +8,9 @@ import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCom
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 const GroupDetails = props => {
-  let { isOwner, selectedGroup, owner, onUpdateGroupVotes, isMember, onJoinGroup, onLeaveGroup, onDisbandGroup, loggedInUser } = props
+  let { 
+    isOwner, selectedGroup, owner, onUpdateGroupVotes, isMember, onJoinGroup, onLeaveGroup, onDisbandGroup, loggedInUser, isLoggedIn 
+  } = props
 
   let [formView, setView] = useState(false)
 
@@ -41,7 +43,7 @@ const GroupDetails = props => {
 
             <div>
               <button className="group-button-join"
-                onClick={()=>onJoinGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
+                onClick={isLoggedIn?()=>onJoinGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id}):()=>alert('Must Be Logged In To Join A Group')}
                 style={isMember?{display:'none'}:{display:'inline'}} 
               >
                 Join

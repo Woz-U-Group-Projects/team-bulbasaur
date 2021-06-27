@@ -8,17 +8,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 
 const User = props => {
   let {
-    user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser, 
-    onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner
+    user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser,
+    onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner, isLoggedIn
   } = props
 
   library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
 
   let [isFriend, checkFreindShip] = useState(false)
   let [buttonView, setButtonView] = useState(false)
-  
+
   useEffect(() => {
-    checkFreindShip(loggedInUser?loggedInUser.friends.filter(friend => friend.id === user.id ).length>0?true:false:false)
+    checkFreindShip(loggedInUser ? loggedInUser.friends.filter(friend => friend.id === user.id).length > 0 ? true : false : false)
     setButtonView(false)
   }, [loggedInUser, user])
 
@@ -30,8 +30,8 @@ const User = props => {
         </div>
 
         <div className="group-members-control-btn">
-          <div style={buttonView?{display:'block'}:{display:'inline'}}>
-            <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
+          <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
+          <div style={buttonView?{display:'block'}:{display:'none'}}>
             <button
               style={
                 loggedInUser && ((loggedInUser.id === user.id) || isFriend )?
@@ -57,6 +57,7 @@ const User = props => {
               >Make Admin</button>
           </div>
         </div>
+      
       </div>
 
     </div>
