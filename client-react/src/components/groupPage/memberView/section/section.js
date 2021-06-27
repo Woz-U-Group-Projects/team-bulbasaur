@@ -6,7 +6,7 @@ const MemberSection = props => {
 
   return (
     <div>
-      <h4>{title}:</h4>
+      <h4>{title} of the group:</h4>
       {members ? members.map(user => (
         <User  key={user.id} {...props} user={user} />
       )) : null}

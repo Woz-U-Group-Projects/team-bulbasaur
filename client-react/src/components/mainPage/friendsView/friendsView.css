@@ -33,9 +33,8 @@
 
 .friends-pending {
     margin: 10px;
-    height: 220px;
-    overflow-y: auto;
-    border-bottom: 1px solid rgb(233, 227, 227);
+    height: 100%;
+    
 }
 
 .friends-request-notification {
@@ -56,9 +55,16 @@
 }
 
 .friends-list {
-    height: 30em;
+    height: 28em;
     margin: 10px;
     overflow-y: auto;
+}
+
+.pending-list {
+    height: 15em;
+    margin: 10px;
+    overflow-y: auto;
+    border-bottom: 1px solid rgb(233, 227, 227);
 }
 
 .friends {

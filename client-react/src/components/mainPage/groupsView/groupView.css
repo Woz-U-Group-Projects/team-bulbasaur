@@ -1,4 +1,5 @@
 .groupview-container {
+    width: 100%;
 }
 
 .group-add {
@@ -54,4 +55,8 @@
 
 .group-vote {
     font-size: 12px;
+}
+
+@media (max-width: 990) {
+    
 }

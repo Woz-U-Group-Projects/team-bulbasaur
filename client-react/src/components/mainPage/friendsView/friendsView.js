@@ -33,7 +33,7 @@ const FriendsView = (props) => {
           </div>
 
           <div className="friends-pending" style={friendView ? { display: 'none' } : { display: 'block' }}>
-            <div className="scrollable" >
+            <div className="pending-list" >
               <h2>Pending Friends</h2>
               {pending ? pending.map(user => (
                 <div key={user.id} className="friends-request-notification">
@@ -64,7 +64,7 @@ const FriendsView = (props) => {
               )) : <span>loading...</span>}
             </div>
 
-            <div className="scrollable" >
+            {/* <div className="scrollable" > */}
               <div className="friends-list">
                 <h2>Friends List</h2>
                 {friends ? friends.map(user => (
@@ -74,8 +74,7 @@ const FriendsView = (props) => {
                   </div>
                 )) : null}
               </div>
-            </div>
-
+            {/* </div> */}
           </div>
 
           <div style={friendView ? { display: 'block' } : { display: 'none' }} className="incoming-request-wrapper">

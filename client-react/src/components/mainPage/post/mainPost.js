@@ -5,7 +5,7 @@ import EditPostForm from '../../forms/editPostForm/editPostForm'
 import './mainPost.css';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { faUser,faUsers, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 const Post = (props) => {
@@ -22,7 +22,7 @@ const Post = (props) => {
     setList(post.comments)
   }, [post])
 
-  library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
+  library.add(faUser,faUsers, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
 
   return (
     <div className='main-post-wrapper'>
