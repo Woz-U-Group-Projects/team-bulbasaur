@@ -6,7 +6,7 @@ const NavBar = (props) => {
     return (
         <div className="NavBar">
             <Navigation {...props} />
-            <MobileNavigation />
+            <MobileNavigation {...props} />
         </div>
     )
 }

@@ -67,7 +67,7 @@ const mapUser = (data) => {
       groupName: group.GroupName,
       discription: group.Discription,
       likes: group.Likes,
-      diskiles: group.Dislikes,
+      dislikes: group.Dislikes,
       private: group.IsPrivate
     })),
     posts: data.posts.map(post => ({
@@ -212,6 +212,7 @@ export const sendToken = async () => {
   try {
     const req = await authAxios.get('/users/api/login')
     const res = await req.data
+    console.log(res)
     if (res.status) {
       const user = mapUser(res.data)
       return { status: res.status, data: user }
@@ -418,6 +419,7 @@ export const deleteCommentCompleted = (data) => ({
 const getProfileById = async (userId) => {
   const req = await authAxios.get(`/users/api/profile/${userId}`)
   const res = await req.data
+  console.log(res)
   const profile = mapUser(res.data)
   return profile
 }

@@ -62,7 +62,10 @@ router.delete('/api/:commentId', (req, res, next) => {
   }).then(result => {
     if (result) {
       models.posts.findAll({
-        where: { Visible: 0 },
+        where: {[Op.and]: [
+          { Visible: 0 },
+          { GroupId: 0}
+        ]},
         include: [
           {
             model: models.users,

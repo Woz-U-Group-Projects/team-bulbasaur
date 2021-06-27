@@ -8,6 +8,7 @@ const valitade = yup.object({
 
 const EditGroupDescription = (props) => {
   let { group, setView, onEditGroupDescription } = props
+
   const formik = useFormik({
     initialValues: {
       groupId: group.groupId,
@@ -29,10 +30,10 @@ const EditGroupDescription = (props) => {
         </div>
 
         <div className='edit-form-body'>
-          <label htmlFor='description'></label>
+          <label htmlFor='discription'></label>
           <textarea
-            id='description'
-            name='description'
+            id='discription'
+            name='discription'
             value={formik.values.discription}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}

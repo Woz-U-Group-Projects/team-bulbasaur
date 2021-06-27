@@ -40,7 +40,10 @@ const Post = (props) => {
               </Link>
             </div>
             <div className="svg-icons">
-              <FontAwesomeIcon onClick={() => onAddFriend({recieverId:post.author.id})} className="user-plus-icon" icon="user-plus" />
+              <FontAwesomeIcon 
+                onClick={() => isLoggedIn?onAddFriend({recieverId:post.author.id}):alert("Must Be Logged In To Add Friends")} 
+                className="user-plus-icon" icon="user-plus" 
+              />
             </div>
             <div className="svg-icons">
               {isLoggedIn && post.author.id === loggedInUser.id ? <FontAwesomeIcon icon="edit" onClick={() => setEditModal(true)} /> : null} 

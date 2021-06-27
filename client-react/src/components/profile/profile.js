@@ -13,8 +13,8 @@ const Profile = (props) => {
 
   library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots, faUserCircle);
 
-  useEffect(()=>{
-    return ()=>{
+  useEffect(() => {
+    return () => {
       onCleanUpProfile()
     }
   }, [onCleanUpProfile])
@@ -26,7 +26,7 @@ const Profile = (props) => {
           <div className="profile-header">
             <div className="profile-detail">
               <div className="user-name">
-                <FontAwesomeIcon  className="user-icon-profile" icon="user-circle" />
+                <FontAwesomeIcon className="user-icon-profile" icon="user-circle" />
                 <h1>{profile.name}</h1>
               </div>
               <h2>User Name: {profile.userName}</h2>
@@ -38,7 +38,20 @@ const Profile = (props) => {
               <ProfilePostForm {...props} userId={profile.id} />
             </div>
           </div>
-          
+
+          <div>
+            <h3>Groups:</h3>
+            <div>
+              {loggedInUser ? loggedInUser.groups.map(group => (
+                <div>
+                  <h3>{group.groupName}</h3>
+                  <div>Likes: {group.likes}</div>
+                  <div>Dislikes: {group.dislikes}</div>
+                </div>
+              )) : null}
+            </div>
+          </div>
+
           <div className="profile-posts">
             {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.map(post => (
               <ProfilePosts {...props} key={post.id} userId={profile.id} post={post} />
@@ -58,7 +71,7 @@ const Profile = (props) => {
             ))}
           </div>
         </div>
-        : 
+        :
         <span>Loading Profile...</span>}
     </div>
   )

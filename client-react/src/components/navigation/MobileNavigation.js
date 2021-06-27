@@ -4,7 +4,7 @@ import {CgMenuRound} from 'react-icons/cg';
 import {CgCloseO} from 'react-icons/cg';
 import {useState} from 'react';
 
-const MobileNavigation = () => {
+const MobileNavigation = (props) => {
 
     const [open, setOpen] = useState(false);
 
@@ -26,7 +26,7 @@ const MobileNavigation = () => {
     return (
         <nav className="mobile-navigation">
             {open ? closeIcon : hamburgerIcon}    
-            {open && <NavLinks isMobile={true} closeMobileMenu={closeMobileMenu}/> }
+            {open && <NavLinks {...props} isMobile={true} closeMobileMenu={closeMobileMenu}/> }
         </nav>
     )
 }
