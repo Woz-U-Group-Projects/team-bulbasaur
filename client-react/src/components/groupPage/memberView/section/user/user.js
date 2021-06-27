@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
+import './user.css';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
 const User = props => {
   let {
     user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser,
     onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner, isLoggedIn
   } = props
+
+  library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
 
   let [isFriend, checkFreindShip] = useState(false)
   let [buttonView, setButtonView] = useState(false)
@@ -16,41 +24,42 @@ const User = props => {
 
   return (
     <div>
-      <div>
-        <h3>{user.userName}</h3>
-        <button onClick={() => setButtonView(prevView => !prevView)}>options</button>
-        <ul style={buttonView ? { display: 'block' } : { display: 'none' }}>
-          <li style={
-            loggedInUser && ((loggedInUser.id === user.id) || isFriend) ?
-              { display: 'none' } : { display: 'block' }
-          }>
+      <div className="owner-group-section">
+        <div>
+          <h3>{user.userName}</h3>
+        </div>
+
+        <div className="group-members-control-btn">
+          <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
+          <div style={buttonView?{display:'block'}:{display:'none'}}>
             <button
-              onClick={isLoggedIn?() => onAddFriend({recieverId: user.id}):()=>alert("Must Be Logged In To Add Friends")}
-            >Add Friend</button>
-          </li>
-          <li style={isOwner && isAdmin ? { display: 'block' } : { display: 'none' }}>
+              style={
+                loggedInUser && ((loggedInUser.id === user.id) || isFriend )?
+                { display: 'none' } : { display: 'inline' }
+              }
+              onClick={() => onAddFriend({recieverId:user.id})}
+              >Add Friend</button>
             <button
-              style={isOwner && isAdmin ? { display: 'block' } : { display: 'none' }}
+              style={isOwner&&isAdmin?{display:'inline'}:{display:'none'}}
               onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}
-            >Remove</button>
-          </li>
-          <li style={user.membership === 'Admin' && isOwner ? { display: 'block' } : { display: 'none' }}>
+              >Remove</button>
             <button
+              style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
               onClick={() => onRemoveGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-            >Make Member</button>
-          </li>
-          <li style={user.membership === 'Admin' && isOwner ? { display: 'block' } : { display: 'none' }}>
+              >Make Member</button>
             <button
               onClick={() => onTransferGroupOwner({ userId: user.id, groupId: selectedGroup.groupId })}
-            >Make Owner</button>
-          </li>
-          <li style={user.membership === 'Member' && isOwner ? { display: 'block' } : { display: 'none' }}>
+              style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
+              >Make Owner</button>
             <button
               onClick={() => onMakeGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-            >Make Admin</button>
-          </li>
-        </ul>
+              style={user.membership === 'Member' && isOwner ? { display: 'inline' } : { display: 'none' }}
+              >Make Admin</button>
+          </div>
+        </div>
+      
       </div>
+
     </div>
   )
 }

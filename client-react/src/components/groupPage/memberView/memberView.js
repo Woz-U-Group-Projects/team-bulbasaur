@@ -8,7 +8,7 @@ const MemberView = props => {
 
   return (
     <div>
-      <h1>Group Members</h1>
+      <h2>Group Members</h2>
       <div className="group-member-container">
         <div className="owner-section">
           <MemberSection {...props} title='Owner' members={selectedGroup.users.filter(user => user.membership === 'Owner')} />
