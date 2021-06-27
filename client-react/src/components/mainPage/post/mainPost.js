@@ -28,10 +28,10 @@ const Post = (props) => {
     <div className='main-post-wrapper'>
       <div className='post-detail'>
         <div className='userName'>
-          <div>
-            <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
+          <div className="user-profile">
+            {/* <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}> */}
               <h3>{post.author.userName}</h3>
-            </Link>
+            {/* </Link> */}
           </div>
           <div className='control-group'>
             <div className="svg-icons">
@@ -51,17 +51,17 @@ const Post = (props) => {
           </div>
         </div>
 
-        <div className='post-body'>
-          <div>
+        <div className='post-body-wrapper'>
+          <div className="post-body" >
             <h4>{post.title}</h4>
             <p>{post.body}</p>
           </div>
           <div style={editModal ? {display: 'block'} : {display: 'none'}}>
             <EditPostForm {...props} setEditModal={setEditModal} post={post} />
           </div>
-          <div>
+          {/* <div>
             {isLoggedIn && post.author.id === loggedInUser.id ? <p>Private: {post.isHidden === 0 ? 'false' : 'true'}</p> : null}
-          </div>
+          </div> */}
         </div>
 
         <div className='post-vote'>
@@ -76,7 +76,7 @@ const Post = (props) => {
           </div>
             
           <div>
-            <FontAwesomeIcon icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
+            <FontAwesomeIcon className="main-post-comment-icon" icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
           </div>
         </div>
         <CommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} commentList={commentList} />

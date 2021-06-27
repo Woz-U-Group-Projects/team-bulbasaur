@@ -22,22 +22,29 @@ const EditGroupDescription = (props) => {
   })
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor='discription'>Edit Description: </label><br />
-        <textarea
-          id='discription'
-          name='discription'
-          value={formik.values.discription}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        ></textarea>
-      </div>
-      <div>
-        <button type='submit'>Submit</button>
-        <button type='button' onClick={() => setView(false)}>Cancel</button>
-      </div>
-    </form>
+    <div className='modal'>
+      <form onSubmit={formik.handleSubmit} className='edit-form-wrapper'>
+        <div className='edit-form-title'>
+          <p>Description</p>
+        </div>
+
+        <div className='edit-form-body'>
+          <label htmlFor='description'></label>
+          <textarea
+            id='description'
+            name='description'
+            value={formik.values.discription}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          ></textarea>
+        </div>
+
+        <div className='edit-form-btn'>
+          <button className='edit-form-cancel-btn' type='button' onClick={() => setView(false)}>Cancel</button>
+          <button className='edit-form-submit-btn' type='submit'>Submit</button>
+        </div>
+      </form>
+    </div>
   )
 }
 

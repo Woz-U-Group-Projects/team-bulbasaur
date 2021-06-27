@@ -1,6 +1,7 @@
 .profile-container {
     display: flex;
     justify-content: center;
+    padding-top: 90px;
 }
 
 .profile-wrapper {

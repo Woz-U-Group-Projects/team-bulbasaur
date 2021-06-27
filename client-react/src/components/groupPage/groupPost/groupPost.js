@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import GroupCommentView from './groupCommentView/groupCommentView'
-import EditGroupPostForm from '../../forms/editGroupPostForm/editGroupPostForm'
+import EditGroupPostForm from '../../forms/editGroupPostForm/editGroupPostForm';
+
+import './groupPost.css';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
 
 const GroupPost = (props) => {
   let { post, onUpdateGroupPostVotes, isLoggedIn, loggedInUser, onDeleteGroupPost, onGetProfile, selectedGroup, isOwner } = props
@@ -17,75 +23,67 @@ const GroupPost = (props) => {
     setList(post.comments)
   }, [post])
 
+  library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
+
   return (
-    <div className='main-post-wrapper'>
-      <div className='post-detail'>
-        <div className='userName'>
-          <h3>{post.author.userName}</h3>
-        </div>
+    <div className='group-post-wrapper'>
+      <div className='group-post-detail'>
+        <div className='group-userName'>
+          <div className="user-link">
+            <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
+              <h3>{post.author.userName}</h3>
+            </Link>
+          </div>
 
-        <div>
-          <h4>{post.title}</h4>
-          <p>{post.body}</p>
-          <div style={editModal ? {display: 'block'} : {display: 'none'}}>
-            <EditGroupPostForm groupId={selectedGroup.groupId} {...props} setEditModal={setEditModal} post={post} />
+          <div className='group-post-control-group'>
+            <div className="svg-icons">
+              <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
+                <FontAwesomeIcon className="user-icon" icon="user" />
+              </Link>
+            </div>
+            <div className="svg-icons">
+              <FontAwesomeIcon className="user-plus-icon" icon="user-plus" />
+            </div>
+            <div className="svg-icons">
+              {isLoggedIn && post.author.id === loggedInUser.id ? <FontAwesomeIcon icon="edit" onClick={() => setEditModal(true)} /> : null}
+            </div>
+            <div className="svg-icons">
+              {(isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) || isOwner ? <FontAwesomeIcon onClick={() => onDeleteGroupPost({ postId: post.id, groupId: selectedGroup.groupId })} className="trash-icon" icon="trash-alt" /> : null}
+            </div>
           </div>
         </div>
 
-        <div>
+        <div className="group-post-body-wrapper">
+          <div className="group-post-body">
+            <h4>{post.title}</h4>
+            <p>{post.body}</p>
+          </div>
           <div>
-            {
-              (isLoggedIn && loggedInUser.admin === 1) || (isLoggedIn && post.author.id === loggedInUser.id) || isOwner ? 
-              <button onClick={() => onDeleteGroupPost({postId:post.id,groupId:selectedGroup.groupId})}>Delete</button> : null
-            }
-            {isLoggedIn && post.author.id === loggedInUser.id ? <button onClick={() => setEditModal(true)}>Edit</button> : null}
-          </div>
-          <div>
-            <button onClick={() => onUpdateGroupPostVotes({
-              type: 'likes',
-              groupId: selectedGroup.groupId,
-              postId: post.id,
-              likes: likes
-            })}>
-              <div>Likes</div>
-              <div>{likes}</div>
-            </button>
-            <button onClick={() => onUpdateGroupPostVotes({
-              type: 'dislikes',
-              groupId: selectedGroup.groupId,
-              postId: post.id,
-              dislikes: dislikes
-            })}>
-              <div>dislikes</div>
-              <div>{dislikes}</div>
-            </button>
-            <button
-              onClick={() => setView(!commentView)}
-            >
-              <div>Comments</div>
-              <div>{commentList.length}</div>
-            </button>
+            <div style={editModal ? { display: 'block' } : { display: 'none' }}>
+              <EditGroupPostForm groupId={selectedGroup.groupId} {...props} setEditModal={setEditModal} post={post} />
+            </div>
           </div>
         </div>
-        <GroupCommentView 
-          {...props} 
-          commentView={commentView} 
-          postId={post.id} 
-          postAuthor={post.authorId} 
-          groupId={selectedGroup.groupId} 
-          commentList={commentList} 
-        />
-      </div>
 
-      <div className='post-control'>
-        <div>
-          <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}>
-            <button>Profile</button>
-          </Link>
+        <div className='post-vote'>
+          <div className="votes">
+            <div className="thumbs-up">
+              <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateGroupPostVotes({type: 'likes', groupId: selectedGroup.groupId, postId: post.id, likes: likes})} /> 
+              <span>{likes}</span>
+            </div>
+              <div className="thumbs-down">
+                <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateGroupPostVotes({type: 'dislikes', groupId: selectedGroup.groupId, postId: post.id,
+                dislikes: dislikes})} />
+              <div className="vote-count">{dislikes}</div>
+            </div>
+          </div>
+
+          <div>
+            <FontAwesomeIcon className="comment-icon" icon="comment-dots" onClick={() => setView(!commentView)} /> {commentList.length}
+          </div>
         </div>
-        <div>
-          <button>Add Friend</button>
-        </div>
+
+        <GroupCommentView {...props} commentView={commentView} postId={post.id} postAuthor={post.authorId} groupId={selectedGroup.groupId} commentList={commentList}/>
       </div>
     </div>
   )

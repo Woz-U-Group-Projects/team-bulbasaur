@@ -1,57 +1,17 @@
-/* .container{
-  border: solid 1px black;
-}
-
-.usersList{
-  height: 82vh;
-  overflow-y: auto;
-}
-
-.toLeft{
-  width: 68%; 
-  float: left;
-}
-
-.toRight{
-  width: 28%;
-  float: right;
-}
-
-.info{
-  float: left;
-  width: 70%;
-}
-
-.form{
-  height: 160px;
-  float: right;
-  width: 30%;
-  border: solid 1px black;
-}
-
-.buttons{
-  display: flex;
-  float: left;
-  width: 70%;
-  justify-content: space-between;
-  padding: 5px;
-} */
-
 .group-page-container {
-  border: 1px solid red;
   margin: 0 auto;
-  margin-top: 20px;
   width: 80%;
   height: 100vh;
   display: flex;
   flex-direction: row;
+  padding-top: 100px;
 }
 
 .group-page-detail {
-  border: 1px solid blue;
   width: 70%;
-  height: 100vh;
+  height: 100%;
   display: flex;
+  margin-right: 10px;
   flex-direction: column;
 }
 
@@ -61,8 +21,16 @@
 }
 
 .group-page-members {
-  border: 1px solid green;
   width: 30%;
-  height: 100vh;
+  height: 100%;
+  margin-left: 15px;
+  box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+  padding: 15px;
 }
 

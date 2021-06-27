@@ -27,18 +27,11 @@ const MainPage = (props) => {
         <GroupView {...props} />
       </div>
 
-      
-
       <div className='postsList'>
-        <div className="group-view-modal">
-          <button className="group-view-modal-btn">
-            Popular Groups
-          </button>
-        </div>
-
         <div className='postForm' style={isLoggedIn === true ? { display: 'block' } : { display: 'none' }}>
           <PostForm {...props} />
         </div>
+
         <div className='posts'>
           {postList.length === 0 ? <p>no posts have been made yet</p> : postList.map(post => {
             return <Post {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />

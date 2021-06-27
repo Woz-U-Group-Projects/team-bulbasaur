@@ -2,6 +2,7 @@
     width: 100%;
     height: auto;
     margin-bottom: 20px;
+    
     display: flex;
     justify-content: column;
     background-color: #fff;
@@ -47,11 +48,16 @@
 
 .svg-icons {
     margin-left: 15px;
+    cursor: pointer;
 }
 
-.post-body {
+.post-body-wrapper {
     height: auto;
     margin-top: 15px;
+}
+
+.post-body p {
+    word-wrap: break-word;
 }
 
 .post-vote {
@@ -89,4 +95,16 @@
 
 .trash-icon {
     color: red;
+}
+
+.user-profile a {
+    text-decoration: none;
+}
+
+.thumbs-up {
+    cursor: pointer;
+}
+
+.main-post-comment-icon {
+    cursor: pointer;
 }

@@ -23,9 +23,13 @@ const EditGroupPostForm = ({ setEditModal, post, onEditGroupPost, groupId }) => 
 
   return (
     <div className='modal'>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor='body'><p>Edit Post:</p></label>
+      <form onSubmit={formik.handleSubmit} className='edit-form-wrapper'>
+        <div className='edit-form-title'>
+          <p>Title: {post.title}</p>
+        </div>
+
+        <div className='edit-form-body'>
+          <label htmlFor='body'></label>
           <textarea
             name='body'
             id='body'
@@ -37,9 +41,10 @@ const EditGroupPostForm = ({ setEditModal, post, onEditGroupPost, groupId }) => 
           ></textarea>
           {formik.touched.body && formik.errors.body ? <div>{formik.errors.body}</div> : null}
         </div>
-        <div>
-          <button type="button" onClick={() => setEditModal(false)}>Cancel</button>
-          <button type='submit' >Submit</button>
+
+        <div className='edit-form-btn'>
+          <button className='edit-form-cancel-btn' type="button" onClick={() => setEditModal(false)}>Cancel</button>
+          <button className='edit-form-submit-btn' type='submit' >Submit</button>
         </div>
       </form>
     </div>
