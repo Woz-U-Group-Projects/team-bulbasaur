@@ -2,10 +2,10 @@ import React from 'react';
 import Navigation from './Navigation'
 import MobileNavigation from './MobileNavigation'
 
-const NavBar = () => {
+const NavBar = (props) => {
     return (
         <div className="NavBar">
-            <Navigation />
+            <Navigation {...props} />
             <MobileNavigation />
         </div>
     )

@@ -5,18 +5,22 @@ const User = props => {
     user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser, 
     onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner
   } = props
+
   let [isFriend, checkFreindShip] = useState(false)
+  let [buttonView, setButtonView] = useState(false)
+  
   useEffect(() => {
     checkFreindShip(loggedInUser?loggedInUser.friends.filter(friend => friend.id === user.id ).length>0?true:false:false)
+    setButtonView(false)
   }, [loggedInUser, user])
 
   return (
     <div>
       <div>
         <h3>{user.userName}</h3>
-        <button>options</button>
+        <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
       </div>
-      <div>
+      <div style={buttonView?{display:'block'}:{display:'inline'}}>
         <div>
           <button
             style={

@@ -249,32 +249,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedGroup: action.payload
       }
-    case 'ADD_FRIEND_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    case 'CANCEL_FRIEND_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    case 'ACCEPT_REQUEST_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    case 'DENY_REQUEST_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    case 'CONFIRM_NOTIFICATION_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    case 'REMOVE_FRIEND_COMPLETED':
+    case 'EDIT_FRIENDS_COMPLETED':
       return {
         ...state,
         loggedInUser: action.payload

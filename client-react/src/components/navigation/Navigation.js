@@ -1,10 +1,10 @@
 import React from 'react';
 import NavLinks from './NavLinks';
 
-const Navigation = () => {
+const Navigation = (props) => {
     return (
         <nav className="navigation">
-            <NavLinks />
+            <NavLinks {...props} />
         </nav>
     )
 }
