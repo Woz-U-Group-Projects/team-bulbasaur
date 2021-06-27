@@ -205,6 +205,7 @@ const mapGroup = data => {
   }
   return group
 }
+
 // basic actions for applications =====================================================================================
 
 export const sendToken = async () => {

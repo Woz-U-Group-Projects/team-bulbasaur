@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import './NavBar.css'
 
 
-const NavLinks = ({isLoggedIn, onLogout, onGetProfile, loggedInUser, isMobile, closeMobileMenu}) => {
+const NavLinks = (props) => {
+    let {isLoggedIn, onLogout, onGetProfile, loggedInUser, isMobile, closeMobileMenu} = props
 
     let[isUserLoggedIn, setUserLoggedIn] = useState();
   

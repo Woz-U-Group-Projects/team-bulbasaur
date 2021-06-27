@@ -18,7 +18,7 @@ const User = props => {
     <div>
       <div>
         <h3>{user.userName}</h3>
-        <button onClick={()=>setButtonView(!buttonView)}>options</button>
+        <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
       </div>
       <div style={buttonView?{display:'block'}:{display:'inline'}}>
         <div>
