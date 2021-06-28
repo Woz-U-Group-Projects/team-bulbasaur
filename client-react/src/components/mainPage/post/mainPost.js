@@ -29,9 +29,7 @@ const Post = (props) => {
       <div className='post-detail'>
         <div className='userName'>
           <div className="user-profile">
-            {/* <Link onClick={() => onGetProfile(post.author.id)} to={`/profile`}> */}
-              <h3>{post.author.userName}</h3>
-            {/* </Link> */}
+            <h3>{post.author.userName}</h3>
           </div>
           <div className='control-group'>
             <div className="svg-icons">

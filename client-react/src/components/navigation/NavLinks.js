@@ -19,15 +19,13 @@ const NavLinks = (props) => {
 
     return (
         <header>
+            <div className='logo'>
+                <h1 className="logo-text"><span>Digi</span>Chat</h1>
+            </div>
             <nav>
                 <ul id='nav'>
-                    <li className='logo'>
-                        <h1 className="logo-text"><span>Digi</span>Chat</h1>
-                    </li>
-                    <li className='user' style={loggedInUser?{display:'inline'}:{display:'none'}}>
-                        <FontAwesomeIcon className="user-icon-profile" icon="user-circle" />
-                        {loggedInUser?loggedInUser.userName:null}
-                    </li>
+
+
                     <li className='profile' onClick={() => isMobile && closeMobileMenu()}>
                         <Link to='/'>Home</Link>
                     </li>
@@ -44,12 +42,16 @@ const NavLinks = (props) => {
                                 <Link to='/login'>Login</Link>
                         }
                     </li>
-                    
-                    <li className="groups"
-                        onClick={()=>alert()}
-                    >Groups</li>
+
+                    {/* <li className="groups"
+                        onClick={() => alert()}
+                    >Groups</li> */}
                 </ul>
             </nav>
+            <div className='user' style={loggedInUser ? { display: 'inline' } : { display: 'none' }}>
+                <FontAwesomeIcon className="online-user-icon" icon="user-circle" />
+                {loggedInUser ? loggedInUser.userName : null}
+            </div>
         </header>
     )
 }
