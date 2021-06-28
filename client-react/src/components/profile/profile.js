@@ -32,14 +32,14 @@ const Profile = (props) => {
               <h2>User Name: {profile.userName}</h2>
               <h3> Email: {profile.email}</h3>
               <h3>Total posts: 0</h3>
-              <h3>Group: </h3>
+              <h3>Group: {loggedInUser ? loggedInUser.groups.map(group => <p>{group.groupName}, </p>) : null}</h3>
             </div>
             <div className="profile-post-form">
               <ProfilePostForm {...props} userId={profile.id} />
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <h3>Groups:</h3>
             <div>
               {loggedInUser ? loggedInUser.groups.map(group => (
@@ -50,7 +50,7 @@ const Profile = (props) => {
                 </div>
               )) : null}
             </div>
-          </div>
+          </div> */}
 
           <div className="profile-posts">
             {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.map(post => (
