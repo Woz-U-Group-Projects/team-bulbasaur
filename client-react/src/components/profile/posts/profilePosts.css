@@ -1,0 +1,85 @@
+.profile-posts-container {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #fff;
+    padding: 0;
+    border: none;
+    border-radius: 10px;
+    padding: 0 15px;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.profile-posts-username {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.profile-posts-control-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.svg-icons {
+    margin-left: 15px;
+}
+
+.profile-posts-body {
+    height: auto;
+    margin-top: 15px;
+}
+
+.profile-posts-votes {
+    width: 100%;
+    height: 45px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-votes {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.thumbs-down {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.thumbs-down-icon {
+    margin-right: 5px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.user-icon {
+    color: black;
+}
+
+.trash-icon {
+    color: red;
+}
+
+.profile-posts-wrapper p, h4 {
+    word-wrap: break-word;
+}
+

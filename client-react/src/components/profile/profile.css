@@ -1,0 +1,91 @@
+.profile-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 90px;
+}
+
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60%;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.profile-detail {
+    width: 100%;
+    height: 200px;
+    margin-right: 5px;
+    padding: 10px;
+    display: flex;
+    background-color: #eaeaea;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.user-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-icon-profile {
+    font-size: 30px;
+    margin-right: 15px;
+    color: #0E94A0;
+}
+
+.profile-post-form {
+    width: 100%;
+    height: 200px;
+    margin-left: 5px;
+}
+
+.profile-posts {
+    margin: 0;
+}
+
+@media (min-width: 481px) and (max-width: 789px) {
+    .profile-wrapper {
+        width: 80%;
+    }
+
+    .profile-header {
+        flex-wrap: wrap;
+    }
+
+    .profile-post-form {
+        margin: 0;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-wrapper {
+        width: 80%;
+    }
+
+    .profile-header {
+        flex-wrap: wrap;
+    }
+
+    .profile-post-form {
+        margin: 0;
+        margin-top: 10px;
+    }
+}
