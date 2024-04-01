@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "Muddhawg1!",
+    "password": "Muddhawg1",
     "database": "digichat",
     "host": "127.0.0.1",
     "dialect": "mysql"
