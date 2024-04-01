@@ -1,41 +1,40 @@
-const jwt = require('jsonwebtoken')
-const models = require('../models')
-var bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+/**
+ * @typedef {Object} tokenData
+ * @property {number} userId
+ * @property {string} email
+ * @property {string} password
+ * @property {number} admin
+ */
 
 var authService = {
-  signUser: function (user) {
-    const token = jwt.sign({
-      UserId: user.UserId,
-      FullName: user.FullName,
-      Admin: user.Admin
-    }, 'secretKey',
-    {
-      expiresIn: '4h'
-    })
-
-    return token
-  },
-  verifyUser: function(token){
-    try{
-      let decoded = jwt.verify(token, 'secretKey')
-      return models.users.findByPk(decoded.UserId)
-    } catch(err){
-      if(err instanceof jwt.TokenExpiredError){
-        return err
-        console.log(err)
-      }
-      console.log(err)
-      return null
-    }
-  },
-  hashPassword: function(plainTextPassword){
-    let salt = bcrypt.genSaltSync(10)
-    let hash = bcrypt.hashSync(plainTextPassword, salt)
-    return hash
-  },
-  comparePassword: function(plainTextPassword, hashedPassowrd){
-    return bcrypt.compareSync(plainTextPassword, hashedPassowrd)
-  }
+  /**
+   * creates a JSON Web Token using the givin data from user object
+   * @param {tokenData} user 
+   * @returns {string} JSON Web Token
+   */
+  signUser: (user) => (jwt.sign({ ...user }, 'secretKey', { expiresIn: '4h' })),
+  /**
+   * verifies the given token using secret key and returns the decoded token
+   * @param {string} token 
+   * @returns {(string | import('jsonwebtoken').JwtPayload)} JSON Web Token | Decoded Token (jwt.JwtPayload)
+   */
+  verifyUser: (token) => (jwt.verify(token, 'secretKey')),
+  /**
+   * creates a hashed password using bcrypt
+   * @param {string} plainTextPassword 
+   * @returns {string} Hashed Password
+   */
+  hashPassword: (plainTextPassword) => (bcrypt.hashSync(plainTextPassword, bcrypt.genSaltSync(10))),
+  /**
+   * compares the given plain text password with the saved hashed password
+   * @param {string} plainTextPassword 
+   * @param {string} hashedPassowrd 
+   * @returns {boolean} if given password matches the saved hashed password
+   */
+  comparePassword: (plainTextPassword, hashedPassowrd) => (bcrypt.compareSync(plainTextPassword, hashedPassowrd))
 }
 
 module.exports = authService
