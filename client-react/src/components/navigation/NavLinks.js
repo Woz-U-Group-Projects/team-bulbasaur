@@ -31,7 +31,7 @@ const NavLinks = (props) => {
                     </li>
                     <li className='signup' onClick={() => isMobile && closeMobileMenu()}>{
                         isUserLoggedIn ?
-                            <Link to='/profile' onClick={() => onGetProfile(loggedInUser.id)}>Profile</Link> :
+                            <Link to='/profile' onClick={() => onGetProfile(loggedInUser.userId)}>Profile</Link> :
                             <Link to='/signup'>SignUp</Link>}
                     </li>
 

@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
-import ProfilePostForm from '../forms/profilePostForm/profilePostForm'
-import ProfilePosts from './posts/profilePosts'
-
-import './profile.css';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core'
+
+import ProfilePosts from './posts/profilePosts'
+import PostForm from '../forms/postForm/postForm';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import './profile.css';
+import Post from '../mainPage/post/mainPost';
+
 
 const Profile = (props) => {
   let { profile, loggedInUser, isLoggedIn, profilePosts, onCleanUpProfile } = props
@@ -21,7 +23,7 @@ const Profile = (props) => {
 
   return (
     <div className="profile-container">
-      {profile ? isLoggedIn && loggedInUser.id === profile.id ?
+      {profile ? isLoggedIn && loggedInUser.userId === profile.userId ?
         <div className="profile-wrapper">
           <div className="profile-header">
             <div className="profile-detail">
@@ -35,7 +37,7 @@ const Profile = (props) => {
               <h3>Group: {loggedInUser ? loggedInUser.groups.map(group => <p>{group.groupName}, </p>) : null}</h3>
             </div>
             <div className="profile-post-form">
-              <ProfilePostForm {...props} userId={profile.id} />
+              <PostForm {...props} />
             </div>
           </div>
 
@@ -53,22 +55,22 @@ const Profile = (props) => {
           </div> */}
 
           <div className="profile-posts">
-            {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.map(post => (
-              <ProfilePosts {...props} key={post.id} userId={profile.id} post={post} />
-            ))}
+            {profile && profile.posts.length > 0 ? profile.posts.map(post => (
+              <Post {...props} key={post.postId} post={post} />
+            )) : <p>You Haven't Made Any Posts Yet</p>}
           </div>
         </div>
         :
         <div className="profile-wrapper">
           <div className="profile-detail">
-            <h1>{profile.name}'s Profile</h1>
+            <h1>{profile.fullName}'s Profile</h1>
             <h2>{profile.userName}</h2>
           </div>
 
           <div className="profile-posts">
-            {profilePosts.length === 0 ? <p>You Haven't Made Any Posts Yet</p> : profilePosts.filter(post => post.isHidden === 0).map(post => (
-              <ProfilePosts {...props} userId={profile.id} key={post.id} post={post} />
-            ))}
+            {profile && profile.posts.length > 0 ? profile.posts.filter(post => post.isHidden === 0).map(post => (
+              <Post {...props} key={post.postId} post={post} />
+            )) : <p>You Haven't Made Any Posts Yet</p>}
           </div>
         </div>
         :

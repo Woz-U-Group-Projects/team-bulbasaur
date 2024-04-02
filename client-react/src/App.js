@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from "react";
+import { connect, DispatchProp } from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,57 +9,43 @@ import {
 //CSS
 import "./App.css";
 //actions
-import {
-  sendToken, sendTokenCompleted, getUsers, getUsersCompleted, signup, signupCompleted, login, loginCompleted, logout, logoutCompleted, 
-  getPosts, getPostsCompleted, makePost, makePostCompleted, updateVotes, updateVotesCompleted, deletePost, deletePostCompleted,
-  editPost, editPostCompleted, makeComment, makeCommentCompleted, updateCommentVotes, updateCommentVotesCompleted,
-  deleteComment, deleteCommentCompleted, getProfile, getProfileCompleted, makePostByUserId, makePostByUserIdCompleted,
-  cleanUpProfile, updateVotesByUserId, updateVotesByUserIdCompleted, editPostByUserId, editPostByUserIdCompleted,
-  deletePostByUserId, deletePostByUserIdCompleted, makeCommentByUserId, makeCommentByUserIdComplete, updateCommentVotesByUserId,
-  updateCommentVotesByUserIdCompleted, deleteCommentByUserId, deleteCommentByUserIdCompleted, getAllGroups, getAllGroupsCompleted,
-  joinGroup, joinGroupCompleted, createGroup, createGroupCompleted, getGroupPage, getGroupPageCompleted, cleanUpGroupPgae,
-  editGroupDescription, editGroupDescriptionCompleted, createGroupPost, createGroupPostCompleted, leaveGroup, leaveGroupCompleted,
-  disbandGroup, disbandGroupCompleted, updateGroupVotes, updateGroupVotesCompleted, deleteGroupPost, deleteGroupPostCompleted,
-  editGroupPost, editGroupPostCompleted, updateGroupPostVotes, updateGroupPostVotesCompleted, makeGroupComment,
-  makeGroupCommentCompleted, deleteGroupComment, deleteGroupCommentCompleted, updateGroupCommentVotes, updateGroupCommentVotesCompleted,
-  removeUser, removeUserCompleted, makeGroupAdmin, makeGroupAdminCompleted, removeGroupAdmin, removeGroupAdminCompleted,
-  transferGroupOwner, transferGroupOwnerCompleted, 
-  groupPageCompleted, groupPostCompleted,
-  
-  addFriend, cancelFriend, acceptRequest, denyRequest, confirmNotification, removeFriend, editFriendsCompleted
-} from './actions/actions'
+import { utilActions, userActions, postActions, groupActions } from './actions';
 //components
 import MainPage from "./components/mainPage/mainPage";
 import Login from "./components/login/login";
-import SignUp from "./components/signup/signup";
+// import SignUp from "./components/signup/signup";
 import Profile from './components/profile/profile'
 import Navigation from "./components/navigation/NavBar";
 import GroupPage from "./components/groupPage/groupPage";
 
-function _App(props) {
-   let { onSendToken } = props
+import { SignUp } from "./views";
+
+// import Feed from "./views/Feed";
+
+function App(props) {
+  const { onSendToken } = props;
 
   useEffect(() => {
-    let token = document.cookie
-    if(token){
-      onSendToken()
-    }
-  }, [onSendToken])
+    const token = document.cookie;
+    if (token) onSendToken();
+  }, [onSendToken]);
 
   return (
     <Router>
-      {!props.profile && !props.selectedGroup ? <Redirect to='/' /> : null}
+      {/* {!props.profile && !props.selectedGroup ? <Redirect to='/' /> : null} */}
+      {/* {props.isLoggedIn ? <Redirect to='/' /> : <Redirect to='/login' />} */}
       <div className="App">
         <Navigation {...props} />
         <Switch>
           <Route exact path='/'>
             <MainPage {...props} />
+            {/* <Feed loggedIn={props.isLoggedIn} user={props.loggedInUser} /> */}
           </Route>
           <Route path='/login'>
             <Login {...props} />
           </Route>
           <Route path='/signup'>
-            <SignUp {...props} />
+            <SignUp onSignup={props.onSignup} />
           </Route>
           <Route path='/profile'>
             <Profile {...props} />
@@ -74,57 +60,104 @@ function _App(props) {
 }
 
 const mapDispatchToProps = (dispatch, state) => {
+  const { verifyLogin, login, signup, logout } = utilActions;
+  const { getUsers, getUser, addFriend, acceptRequest, confirmAccepted, rejectRequest, confirmRejected, deleteFriend } = userActions;
+  const { getPosts, createPost, editPost, deletePost, createComment, deleteComment } = postActions;
+  const { getGroups, getGroup, createGroup, editGroup, deleteGroup, joinGroup, removeUser, promoteUser, demoteUser, transferOwnership } = groupActions;
   return {
-    onSendToken: () => sendToken().then(data => dispatch(sendTokenCompleted(data))),
-    onGetProfile: userId => getProfile(userId).then(data => dispatch(getProfileCompleted(data))),
-    onCleanUpProfile: () => dispatch(cleanUpProfile()),
-    onCleanUpGroup: () => dispatch(cleanUpGroupPgae()),
-    onGetUsers: () => getUsers().then(users => dispatch(getUsersCompleted(users))),
-    onGetPosts: () => getPosts().then(posts => dispatch(getPostsCompleted(posts))),
-    onUpdateVotes: (type, current, postId) => updateVotes(type, current, postId).then(posts => dispatch(updateVotesCompleted(posts))),
-    onSignup: (object) => signup(object).then(data => dispatch(signupCompleted(data))),
-    onLogin: (object) => login(object).then(data => dispatch(loginCompleted(data))),
-    onLogout: () => logout().then(data => dispatch(logoutCompleted(data))),
-    onMakePost: (obj) => makePost(obj).then(res => dispatch(makePostCompleted(res))),
-    onMakeComment: (obj) => makeComment(obj).then(data => dispatch(makeCommentCompleted(data))),
-    onDeletePost: (postId) => deletePost(postId).then(data => dispatch(deletePostCompleted(data))),
-    onEditPost: (obj) => editPost(obj).then(data => dispatch(editPostCompleted(data))),
-    onUpdateCommentVotes: (type, current, commentId) => updateCommentVotes(type, current, commentId).then(data => dispatch(updateCommentVotesCompleted(data))),
-    ondeleteComment: obj => deleteComment(obj).then(data => dispatch(deleteCommentCompleted(data))),
-    onUpdateVotesByUserId: (type, current, userId, postId) => updateVotesByUserId(type, current, userId, postId).then(data => dispatch(updateVotesByUserIdCompleted(data))),
-    onMakePostByUserId: (obj) => makePostByUserId(obj).then(data => dispatch(makePostByUserIdCompleted(data))),
-    onEditPostByUserId: obj => editPostByUserId(obj).then(data => dispatch(editPostByUserIdCompleted(data))),
-    onDeletePostByUserId: (postId, userId) => deletePostByUserId(postId, userId).then(data => dispatch(deletePostByUserIdCompleted(data))),
-    onMakeCommentByUserId: obj => makeCommentByUserId(obj).then(data => dispatch(makeCommentByUserIdComplete(data))),
-    onUpdateCommentVotesByUserId: (obj) => updateCommentVotesByUserId(obj).then(data => dispatch(updateCommentVotesByUserIdCompleted(data))),
-    ondeleteCommentByUserId: obj => deleteCommentByUserId(obj).then(data => dispatch(deleteCommentByUserIdCompleted(data))),
+    // utility actions
+    onSendToken: () => (
+      verifyLogin.action().then(user => dispatch({ type: verifyLogin.key, payload: user }))
+    ),
+    onSignup: (newUser) => (
+      signup.action(newUser).then(user => dispatch({ type: signup.key, payload: user }))
+    ),
+    onLogin: (userInfo) => (
+      login.action(userInfo).then(user => dispatch({ type: login.key, payload: user }))
+    ),
+    onLogout: () => (
+      logout.action().then(() => dispatch({ type: logout.key }))
+    ),
 
-    onGetGroups: () => getAllGroups().then(data => dispatch(getAllGroupsCompleted(data))),
-    onJoinGroup: (obj) => joinGroup(obj).then(data => dispatch(joinGroupCompleted(data))),
-    onCreateGroup: (obj) => createGroup(obj).then(data => dispatch(createGroupCompleted(data))),
-    
-    onGetGroupPage: (groupId) => getGroupPage(groupId).then(data => dispatch(getGroupPageCompleted(data))),
-    onEditGroupDescription: (obj) => editGroupDescription(obj).then(data => dispatch(editGroupDescriptionCompleted(data))),
-    onCreateGroupPost: obj => createGroupPost(obj).then(data => dispatch(createGroupPostCompleted(data))),
-    onLeaveGroup: obj => leaveGroup(obj).then(data => dispatch(leaveGroupCompleted(data))),
-    onDisbandGroup: obj => disbandGroup(obj).then(data => dispatch(disbandGroupCompleted(data))),
-    onUpdateGroupVotes: obj => updateGroupVotes(obj).then(data => dispatch(updateGroupVotesCompleted(data))),
-    onDeleteGroupPost: obj => deleteGroupPost(obj).then(data => dispatch(deleteGroupPostCompleted(data))),
-    onEditGroupPost: obj => editGroupPost(obj).then(data => dispatch(editGroupPostCompleted(data))),
-    onUpdateGroupPostVotes: obj => updateGroupPostVotes(obj).then(data => dispatch(updateGroupPostVotesCompleted(data))),
-    onMakeGroupComment: obj => makeGroupComment(obj).then(data => dispatch(makeGroupCommentCompleted(data))),
-    onDeleteGroupComment: obj => deleteGroupComment(obj).then(data => dispatch(deleteGroupCommentCompleted(data))),
-    onUpdateGroupCommentVotes: obj => updateGroupCommentVotes(obj).then(data => dispatch(updateGroupCommentVotesCompleted(data))),
-    onRemoveUser: obj => removeUser(obj).then(data => dispatch(removeUserCompleted(data))),
-    onMakeGroupAdmin: obj => makeGroupAdmin(obj).then(data => dispatch(makeGroupAdminCompleted(data))),
-    onRemoveGroupAdmin: obj => removeGroupAdmin(obj).then(data => dispatch(removeGroupAdminCompleted(data))),
-    onTransferGroupOwner: obj => transferGroupOwner(obj).then(data => dispatch(transferGroupOwnerCompleted(data))),
-    onAddFriend: obj => addFriend(obj).then(data => dispatch(editFriendsCompleted(data))),
-    onCancelFriend: obj => cancelFriend(obj).then(data => dispatch(editFriendsCompleted(data))),
-    onAcceptRequest: obj => acceptRequest(obj).then(data => dispatch(editFriendsCompleted(data))),
-    onDenyRequest: obj => denyRequest(obj).then(data => dispatch(editFriendsCompleted(data))),
-    onConfirmNotification: obj => confirmNotification(obj).then(data => dispatch(editFriendsCompleted(data))),
-    onRemoveFriend: obj => removeFriend(obj).then(data => dispatch(editFriendsCompleted(data)))
+    // user actions
+    onGetUsers: () => (
+      getUsers.action().then(users => dispatch({ type: getUsers.key, payload: users }))
+    ),
+    onGetProfile: (userId) => (
+      getUser.action(userId).then(user => dispatch({ type: getUser.key, payload: user }))
+    ),
+    onAddFriend: (addresseeId) => (
+      addFriend.action(addresseeId).then(friendId => dispatch({ type: addFriend.key, payload: friendId }))
+    ),
+    onAcceptRequest: (addresseeId) => (
+      acceptRequest.action(addresseeId).then(friendId => dispatch({ type: acceptRequest.key, payload: friendId }))
+    ),
+    onConfirmAccepted: (addresseeId) => (
+      confirmAccepted.action(addresseeId).then(friendId => dispatch({ type: confirmAccepted.key, payload: friendId }))
+    ),
+    onRejectRequest: (addresseeId) => (
+      rejectRequest.action(addresseeId).then(userId => dispatch({ type: rejectRequest.key, payload: userId }))
+    ),
+    onConfirmRejected: (addresseeId) => (
+      confirmRejected.action(addresseeId).then(userId => dispatch({ type: confirmRejected.key, payload: userId }))
+    ),
+    onDeleteFriend: (addresseeId) => (
+      deleteFriend.action(addresseeId).then(userId => dispatch({ type: deleteFriend.key, payload: userId }))
+    ),
+    onCleanUpProfile: () => dispatch({ type: 'CLEAN_UP_PROFILE' }),
+
+    // group actions
+    onCreateGroup: (obj) => (
+      createGroup.action(obj).then(data => dispatch({ type: createGroup.key, payload: data }))
+    ),
+    onGetGroups: () => (
+      getGroups.action().then(data => dispatch({ type: getGroups.key, payload: data }))
+    ),
+    onGetGroupPage: (groupId) => (
+      getGroup.action(groupId).then(group => dispatch({ type: getGroup.key, payload: group }))
+    ),
+    onEditGroup: (obj) => (
+      editGroup.action(obj).then(data => dispatch({ type: editGroup.key, payload: data }))
+    ),
+    onDeleteGroup: (groupId) => (
+      deleteGroup.action(groupId).then(groupId => dispatch({ type: deleteGroup.key, payload: groupId }))
+    ),
+    onJoinGroup: (groupId) => (
+      joinGroup.action(groupId).then(groupId => dispatch({ type: joinGroup.key, payload: groupId }))
+    ),
+    onRemoveUser: (ids) => (
+      removeUser.action(ids).then(userId => dispatch({ type: removeUser.key, payload: userId }))
+    ),
+    onPromoteUser: (ids) => (
+      promoteUser.action(ids).then(userId => dispatch({ type: promoteUser.key, payload: userId }))
+    ),
+    onDemoteUser: (ids) => (
+      demoteUser.action(ids).then(userId => dispatch({ type: demoteUser.key, payload: userId }))
+    ),
+    onTransferOwnership: (ids) => (
+      transferOwnership.action(ids).then(userId => dispatch({ type: transferOwnership.key, payload: userId }))
+    ),
+    onCleanUpGroup: () => dispatch({ type: 'CLEAN_UP_GROUP' }),
+
+    // post actions
+    onGetPosts: () => (
+      getPosts.action().then(posts => dispatch({ type: getPosts.key, payload: posts }))
+    ),
+    onCreatePost: (postData) => (
+      createPost.action(postData).then(post => dispatch({ type: createPost.key, payload: post }))
+    ),
+    onEditPost: (postEdit) => (
+      editPost.action(postEdit).then(post => dispatch({ type: editPost.key, payload: post }))
+    ),
+    onDeletePost: (postId) => (
+      deletePost.action(postId).then(postId => dispatch({ type: deletePost.key, payload: postId }))
+    ),
+    onCreateComment: (commentData) => (
+      createComment.action(commentData).then(comment => dispatch({ type: createComment.key, payload: comment }))
+    ),
+    onDeleteComment: (commentIdObj) => (
+      deleteComment.action(commentIdObj).then(commentIdObj => dispatch({ type: deleteComment.key, payload: commentIdObj }))
+    ),
   }
 }
 
@@ -144,6 +177,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(_App)
-
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

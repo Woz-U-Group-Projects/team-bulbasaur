@@ -1,263 +1,216 @@
+/**
+ * @typedef {Object} State
+ * @property {import("../../../server-express-mysql/controllers/UserContoller").user[]} users
+ * @property {import("../../../server-express-mysql/controllers/PostController").post[]} posts
+ * @property {import("../../../server-express-mysql/controllers/GroupController").group[]} groups
+ * @property {import("../../../server-express-mysql/controllers/PostController").post[]} userPosts
+ * @property {any} profile
+ * @property {Object} signupStatus
+ * @property {import("../../../server-express-mysql/controllers/UserContoller").user} loggedInUser  
+ * @property {boolean} isLoggedIn
+ * @property {import("../../../server-express-mysql/controllers/GroupController").group} selectedGroup
+ * @property {import("../../../server-express-mysql/controllers/PostController").post[]} groupPosts
+ */
 const initialState = {
   users: [],
   posts: [],
   groups: [],
-  userPosts: [],
   profile: undefined,
   signupStatus: {},
   loggedInUser: undefined,
-  profilePosts: [],
   isLoggedIn: false,
   selectedGroup: undefined,
-  groupPosts: []
 }
 
 const reducer = (state = initialState, action) => {
+  // if (action.payload === undefined) return { ...state }
   switch (action.type) {
-    case 'SEND_TOKEN_COMPLETED':
-      if (action.payload.status) {
-        return {
-          ...state,
-          isLoggedIn: true,
-          loggedInUser: action.payload.data
-        }
-      } else {
-        setTimeout(() => {
-          alert('Must Login Again')
-        }, 100);
-        return {
-          ...state
-        }
+    // utility actions
+    case 'LOGIN': return {
+      ...state,
+      isLoggedIn: action.payload ? true : false,
+      loggedInUser: action.payload
+    }
+    case 'LOGOUT': return {
+      ...state,
+      isLoggedIn: false,
+      loggedInUser: undefined,
+    }
+
+    // user actions
+    case 'GET_USERS': return {
+      ...state,
+      users: action.payload ?? []
+    }
+    case 'GET_USER': return {
+      ...state,
+      profile: action.payload
+    }
+    case 'ADD_FRIEND': return {
+      ...state,
+      loggedInUser: {
+        ...state.loggedInUser,
+        outgoing: [state.users.find(user => user.userId === action.payload), ...state.loggedInUser.outgoing]
       }
-    case 'CLEAN_UP_PROFILE':
+    }
+    case 'ACCEPT_REQUEST': {
       return {
         ...state,
-        profile: undefined,
-        profilePosts: []
-      }
-    case 'CLEAN_UP_GROUP_PAGE':
-      return {
-        ...state,
-        selectedGroup: undefined,
-        groupPosts: []
-      }
-    case 'GET_USERS_COMPLETED':
-      return {
-        ...state,
-        users: action.payload
-      }
-    case 'GET_POSTS_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'ADD_VOTE_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'GET_PROFILE_COMPLETED':
-      return {
-        ...state,
-        profile: action.payload.profile,
-        profilePosts: action.payload.posts
-      }
-    case 'SIGNUP_COMPLETED':
-      return {
-        ...state,
-        signupStatus: action.payload
-      }
-    case 'LOGIN_COMPLETED':
-      if (action.payload.result === true) {
-        setTimeout(() => {
-          alert(action.payload.message)
-        }, 100);
-        return {
-          ...state,
-          isLoggedIn: action.payload.result,
-          loggedInUser: action.payload.user,
-        }
-      } else {
-        setTimeout(() => {
-          alert(action.payload.message)
-        }, 100);
-        return {
-          ...state
+        loggedInUser: {
+          ...state.loggedInUser,
+          incoming: state.loggedInUser.incoming.filter(user => user.userId !== action.payload),
+          friends: [state.loggedInUser.incoming.find(user => user.userId === action.payload), ...state.loggedInUser.friends]
         }
       }
-    case 'LOGOUT_COMPLETED':
+    }
+    case 'REJECT_REQUEST': return {
+      ...state,
+      loggedInUser: {
+        ...state.loggedInUser,
+        incoming: state.loggedInUser.incoming.filter(user => user.userId !== action.payload),
+      }
+    }
+    case 'DELETE_FRIEND': return {
+      ...state,
+      loggedInUser: {
+        ...state.loggedInUser,
+        friends: state.loggedInUser.friends.filter(user => user.userId !== action.payload),
+        incoming: state.loggedInUser.incoming.filter(user => user.userId !== action.payload),
+        outgoing: state.loggedInUser.outgoing.filter(user => user.userId !== action.payload),
+      }
+    }
+    case 'TRANSFER_OWNERSHIP': return {
+      ...state,
+      selectedGroup: {
+        ...state.selectedGroup,
+        owner: state.selectedGroup.admins.find(user => user.userId === action.payload),
+        admins: [state.selectedGroup.owner, ...state.selectedGroup.admins.filter(user => user.userId !== action.payload)]
+      }
+    }
+    case 'CLEAN_UP_PROFILE': return {
+      ...state,
+      profile: undefined
+    }
+
+    // group actions
+    case 'CREATE_GROUP': return {
+      ...state,
+      groups: [...state.groups, action.payload]
+    }
+    case 'GET_GROUPS': return {
+      ...state,
+      groups: action.payload ?? []
+    }
+    case 'GET_GROUP': return {
+      ...state,
+      selectedGroup: action.payload
+    }
+    case 'EDIT_GROUP': return {
+      ...state,
+      selectedGroup: {
+        ...state.selectedGroup,
+        description: action.payload.description,
+      }
+    }
+    case 'DELETE_GROUP': return {
+      ...state,
+      groups: state.groups.filter(group => group.groupId !== action.payload),
+      selectedGroup: undefined
+    }
+    case 'JOIN_GROUP': return {
+      ...state,
+      groups: state.groups.map(group => group.groupId === action.payload ? {
+        ...group,
+        members: [...group.members, state.loggedInUser]
+      } : group),
+      selectedGroup: state.selectedGroup ? {
+        ...state.selectedGroup,
+        members: [...state.selectedGroup.members, state.loggedInUser]
+      } : undefined
+    }
+    case 'REMOVE_USER': return {
+      ...state,
+      selectedGroup: {
+        ...state.selectedGroup,
+        members: state.selectedGroup.members.filter(user => user.userId !== action.payload),
+        admins: state.selectedGroup.admins.filter(user => user.userId !== action.payload)
+      }
+    }
+    case 'PROMOTE_USER': return {
+      ...state,
+      selectedGroup: {
+        ...state.selectedGroup,
+        admins: [...state.selectedGroup.admins, state.selectedGroup.members.find(user => user.userId === action.payload)],
+        members: state.selectedGroup.members.filter(user => user.userId !== action.payload)
+      }
+    }
+    case 'DEMOTE_USER': return {
+      ...state,
+      selectedGroup: {
+        ...state.selectedGroup,
+        admins: state.selectedGroup.admins.filter(user => user.userId !== action.payload),
+        members: [...state.selectedGroup.members, state.selectedGroup.admins.find(user => user.userId === action.payload)]
+      }
+    }
+    case 'CLEAN_UP_GROUP': return {
+      ...state,
+      selectedGroup: undefined
+    }
+
+    // post actions
+    case 'GET_POSTS': return {
+      ...state,
+      posts: action.payload ? action.payload.reverse() : []
+    }
+    case 'CREATE_POST': return {
+      ...state,
+      posts: [action.payload, ...state.posts],
+      loggedInUser: {
+        ...state.loggedInUser,
+        posts: [action.payload, ...state.loggedInUser.posts]
+      },
+      selectedGroup: state.selectedGroup && action.payload.groupId !== undefined ? {
+        ...state.selectedGroup,
+        posts: [action.payload, ...state.selectedGroup.posts]
+      } : state.selectedGroup
+    }
+    case 'EDIT_POST': return {
+      ...state,
+      posts: state.posts.map(post => post.postId === action.payload.postId ? action.payload : post)
+    }
+    case 'DELETE_POST': return {
+      ...state,
+      posts: state.posts.filter(post => post.postId !== action.payload)
+    }
+    case 'CREATE_COMMENT': return {
+      ...state,
+      posts: state.posts.map(post => post.postId === action.payload.postId ?
+        { ...post, comments: [action.payload, ...post.comments] }
+        : post
+      ),
+      selectedGroup: (
+        state.selectedGroup &&
+        state.selectedGroup.posts.find(post => post.postId === action.payload.postId).groupId !== undefined
+      ) ? {
+        ...state.selectedGroup,
+        posts: state.selectedGroup.posts.map(post => post.postId === action.payload.postId ? {
+          ...post,
+          comments: [action.payload, ...post.comments]
+        } : post)
+      } : state.selectedGroup
+    }
+    case 'DELETE_COMMENT': {
       return {
         ...state,
-        isLoggedIn: false,
-        loggedInUser: undefined
+        posts: state.posts.map(post => post.postId === action.payload.postId ?
+          { ...post, comments: post.comments.filter(comment => comment.commentId !== action.payload.commentId) }
+          : post
+        )
       }
-    case 'MAKE_POST_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'DELETE_POST_COMPLETED':
-      setTimeout(() => {
-        alert(action.payload.message)
-      }, 100);
-      return {
-        ...state,
-        posts: action.payload.data
-      }
-    case 'EDIT_POST_COMPLETED':
-      setTimeout(() => {
-        alert(action.payload.message)
-      }, 100);
-      return {
-        ...state,
-        posts: action.payload.data
-      }
-    case 'MAKE_COMMENT_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'COMMENT_VOTES_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'DELETE_COMMENT_COMPLETED':
-      return {
-        ...state,
-        posts: action.payload
-      }
-    case 'UPDATE_VOTES_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'MAKE_POST_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'EDIT_POST_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'DELETE_POST_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'MAKE_COMMENT_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'UPDATE_COMMENT_VOTES_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'DELETE_COMMENT_BY_USER_ID_COMPLETED':
-      return {
-        ...state,
-        profilePosts: action.payload
-      }
-    case 'GET_ALL_GROUPS_COMPLETED':
-      return {
-        ...state,
-        groups: action.payload
-      }
-    case 'CREATE_GROUP_COMPLETED':
-      return {
-        ...state,
-        groups: action.payload
-      }
-    case 'GET_GROUP_PAGE_COMPLETE':
-      return {
-        ...state,
-        selectedGroup: action.payload.group,
-        groupPosts: action.payload.posts
-      }
-    case 'JOIN_GROUP_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'LEAVE_GROUP_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'CREATE_GROUP_POST_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'UPDATE_GROUP_VOTES_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'DISBAND_GROUP_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: undefined,
-        groupPosts: []
-      }
-    case 'EDIT_GROUP_DESCRIPTION_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'DELETE_GROUP_POST_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'EDIT_GROUP_POST_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'UPDATE_GROUP_POSTS_VOTES_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'MAKE_GROUP_cOMMENT_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'DELETE_GROUP_COMMENT_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'UPDATE_GROUP_COMMENT_VOTES_COMPLETED':
-      return {
-        ...state,
-        groupPosts: action.payload
-      }
-    case 'REMOVE_USER_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'MAKE_GROUP_ADMIN_COMPLETED':
-      return {
-        ...state,
-        selectedGroup: action.payload
-      }
-    case 'EDIT_FRIENDS_COMPLETED':
-      return {
-        ...state,
-        loggedInUser: action.payload
-      }
-    default:
-      return {
-        ...state
-      }
+    }
+
+
+    default: return { ...state }
   }
 }
 

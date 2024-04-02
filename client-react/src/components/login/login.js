@@ -1,5 +1,5 @@
 import React from 'react'
-import { useFormik } from 'formik'
+import { useFormik, Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 import { Redirect } from 'react-router'
 
@@ -16,67 +16,54 @@ const validate = yup.object({
 
 library.add(faUserCircle, faEnvelope, faUser, faLock);
 
-const Login = ({ onLogin, loggedInUser, isLoggedIn }) => {
+const Login = ({ onLogin }) => (
+  <div className="login-container">
+    <div className="login-text">
+      <h1>Login</h1>
+    </div>
 
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: ''
-    },
-    validationSchema: validate,
-    onSubmit: (values, actions) => {
-      actions.resetForm()
-      onLogin(values)
-    }
-  })
-
-  if(isLoggedIn){
-    return <Redirect to='/' />
-  }
-
-  return (
-    <div className="login-container">
-      <div className="login-text">
-        <h1>Login</h1>
+    <Formik
+      initialValues={{
+        email: '',
+        password: ''
+      }}
+      validationSchema={validate}
+      onSubmit={(values, actions) => {
+        onLogin(values);
+        actions.resetForm()
+      }}
+    >
+    <Form className="login-form-wrapper">
+      <div className="login-email">
+        {/* <label htmlFor='email'>Email: </label> */}
+        <Field
+          id='email'
+          name='email'
+          type='email'
+          placeholder='Email'
+        />
+        <FontAwesomeIcon className="icon-login" icon="envelope" />
+        <ErrorMessage name="email" component="div" />
       </div>
 
-      <form onSubmit={formik.handleSubmit} className="login-form-wrapper">
-        <div className="login-email">
-          {/* <label htmlFor='email'>Email: </label> */}
-          <input
-            id='email'
-            name='email'
-            type='email'
-            placeholder='Email'
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <FontAwesomeIcon className="icon-login" icon="envelope" />
-          {/* {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null} */}
-        </div>
+      <div className="login-password">
+        {/* <label htmlFor='password'>Password</label> */}
+        <Field
+          id='password'
+          name='password'
+          type='password'
+          placeholder='Password'
+        />
+        <FontAwesomeIcon className="icon-login" icon="lock" />
+        <ErrorMessage name="password" component="div" />
+      </div>
 
-        <div className="login-password">
-          {/* <label htmlFor='password'>Password</label> */}
-          <input
-            id='password'
-            name='password'
-            type='password'
-            placeholder='Password'
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <FontAwesomeIcon className="icon-login" icon="lock" />
-          {/* {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null} */}
-        </div>
-
-        <div className="login-btn">
-          <button type='submit'>Login</button>
-        </div>
-      </form>
-    </div>
-  )
-}
+      <div className="login-btn">
+        <button type='submit'>Login</button>
+      </div>
+    </Form>
+    </Formik>
+  </div>
+)
 
 export default Login

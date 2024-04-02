@@ -11,13 +11,13 @@ const MemberView = props => {
       <h2>Group Members</h2>
       <div className="group-member-container">
         <div className="owner-section">
-          <MemberSection {...props} title='Owner' members={selectedGroup.users.filter(user => user.membership === 'Owner')} />
+          <MemberSection {...props} title='Owner' members={[selectedGroup.owner]} />
         </div>
         <div className="admins-section">
-          <MemberSection {...props} title='Admins' members={selectedGroup.users.filter(user => user.membership === 'Admin')} />
+          <MemberSection {...props} title='Admins' members={selectedGroup.admins} />
         </div>
         <div className="members-section">
-          <MemberSection {...props} title='Members' members={selectedGroup.users.filter(user => user.membership === 'Member')} />
+          <MemberSection {...props} title='Members' members={selectedGroup.members} />
         </div>
       </div>
     </div>

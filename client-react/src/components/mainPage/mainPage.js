@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-// import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import PostForm from '../forms/postForm/postForm';
 import Post from './post/mainPost'
 import GroupView from './groupsView/groupView';
 import FriendsView from './friendsView/friendsView';
+
+
 //css
 import './mainPage.css'
 
 const MainPage = (props) => {
-  let { posts, users, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups } = props
-  let [postList, setPosts] = useState([])
+  const { posts, onGetPosts, onGetUsers, onUpdateVotes, isLoggedIn, onGetGroups } = props;
+  const [postList, setPosts] = useState([]);
 
   useEffect(() => {
     onGetPosts()
@@ -18,8 +20,8 @@ const MainPage = (props) => {
   }, [onGetPosts, onGetUsers, onGetGroups])
 
   useEffect(() => {
-    setPosts(posts)
-  }, [posts, users])
+    setPosts(posts);
+  }, [posts]);
 
   return (
     <div className='mainPage-container'>
@@ -34,7 +36,7 @@ const MainPage = (props) => {
 
         <div className='posts'>
           {postList.length === 0 ? <p>no posts have been made yet</p> : postList.map(post => {
-            return <Post {...props} key={post.id} post={post} onUpdateVotes={onUpdateVotes} />
+            return <Post {...props} key={post.postId} post={post} onUpdateVotes={onUpdateVotes} />
           })}
         </div>
       </div>

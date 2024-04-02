@@ -10,7 +10,7 @@ const validate = yup.object({
 const EditPostForm = ({ setEditModal, post, onEditPost }) => {
   const formik = useFormik({
     initialValues: {
-      postId: post.id,
+      postId: post.postId,
       body: post.body
     },
     validationSchema: validate,

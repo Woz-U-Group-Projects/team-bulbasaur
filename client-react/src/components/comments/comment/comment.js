@@ -7,11 +7,11 @@ import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCom
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 const Comment = (props) => {
-  let { comment, postAuthor, loggedInUser, isLoggedIn, onUpdateCommentVotes, ondeleteComment, onGetProfile } = props
-  let [likes, setLikes] = useState()
-  let [dislikes, setDislikes] = useState()
-  let isVisible = isLoggedIn && ( comment.authorId === loggedInUser.id || postAuthor === loggedInUser.id || loggedInUser.admin === 1 )
-  
+  let { comment, postAuthor, loggedInUser, isLoggedIn, onUpdateCommentVotes, onDeleteComment, onGetProfile } = props
+  let [likes, setLikes] = useState(0)
+  let [dislikes, setDislikes] = useState(0)
+  let isVisible = isLoggedIn && (comment.author.userId === loggedInUser.userId || postAuthor === loggedInUser.userId || loggedInUser.admin === 1)
+
   useEffect(() => {
     setDislikes(comment.dislikes)
     setLikes(comment.likes)
@@ -21,27 +21,40 @@ const Comment = (props) => {
 
   return (
     <div key={comment.id} className="comment-view-container">
+      {/* Comment Body */}
       <div className="comment-body">
-        <p>{comment.body} -</p>  
-        <Link className="link-profile" onClick={() => onGetProfile(comment.authorId)} to={`/profile`}>
-          <h5>{comment.author}</h5>
+        <p>{comment.body} -</p>
+        <Link className="link-profile" onClick={() => onGetProfile(comment.author.userId)} to={`/profile`}>
+          <h5>{comment.author.userName}</h5>
         </Link>
       </div>
 
+      {/* Interaction Panel */}
       <div className="comment-vote-container">
+        {/* Likes Icon/Count */}
         <div className="thumbs-up">
-          <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateCommentVotes('likes', likes, comment.id)} /> <span>{likes}</span>
-        </div>
-        
-        <div className="thumbs-down">
-          <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateCommentVotes('dislikes', dislikes, comment.id)} /> <div className="vote-count">{dislikes}</div>
+          <FontAwesomeIcon
+            icon="thumbs-up"
+            onClick={() => onUpdateCommentVotes('likes', likes, comment.commentId)}
+          />
+          <span>{likes}</span>
         </div>
 
+        {/* Dislikes Icon/Count */}
+        <div className="thumbs-down">
+          <FontAwesomeIcon
+            className="thumbs-down-icon" icon="thumbs-down"
+            onClick={() => onUpdateCommentVotes('dislikes', dislikes, comment.commentId)}
+          />
+          <div className="vote-count">{dislikes}</div>
+        </div>
+
+        {/* Delete Icon */}
         <div>
           <button
             className="comment-delete-btn"
             style={isVisible ? { display: 'block' } : { display: 'none' }}
-            onClick={() => isVisible ? ondeleteComment({commentId:comment.id}) : null}
+            onClick={() => isVisible ? onDeleteComment({ commentId: comment.commentId, postId: comment.postId }) : null}
           >
             <FontAwesomeIcon className="comment-delete-icon" icon="trash-alt" />
           </button>
@@ -51,4 +64,4 @@ const Comment = (props) => {
   )
 }
 
-export default Comment
+export default Comment;

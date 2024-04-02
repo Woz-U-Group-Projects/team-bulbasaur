@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import './user.css';
 
@@ -7,18 +8,16 @@ import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCom
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 const User = props => {
-  let {
-    user, loggedInUser, onAddFriend, onTransferGroupOwner, selectedGroup, onRemoveUser,
-    onRemoveGroupAdmin, onMakeGroupAdmin, isAdmin, isOwner, isLoggedIn
+  const {
+    user, loggedInUser, onAddFriend, onTransferOwnership, selectedGroup, onRemoveUser,
+    onPromoteUser, onDemoteUser
   } = props
 
   library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
 
-  let [isFriend, checkFreindShip] = useState(false)
-  let [buttonView, setButtonView] = useState(false)
+  const [buttonView, setButtonView] = useState(false)
 
   useEffect(() => {
-    checkFreindShip(loggedInUser ? loggedInUser.friends.filter(friend => friend.id === user.id).length > 0 ? true : false : false)
     setButtonView(false)
   }, [loggedInUser, user])
 
@@ -26,43 +25,97 @@ const User = props => {
     <div>
       <div className="owner-group-section">
         <div>
-          <h3>{user.userName}</h3>
+          <h3>
+            <Link style={{ textDecoration: 'none', color: 'black' }} to={`/profile/${user.userId}`} onClick={() => { }}>
+              <FontAwesomeIcon icon="user" />
+              <span style={{ marginLeft: '10px' }}>{user.userName}</span>
+            </Link>
+          </h3>
         </div>
 
         <div className="group-members-control-btn">
-          <button onClick={()=>setButtonView(prevView => !prevView)}>options</button>
-          <div style={buttonView?{display:'block'}:{display:'none'}}>
+          <button
+            style={(
+              (
+                user.userId !== loggedInUser.userId &&
+                (
+                  loggedInUser.userId === selectedGroup.owner.userId ||
+                  (
+                    selectedGroup.admins.find(admin => admin.userId === loggedInUser.userId)
+                    && user.userId !== selectedGroup.owner.userId
+                    && !selectedGroup.admins.find(admin => admin.userId === user.userId)
+                  )
+                )
+              )
+            ) ? { display: 'inline' } : { display: 'none' }}
+            onClick={() => setButtonView(prevView => !prevView)}
+          >
+            options
+          </button>
+          <div style={(buttonView) ? { display: 'block' } : { display: 'none' }}>
             <div className="modal">
               <div className="button-option-wrapper">
                 <button
-                  style={
-                    loggedInUser && ((loggedInUser.id === user.id) || isFriend )?
-                    { display: 'none' } : { display: 'inline' }
-                  }
-                  onClick={() => onAddFriend({recieverId:user.id})}
-                  >Add Friend</button>
+                  style={(
+                    loggedInUser
+                    && (loggedInUser.userId !== user.userId)
+                    && !loggedInUser.denied.find(u => u.userId === user.userId)
+                    && !loggedInUser.friends.find(u => u.userId === user.userId)
+                    && !loggedInUser.incoming.find(u => u.userId === user.userId)
+                    && !loggedInUser.outgoing.find(u => u.userId === user.userId)
+                  ) ? { display: 'inline' } : { display: 'none' }}
+                  onClick={() => onAddFriend(user.userId)}
+                >
+                  <span>Add Friend</span>
+                  <FontAwesomeIcon icon="user-plus" />
+                </button>
                 <button
-                  style={isOwner&&isAdmin?{display:'inline'}:{display:'none'}}
-                  onClick={() => onRemoveUser({ userId: user.id, groupId: selectedGroup.groupId })}
-                  >Remove</button>
+                  style={(
+                    loggedInUser && (
+                      loggedInUser.userId === selectedGroup.owner.userId ||
+                      selectedGroup.admins.find(admin => admin.userId === loggedInUser.userId)
+                    )
+                  ) ? { display: 'inline' } : { display: 'none' }}
+                  onClick={() => onRemoveUser({ userId: user.userId, groupId: selectedGroup.groupId })}
+                >
+                  <span>Remove Member</span>
+                  <FontAwesomeIcon icon="trash-alt" />
+                </button>
                 <button
-                  style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                  onClick={() => onRemoveGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                  >Make Member</button>
+                  style={(
+                    selectedGroup.admins.find(admin => admin.userId === user.userId)
+                    && loggedInUser.userId === selectedGroup.owner.userId
+                  ) ? { display: 'inline' } : { display: 'none' }}
+                  onClick={() => onDemoteUser({ userId: user.userId, groupId: selectedGroup.groupId })}
+                >
+                  <span>Remove Admin</span>
+                  <FontAwesomeIcon icon="edit" />
+                </button>
                 <button
-                  onClick={() => onTransferGroupOwner({ userId: user.id, groupId: selectedGroup.groupId })}
-                  style={user.membership === 'Admin' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                  >Make Owner</button>
+                  onClick={() => onPromoteUser({ userId: user.userId, groupId: selectedGroup.groupId })}
+                  style={(
+                    !selectedGroup.admins.find(admin => admin.userId === user.userId)
+                    && loggedInUser.userId === selectedGroup.owner.userId
+                  ) ? { display: 'inline' } : { display: 'none' }}
+                >
+                  <span>Make Admin</span>
+                  <FontAwesomeIcon icon="edit" />
+                </button>
                 <button
-                  onClick={() => onMakeGroupAdmin({ userId: user.id, groupId: selectedGroup.groupId })}
-                  style={user.membership === 'Member' && isOwner ? { display: 'inline' } : { display: 'none' }}
-                  >Make Admin</button>
-                <button onClick={()=>setButtonView(prevView => !prevView)}>Quit</button>
+                  onClick={() => onTransferOwnership({ userId: user.userId, groupId: selectedGroup.groupId })}
+                  style={(
+                    selectedGroup.admins.find(admin => admin.userId === user.userId)
+                    && loggedInUser.userId === selectedGroup.owner.userId
+                  ) ? { display: 'inline' } : { display: 'none' }}
+                >
+                  Make Owner
+                </button>
+                <button onClick={() => setButtonView(prevView => !prevView)}>Quit</button>
               </div>
             </div>
           </div>
         </div>
-      
+
       </div>
 
     </div>

@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import EditGroupDescription from '../../forms/editGroupDescription/editGroupDescription';
-
-import './groupDetails.css';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
 import { faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
+import EditGroupDescription from '../../forms/editGroupDescription/editGroupDescription';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import './groupDetails.css';
+
 const GroupDetails = props => {
-  let { 
-    isOwner, selectedGroup, owner, onUpdateGroupVotes, isMember, onJoinGroup, onLeaveGroup, onDisbandGroup, loggedInUser, isLoggedIn 
+  const {
+    selectedGroup, onUpdateGroupVotes, onJoinGroup, onRemoveUser, onDeleteGroup, loggedInUser, isLoggedIn
   } = props
 
-  let [formView, setView] = useState(false)
+  const [formView, setView] = useState(false)
 
   library.add(faUser, faUserPlus, faEdit, faTrashAlt, faThumbsUp, faThumbsDown, faCommentDots);
 
@@ -21,45 +22,53 @@ const GroupDetails = props => {
       <div className='owner-info'>
         <h1>{selectedGroup.groupName}</h1><br />
         <div>
-          <h3>Owner: <span>{owner ? owner.userName : null}</span></h3>
+          <h3>Owner: <span>{selectedGroup.owner.userName}</span></h3>
+
+          {/* control buttons */}
           <div className="group-vote-btn">
+            {/* vote buttons/count */}
             <div className="group-vote-button">
-              {/* <button onClick={() => onUpdateGroupVotes({ type: 'likes', dislikes: selectedGroup.likes, groupId: selectedGroup.groupId })} >
-                Likes: {selectedGroup.likes}
-              </button> */}
               <div className="thumbs-up-button">
-                <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateGroupVotes({ type: 'likes', likes: selectedGroup.likes, groupId: selectedGroup.groupId })} /> 
-                <span>   {selectedGroup.likes}</span>
+                <FontAwesomeIcon icon="thumbs-up" onClick={() => onUpdateGroupVotes({ type: 'likes', likes: selectedGroup.likes, groupId: selectedGroup.groupId })} />
+                <span>{selectedGroup.likes}</span>
               </div>
 
-              {/* <button onClick={() => onUpdateGroupVotes({ type: 'dislikes', dislikes: selectedGroup.dislikes, groupId: selectedGroup.groupId })} >
-                Dislikes: {selectedGroup.dislikes}
-              </button> */}
               <div className="thumbs-down">
-                <FontAwesomeIcon className="thumbs-down-icon" icon="thumbs-down" onClick={() => onUpdateGroupVotes({ type: 'dislikes', dislikes: selectedGroup.dislikes, groupId: selectedGroup.groupId })} />
-                <span>  {selectedGroup.dislikes}</span>
+                <FontAwesomeIcon
+                  icon="thumbs-down"
+                  className="thumbs-down-icon"
+                  onClick={() => onUpdateGroupVotes({ type: 'dislikes', dislikes: selectedGroup.dislikes, groupId: selectedGroup.groupId })}
+                />
+                <span>{selectedGroup.dislikes}</span>
               </div>
             </div>
 
+            {/* membership buttons */}
             <div>
               <button className="group-button-join"
-                onClick={isLoggedIn?()=>onJoinGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id}):()=>alert('Must Be Logged In To Join A Group')}
-                style={isMember?{display:'none'}:{display:'inline'}} 
+                onClick={isLoggedIn ? () => onJoinGroup(selectedGroup.groupId) : () => alert('Must Be Logged In To Join A Group')}
+                style={(
+                  loggedInUser.userId === selectedGroup.owner.userId
+                  || selectedGroup.members.find(user => user.userId === loggedInUser.userId) 
+                  || selectedGroup.admins.find(user => user.userId === loggedInUser.userId)
+                ) ? { display: 'none' } : { display: 'inline' }}
               >
                 Join
               </button>
               <button className="group-button-leave"
-                onClick={()=>onLeaveGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
-                style={isMember&&!isOwner?{display:'inline'}:{display:'none'}} 
+                onClick={() => onRemoveUser({ userId: loggedInUser.userId, groupId: selectedGroup.groupId })}
+                style={selectedGroup.members.find(user => user.userId === loggedInUser.userId) ? { display: 'inline' } : { display: 'none' }}
               >
                 Leave
               </button>
-              <button className="group-button-disband"
-                onClick={()=>onDisbandGroup({groupId:selectedGroup.groupId, userId:loggedInUser.id})}
-                style={isOwner?{display:'inline'}:{display:'none'}} 
+              <Link
+                to='/' 
+                className="group-button-disband"
+                onClick={() => onDeleteGroup(selectedGroup.groupId)}
+                style={loggedInUser && loggedInUser.userId === selectedGroup.owner.userId ? { display: 'inline' } : { display: 'none' }}
               >
                 Disband
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -70,16 +79,16 @@ const GroupDetails = props => {
           <div style={formView ? { display: 'none' } : { display: 'block' }}>
             <h3>Description</h3>
             <div className="description-view">
-              <p>{selectedGroup.discription}</p>
+              <p>{selectedGroup.description}</p>
             </div>
           </div>
-          <div style={formView && isOwner ? { display: 'block' } : { display: 'none' }}>
+          <div style={formView && loggedInUser.userId === selectedGroup.owner.userId ? { display: 'block' } : { display: 'none' }}>
             <EditGroupDescription {...props} group={selectedGroup} setView={setView} />
           </div>
 
           <div className="group-button-description">
-            <button 
-              style={isOwner ? formView ? { display: 'none' } : { display: 'block' } : { display: 'none' }}
+            <button
+              style={!formView && loggedInUser.userId === selectedGroup.owner.userId ? { display: 'block' } : { display: 'none' }}
               onClick={() => setView(true)}
             >
               Edit Description

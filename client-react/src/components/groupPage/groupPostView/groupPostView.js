@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import GroupPost from '../groupPost/groupPost'
-import GroupPostForm from '../../forms/groupPostForm/groupPostForm';
+import React, { useState } from 'react';
 
 import './groupPostView.css';
+import Post from '../../mainPage/post/mainPost';
+import PostForm from '../../forms/postForm/postForm';
 
 const GroupPostView = props => {
-  let { isAdmin, isMember, isOwner, groupPosts, selectedGroup } = props
+  const { selectedGroup, loggedInUser } = props;
 
-  let [messageView, setMessageView] = useState(false)
+  const [messageView, setMessageView] = useState(false);
 
   return (
     <div>
@@ -15,27 +15,47 @@ const GroupPostView = props => {
         <button className="link-btn" onClick={() => setMessageView(false)}>
           <h3>Posts</h3>
         </button>
-        <button className="link-btn" style={isMember ? { display: 'inline' } : { display: 'none' }} onClick={() => setMessageView(true)}>
+        <button
+          className="link-btn"
+          style={(
+            loggedInUser.userId === selectedGroup.owner.userId
+            || selectedGroup.members.find(user => user.userId === loggedInUser.userId)
+            || selectedGroup.admins.find(user => user.userId === loggedInUser.userId)
+          ) ? { display: 'inline' } : { display: 'none' }}
+          onClick={() => setMessageView(true)}
+        >
           <h3>Group Messages</h3>
         </button>
       </div>
 
       <div style={!messageView ? { display: 'block' } : { display: 'none' }}>
-        <div style={isMember ? { display: 'block' } : { display: 'none' }}>
-          <GroupPostForm {...props} group={selectedGroup} isAdmin={isAdmin} isOwner={isOwner} />
+        <div
+          style={(
+            loggedInUser.userId === selectedGroup.owner.userId
+            || selectedGroup.members.find(user => user.userId === loggedInUser.userId)
+            || selectedGroup.admins.find(user => user.userId === loggedInUser.userId)
+          ) ? { display: 'block' } : { display: 'none' }}
+        >
+          <PostForm {...props} />
         </div>
-        {groupPosts.length === 0 ? <span>No Posts Have Been Made Yet</span> : groupPosts.filter(post => post.isHidden === 0).map(post => (
-          <GroupPost key={post.id} {...props} post={post} isOwner={isOwner} />
-        ))}
+        {selectedGroup.posts.filter(post => post.private === 0).length > 0 ? selectedGroup.posts.filter(post => post.private === 0).reverse().map(post => (
+          <Post key={post.postId} {...props} post={post} />
+        )) : <span>No Posts Have Been Made Yet</span>}
       </div>
 
       <div style={messageView ? { display: 'block' } : { display: 'none' }}>
-        <div style={isMember ? { display: 'block' } : { display: 'none' }}>
-          <GroupPostForm {...props} group={selectedGroup} isAdmin={isAdmin} isOwner={isOwner} />
+        <div
+          style={(
+            loggedInUser.userId === selectedGroup.owner.userId
+            || selectedGroup.members.find(user => user.userId === loggedInUser.userId)
+            || selectedGroup.admins.find(user => user.userId === loggedInUser.userId)
+          ) ? { display: 'block' } : { display: 'none' }}
+        >
+          <PostForm {...props} group={selectedGroup} />
         </div>
-        {groupPosts.length === 0 ? <span>No Posts Have Been Made Yet</span> : groupPosts.filter(post => post.isHidden === 1).map(post => (
-          <GroupPost key={post.id} {...props} post={post} isOwner={isOwner} />
-        ))}
+        {selectedGroup.posts.length > 0 ? selectedGroup.posts.filter(post => post.private === 1).reverse().map(post => (
+          <Post key={post.postId} {...props} post={post} />
+        )) : <span>No Messages Have Been Made Yet</span>}
       </div>
     </div>
   )
