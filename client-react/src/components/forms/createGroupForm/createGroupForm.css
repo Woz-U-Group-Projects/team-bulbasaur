@@ -1,0 +1,69 @@
+.create-group-form-wrapper {
+    background-color: #eaeaea;
+    width: 100%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.group-form-name {
+    width: 100%;
+}
+
+.group-form-name input {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding-left: 10px;
+    border: none;
+}
+
+.group-form-input {
+    width: 100%;
+}
+
+.group-form-input textarea {
+    width: 100%;
+    height: 105px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border: none;
+    resize: none;
+}
+
+.group-form-private {
+    margin-bottom: 10px;
+}
+
+.group-form-private input {
+    margin-left: 10px;
+}
+
+.group-form-btn {
+    display: flex;
+    justify-content:  flex-end;
+}
+
+.group-form-btn button {
+    margin-left: 5px;
+}
+
+.group-form-submit-btn {
+    width: 80px;
+    height: 30px;
+    background-color: #008391;
+    color: #fff;
+    border-radius: 1.5em;
+}
+ 
+.group-form-cancel-btn {
+    width: 80px;
+    height: 30px;
+    background-color: #ac2e08;
+    color: #fff;
+    border-radius: 1.5em;
+}

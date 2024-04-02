@@ -1,0 +1,22 @@
+.group-member-container {
+    display: flex;
+    flex-direction: column;
+    height: 60em;
+}
+
+.owner-section {
+    height: 110px;
+    border-bottom: 1px solid grey;
+    overflow-y: auto;
+}
+
+.admins-section {
+    height: 280px;
+    border-bottom: 1px solid grey;
+    overflow-y: auto;
+}
+
+.members-section {
+    height: 100%;
+    overflow-y: auto;
+}
