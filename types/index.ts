@@ -74,3 +74,15 @@ export type UserObject = UserData & {
   denied: ({ userId: number; userName: string; })[];
   blocked: ({ userId: number; userName: string; })[];
 }
+
+export type utilityActionKeys = "Get_Token";
+
+export type groupActionKeys = "GET_GROUPS";
+
+export type userActionKeys = "GET_USERS";
+
+export type postActionKeys = "GET_POSTS";
+
+export type commentActionKeys = "GET_COMMENTS";
+
+export type actionKeys = utilityActionKeys | groupActionKeys | userActionKeys | postActionKeys | commentActionKeys;
